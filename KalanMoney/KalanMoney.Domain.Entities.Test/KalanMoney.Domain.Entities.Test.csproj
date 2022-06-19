@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+      <PackageReference Include="xunit" Version="2.4.2-pre.12" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\KalanMoney.Domain.Entities\KalanMoney.Domain.Entities.csproj" />
+    </ItemGroup>
+
+</Project>
