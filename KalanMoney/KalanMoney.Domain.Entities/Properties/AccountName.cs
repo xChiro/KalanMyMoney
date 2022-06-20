@@ -1,4 +1,4 @@
-using KalanMoney.Domain.UseCases.Exceptions;
+using KalanMoney.Domain.Entities.Exceptions;
 
 namespace KalanMoney.Domain.Entities.Properties;
 

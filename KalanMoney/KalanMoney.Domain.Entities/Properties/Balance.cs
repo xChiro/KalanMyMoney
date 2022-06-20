@@ -1,6 +1,6 @@
 namespace KalanMoney.Domain.Entities.Properties;
 
-public record Balance(decimal Amount)
+public record Balance(decimal Amount = 0)
 {
     public decimal Amount { get; private set; } = Amount;
 

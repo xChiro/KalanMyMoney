@@ -1,5 +1,4 @@
 using KalanMoney.Domain.Entities.Properties;
-using KalanMoney.Domain.UseCases;
 
 namespace KalanMoney.Domain.Entities;
 

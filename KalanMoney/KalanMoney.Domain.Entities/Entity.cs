@@ -1,4 +1,4 @@
-namespace KalanMoney.Domain.UseCases;
+namespace KalanMoney.Domain.Entities;
 
 public abstract class Entity
 {
