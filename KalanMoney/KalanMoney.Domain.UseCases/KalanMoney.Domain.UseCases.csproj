@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\KalanMoney.Domain.Entities\KalanMoney.Domain.Entities.csproj" />
+    </ItemGroup>
+
 </Project>

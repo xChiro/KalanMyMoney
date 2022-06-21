@@ -2,10 +2,10 @@ namespace KalanMoney.Domain.Entities.Exceptions;
 
 public class AccountNameException : Exception
 {
-    public string invalidName { get; }
+    public string InvalidName { get; }
 
     public AccountNameException(string invalidName)
     {
-        
+        InvalidName = invalidName;
     }
 }
