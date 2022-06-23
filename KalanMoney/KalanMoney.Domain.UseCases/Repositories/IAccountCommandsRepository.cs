@@ -4,5 +4,5 @@ namespace KalanMoney.Domain.UseCases.Repositories;
 
 public interface IAccountCommandsRepository
 {
-    public void OpenAccount(FinancialAccount account, FinancialCategory category);
+    public void OpenAccount(FinancialAccount account);
 }
