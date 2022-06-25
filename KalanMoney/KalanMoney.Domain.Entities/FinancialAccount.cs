@@ -1,4 +1,4 @@
-using KalanMoney.Domain.Entities.Properties;
+using KalanMoney.Domain.Entities.ValueObjects;
 
 namespace KalanMoney.Domain.Entities;
 
@@ -16,7 +16,7 @@ public class FinancialAccount : Entity
     public FinancialAccount(string id, AccountName accountName, Owner owner, Balance balance, TimeStamp creationDate,
         IEnumerable<Transaction> transactions) : base(id)
     {
-        AccountName = accountName;
+        AccountName = accountName; 
         Owner = owner;
         Balance = balance;
         CreationDate = creationDate;

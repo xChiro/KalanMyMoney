@@ -1,6 +1,6 @@
 using KalanMoney.Domain.UseCases.Adapters;
 
-namespace KalanMoney.Domain.UseCases.Test.Adapters;
+namespace KalanMoney.Domain.UseCases.Tests.Adapters;
 
 public class CreateAccountOutputMock : ICreateAccountOutput
 {

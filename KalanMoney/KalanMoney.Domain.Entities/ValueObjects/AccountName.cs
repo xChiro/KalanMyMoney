@@ -1,6 +1,6 @@
 using KalanMoney.Domain.Entities.Exceptions;
 
-namespace KalanMoney.Domain.Entities.Properties;
+namespace KalanMoney.Domain.Entities.ValueObjects;
 
 public record AccountName
 {
@@ -17,7 +17,7 @@ public record AccountName
     /// </exception>
     public static AccountName Create(string name)
     {
-        if (string.IsNullOrEmpty(name) || name.Length > 155) throw new AccountNameException(name);
+        if (string.IsNullOrEmpty(name) || name.Length > 50) throw new AccountNameException(name);
 
         return new AccountName(name);
     }

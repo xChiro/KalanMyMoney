@@ -1,6 +1,6 @@
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.Exceptions;
-using KalanMoney.Domain.Entities.Properties;
+using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.Adapters;
 using KalanMoney.Domain.UseCases.Repositories;
 

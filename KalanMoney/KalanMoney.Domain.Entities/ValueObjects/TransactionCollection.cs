@@ -1,4 +1,4 @@
-namespace KalanMoney.Domain.Entities.Properties;
+namespace KalanMoney.Domain.Entities.ValueObjects;
 
 public record TransactionCollection
 {

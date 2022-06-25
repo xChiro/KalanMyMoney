@@ -1,4 +1,4 @@
-using KalanMoney.Domain.Entities.Properties;
+using KalanMoney.Domain.Entities.ValueObjects;
 
 namespace KalanMoney.Domain.Entities;
 

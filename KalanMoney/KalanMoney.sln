@@ -12,9 +12,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.Domain.UseCases"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{569214EA-AA1E-4B59-8166-6AB5DFA03965}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.Domain.Entities.Test", "KalanMoney.Domain.Entities.Test\KalanMoney.Domain.Entities.Test.csproj", "{252345E9-21D3-4E68-AAA1-2A2FB7EA954F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.Domain.Entities.Tests", "KalanMoney.Domain.Entities.Tests\KalanMoney.Domain.Entities.Tests.csproj", "{252345E9-21D3-4E68-AAA1-2A2FB7EA954F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.Domain.UseCases.Test", "KalanMoney.Domain.UseCases.Test\KalanMoney.Domain.UseCases.Test.csproj", "{0DAB5EAC-5EF6-4339-B7FF-4917CEFB71C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.Domain.UseCases.Tests", "KalanMoney.Domain.UseCases.Tests\KalanMoney.Domain.UseCases.Tests.csproj", "{0DAB5EAC-5EF6-4339-B7FF-4917CEFB71C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
