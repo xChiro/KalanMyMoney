@@ -18,7 +18,7 @@ public class CreateAccountUseCaseTest
         const decimal openingTransaction = 0;
         
         var createAccountRequest = CreateAccountRequest("Normal Name");
-        var accountRepositoryMock = AccountRepositoryMock();
+        var accountRepositoryMock = GetSetupAccountRepositoryMock();
         
         var createAccountOutput = new CreateAccountOutputMock();
         var sut = new CreateAccountUseCase(accountRepositoryMock.Object);
@@ -34,7 +34,7 @@ public class CreateAccountUseCaseTest
     public void Try_to_create_a_new_category_but_the_name_is_to_long()
     {
         // Arrange
-        var accountRepositoryMock = AccountRepositoryMock();
+        var accountRepositoryMock = GetSetupAccountRepositoryMock();
 
         var createAccountOutput = new CreateAccountOutputMock();
         var sut = new CreateAccountUseCase(accountRepositoryMock.Object);
@@ -59,10 +59,11 @@ public class CreateAccountUseCaseTest
         return createAccountRequest;
     }
 
-    private static Mock<IAccountCommandsRepository> AccountRepositoryMock()
+    private static Mock<IAccountCommandsRepository> GetSetupAccountRepositoryMock()
     {
         var accountRepositoryMock = new Mock<IAccountCommandsRepository>();
         accountRepositoryMock.Setup(x => x.OpenAccount(It.IsAny<FinancialAccount>()));
+        
         return accountRepositoryMock;
     }
 }

@@ -22,6 +22,10 @@ public record AccountName
         return new AccountName(name);
     }
     
+    /// <exception cref="AccountNameException">
+    /// Name contains invalid values, is null or empty.
+    /// Name lenght is greater than 155.
+    /// </exception>
     public static AccountName Create(string? name, string alternative)
     {
         var finalName = string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name) ? alternative : name;
