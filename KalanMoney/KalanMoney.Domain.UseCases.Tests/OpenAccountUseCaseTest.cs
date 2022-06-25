@@ -8,10 +8,10 @@ using Xunit;
 
 namespace KalanMoney.Domain.UseCases.Tests;
 
-public class CreateAccountUseCaseTest
+public class OpenAccountUseCaseTest
 {
     [Fact]
-    public void Create_a_new_account_with_a_default_category_successfully()
+    public void Open_an_account_with_a_default_category_successfully()
     {
         // Arrange 
         const decimal openingTransaction = 0;
