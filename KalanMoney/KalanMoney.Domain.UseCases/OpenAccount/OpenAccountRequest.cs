@@ -1,4 +1,4 @@
-namespace KalanMoney.Domain.UseCases.CreateAccount;
+namespace KalanMoney.Domain.UseCases.OpenAccount;
 
 public class CreateAccountRequest
 {

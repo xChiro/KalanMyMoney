@@ -4,13 +4,13 @@ using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.Adapters;
 using KalanMoney.Domain.UseCases.Repositories;
 
-namespace KalanMoney.Domain.UseCases.CreateAccount;
+namespace KalanMoney.Domain.UseCases.OpenAccount;
 
-public class CreateAccountUseCase : ICreateAccountInput
+public class OpenAccountUseCase : IOpenAccountInput
 {
     private readonly IAccountCommandsRepository _accountCommands;
     
-    public CreateAccountUseCase(IAccountCommandsRepository accountCommands)
+    public OpenAccountUseCase(IAccountCommandsRepository accountCommands)
     {
         _accountCommands = accountCommands;
     }
@@ -19,13 +19,13 @@ public class CreateAccountUseCase : ICreateAccountInput
     /// Name contains invalid values, is null or empty.
     /// Name lenght is greater than 155.
     /// </exception>
-    public void Execute(CreateAccountRequest requestModel, ICreateAccountOutput createAccountOutput)
+    public void Execute(CreateAccountRequest requestModel, IOpenAccountOutput openAccountOutput)
     {
         var accountName = AccountName.Create(requestModel.AccountName);
         var financialAccount = new FinancialAccount(accountName, requestModel.OwnerId, requestModel.OwnerName);
 
         _accountCommands.OpenAccount(financialAccount);
         
-        createAccountOutput.Results(financialAccount.Id, financialAccount.Balance.Amount);
+        openAccountOutput.Results(financialAccount.Id, financialAccount.Balance.Amount);
     }
 }

@@ -1,8 +1,8 @@
-using KalanMoney.Domain.UseCases.Adapters;
+using KalanMoney.Domain.UseCases.OpenAccount;
 
 namespace KalanMoney.Domain.UseCases.Tests.Adapters;
 
-public class CreateAccountOutputMock : ICreateAccountOutput
+public class OpenAccountOutputMock : IOpenAccountOutput
 {
     public string AccountId { get; private set; }
 

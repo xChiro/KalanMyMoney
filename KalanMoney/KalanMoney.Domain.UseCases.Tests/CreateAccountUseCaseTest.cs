@@ -1,7 +1,6 @@
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.Exceptions;
-using KalanMoney.Domain.UseCases.Adapters;
-using KalanMoney.Domain.UseCases.CreateAccount;
+using KalanMoney.Domain.UseCases.OpenAccount;
 using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Domain.UseCases.Tests.Adapters;
 using Moq;
@@ -20,8 +19,8 @@ public class CreateAccountUseCaseTest
         var createAccountRequest = CreateAccountRequest("Normal Name");
         var accountRepositoryMock = GetSetupAccountRepositoryMock();
         
-        var createAccountOutput = new CreateAccountOutputMock();
-        var sut = new CreateAccountUseCase(accountRepositoryMock.Object);
+        var createAccountOutput = new OpenAccountOutputMock();
+        var sut = new OpenAccountUseCase(accountRepositoryMock.Object);
 
         // Act
         sut.Execute(createAccountRequest, createAccountOutput);
@@ -36,8 +35,8 @@ public class CreateAccountUseCaseTest
         // Arrange
         var accountRepositoryMock = GetSetupAccountRepositoryMock();
 
-        var createAccountOutput = new CreateAccountOutputMock();
-        var sut = new CreateAccountUseCase(accountRepositoryMock.Object);
+        var createAccountOutput = new OpenAccountOutputMock();
+        var sut = new OpenAccountUseCase(accountRepositoryMock.Object);
         
         const string longName =
             "This its a very very very long accountName and we follow TDD and Clean Architecture principles.";
