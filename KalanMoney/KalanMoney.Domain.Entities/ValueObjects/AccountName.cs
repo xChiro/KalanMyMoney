@@ -24,8 +24,8 @@ public record AccountName
     
     public static AccountName Create(string? name, string alternative)
     {
-        if (!string.IsNullOrEmpty(name) && name.Length > 155) throw new AccountNameException(name);
-
-        return new AccountName(name ?? alternative);
+        var finalName = string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name) ? alternative : name;
+        
+        return Create(finalName);
     }
 }
