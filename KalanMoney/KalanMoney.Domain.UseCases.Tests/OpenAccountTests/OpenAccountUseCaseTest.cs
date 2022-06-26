@@ -2,11 +2,10 @@ using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.Exceptions;
 using KalanMoney.Domain.UseCases.OpenAccount;
 using KalanMoney.Domain.UseCases.Repositories;
-using KalanMoney.Domain.UseCases.Tests.Adapters;
 using Moq;
 using Xunit;
 
-namespace KalanMoney.Domain.UseCases.Tests;
+namespace KalanMoney.Domain.UseCases.Tests.OpenAccountTests;
 
 public class OpenAccountUseCaseTest
 {

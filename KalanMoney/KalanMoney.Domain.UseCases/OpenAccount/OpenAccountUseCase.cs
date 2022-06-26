@@ -25,7 +25,8 @@ public class OpenAccountUseCase : IOpenAccountInput
         var financialAccount = new FinancialAccount(accountName, requestModel.OwnerId, requestModel.OwnerName);
 
         _accountCommands.OpenAccount(financialAccount);
-        
-        openAccountOutput.Results(financialAccount.Id, financialAccount.Balance.Amount);
+
+        var response = new OpenAccountResponse(financialAccount.Id, financialAccount.Balance.Amount);
+        openAccountOutput.Results(response);
     }
 }
