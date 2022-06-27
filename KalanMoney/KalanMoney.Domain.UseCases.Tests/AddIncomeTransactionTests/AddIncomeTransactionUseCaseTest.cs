@@ -1,7 +1,8 @@
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
-using KalanMoney.Domain.UseCases.Exceptions;
+using KalanMoney.Domain.UseCases.Common.Exceptions;
+using KalanMoney.Domain.UseCases.Common.Models;
 using KalanMoney.Domain.UseCases.Repositories;
 using Moq;
 using Xunit;
@@ -26,7 +27,7 @@ public class AddIncomeTransactionUseCaseTest
         var accountId = Guid.NewGuid().ToString();
         var categoryId = Guid.NewGuid().ToString();
         
-        var inputRequest = new AddIncomeTransactionRequest(accountId, categoryId, 1500.00m);
+        var inputRequest = new AddTransactionRequest(accountId, categoryId, 1500.00m);
         
         var outPut = new AddIncomeTransactionOutputMock();
 
@@ -49,7 +50,7 @@ public class AddIncomeTransactionUseCaseTest
         var accountCommandsRepository = new Mock<IAccountCommandsRepository>();
 
         var sut = new AddIncomeTransactionUseCase(accountQueriesRepositoryMock.Object, categoryQueryRepositoryMock.Object, accountCommandsRepository.Object);
-        var request = new AddIncomeTransactionRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 145.23m);
+        var request = new AddTransactionRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 145.23m);
         
         // Act/Assert
         Assert.Throws<CategoryNotFoundException>(() => sut.Execute(request, new AddIncomeTransactionOutputMock()));
@@ -75,7 +76,7 @@ public class AddIncomeTransactionUseCaseTest
         accountCommandsRepository.Setup(x => x.OpenAccount(It.IsAny<FinancialAccount>()));
 
         var sut = new AddIncomeTransactionUseCase(accountQueryRepository.Object, categoryQueryRepository.Object, accountCommandsRepository.Object);
-        var transaction = new AddIncomeTransactionRequest( financialAccount.Id, financialCategory.Id, transactionAmount);
+        var transaction = new AddTransactionRequest( financialAccount.Id, financialCategory.Id, transactionAmount);
         var outputMock = new AddIncomeTransactionOutputMock();
         
         // Act
@@ -95,7 +96,7 @@ public class AddIncomeTransactionUseCaseTest
         };
 
         var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), AccountName.Create("Test"), owner,
-            balance, TimeStamp.CreateNow(), currentTransactions);
+            balance, TimeStamp.CreateNow(), currentTransactions);   
         
         return financialAccount;
     }

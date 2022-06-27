@@ -1,4 +1,4 @@
-namespace KalanMoney.Domain.UseCases.Exceptions;
+namespace KalanMoney.Domain.UseCases.Common.Exceptions;
 
 public class AccountNotFoundException : Exception
 {

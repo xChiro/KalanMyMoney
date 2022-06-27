@@ -1,7 +1,7 @@
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.Exceptions;
-using KalanMoney.Domain.Entities.ValueObjects;
-using KalanMoney.Domain.UseCases.Exceptions;
+using KalanMoney.Domain.UseCases.Common.Exceptions;
+using KalanMoney.Domain.UseCases.Common.Models;
 using KalanMoney.Domain.UseCases.Repositories;
 
 namespace KalanMoney.Domain.UseCases.AddIncomeTransaction;
@@ -26,7 +26,7 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
     /// Name contains invalid values, is null or empty.
     /// Name lenght is greater than 155.
     /// </exception>
-    public void Execute(AddIncomeTransactionRequest request, IAddIncomeTransactionOutput output)
+    public void Execute(AddTransactionRequest request, IAddIncomeTransactionOutput output)
     {
         var account = GetFinancialAccount(request);
         var category = GetFinancialCategory(request);
@@ -35,7 +35,7 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
         var transaction = account.Transactions.Items[0];
         
         var categoryBalance= category.AddTransaction(transaction);
-        var response = new AddIncomeTransactionResponse(transaction.Id, accountBalance, categoryBalance);
+        var response = new AddTransactionResponse(transaction.Id, accountBalance, categoryBalance);
 
         _accountCommandsRepository.AddTransaction(account.Id, transaction, account.Balance);
         
@@ -43,7 +43,7 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
     }
 
     /// <exception cref="CategoryNotFoundException"></exception>
-    private FinancialCategory GetFinancialCategory(AddIncomeTransactionRequest request)
+    private FinancialCategory GetFinancialCategory(AddTransactionRequest request)
     {
         var category = _categoryQueriesRepository.GetCategoryById(request.CategoryId);
         
@@ -53,7 +53,7 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
     }
 
     /// <exception cref="AccountNotFoundException"></exception>
-    private FinancialAccount GetFinancialAccount(AddIncomeTransactionRequest request)
+    private FinancialAccount GetFinancialAccount(AddTransactionRequest request)
     {
         var account = _accountQueriesRepository.GetAccountById(request.AccountId);
         

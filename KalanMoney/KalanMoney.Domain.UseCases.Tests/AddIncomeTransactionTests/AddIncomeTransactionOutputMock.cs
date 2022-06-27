@@ -1,3 +1,4 @@
+using KalanMoney.Domain.UseCases.Common.Models;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
 
 namespace KalanMoney.Domain.UseCases.Tests.AddIncomeTransactionTests;
@@ -10,7 +11,7 @@ public class AddIncomeTransactionOutputMock : IAddIncomeTransactionOutput
     
     public decimal CategoryBalance { get; private set; }
     
-    public void Results(AddIncomeTransactionResponse response)
+    public void Results(AddTransactionResponse response)
     {
         TransactionId = response.TransactionId;
         CategoryBalance = response.CategoryBalance;
