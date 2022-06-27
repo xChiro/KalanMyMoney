@@ -32,7 +32,7 @@ public class FinancialCategory : Entity
     
     public TransactionCollection Transactions { get; init; }
 
-    public decimal AddTransaction(Transaction transaction)
+    public Balance AddTransaction(Transaction transaction)
     {
         Transactions.AddTransaction(transaction);
         var balance = Balance.SumAmount(transaction.Amount);

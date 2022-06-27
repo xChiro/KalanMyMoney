@@ -36,7 +36,7 @@ public class FinancialAccount : Entity
     /// <returns>
     /// Returns new account balance.
     /// </returns>
-    public decimal AddIncomeTransaction(decimal amount)
+    public Balance AddIncomeTransaction(decimal amount)
     {
         var positiveAmount = Math.Abs(amount);
         var balance = AddTransaction(positiveAmount);
@@ -47,7 +47,7 @@ public class FinancialAccount : Entity
     /// <returns>
     /// Returns new account balance.
     /// </returns>
-    public decimal AddOutcomeTransaction(decimal amount)
+    public Balance AddOutcomeTransaction(decimal amount)
     {
         var negativeAmount = -Math.Abs(amount);
         var balance = AddTransaction(negativeAmount);
@@ -55,7 +55,7 @@ public class FinancialAccount : Entity
         return balance;
     }
 
-    private decimal AddTransaction(decimal amount)
+    private Balance AddTransaction(decimal amount)
     {
         var transaction = new Transaction(amount);
         Transactions.AddTransaction(transaction);

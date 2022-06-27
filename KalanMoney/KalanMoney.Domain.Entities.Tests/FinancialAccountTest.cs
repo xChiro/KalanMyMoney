@@ -19,7 +19,7 @@ public class FinancialAccountTest
         var balance = sut.AddIncomeTransaction(incomeAmount);
         
         // Assert
-        Assert.True(balance == expectedBalance && sut.Transactions.Items.Length > 0 && !string.IsNullOrEmpty(sut.Id));
+        Assert.True(balance == new Balance(expectedBalance) && sut.Transactions.Items.Length > 0 && !string.IsNullOrEmpty(sut.Id));
     }
 
     [Theory]
@@ -43,7 +43,7 @@ public class FinancialAccountTest
         var result = sut.AddIncomeTransaction(transactionAmount);
 
         // Assert 
-        Assert.Equivalent(expected, result);
+        Assert.Equal(new Balance(expected), result);
     }
 
     [Theory]
@@ -67,6 +67,6 @@ public class FinancialAccountTest
         var result = sut.AddOutcomeTransaction(transactionAmount);
 
         // Assert 
-        Assert.Equivalent(expected, result);
+        Assert.Equal(new Balance(expected), result);
     }
 }

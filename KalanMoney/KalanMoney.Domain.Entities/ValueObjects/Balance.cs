@@ -4,9 +4,9 @@ public record Balance(decimal Amount = 0)
 {
     public decimal Amount { get; private set; } = Amount;
 
-    public decimal SumAmount(decimal amount)
+    public Balance SumAmount(decimal amount)
     {
         Amount += amount;
-        return Amount;
+        return new Balance(Amount);
     }
 }

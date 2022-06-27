@@ -21,7 +21,7 @@ public class FinancialCategoryTest
         var result = sut.AddTransaction(openTransaction);
 
         // Assert
-        Assert.True(result == openBalance && sut.Transactions.Items.Length > 0 && !string.IsNullOrEmpty(sut.Id));
+        Assert.True(result == new Balance(openBalance) && sut.Transactions.Items.Length > 0 && !string.IsNullOrEmpty(sut.Id));
     }
     
     [Theory]
@@ -44,6 +44,6 @@ public class FinancialCategoryTest
         var result = sut.AddTransaction(secondTransaction);
 
         // Assert 
-        Assert.Equivalent(expected, result);
+        Assert.Equal(new Balance(expected), result);
     }
 }

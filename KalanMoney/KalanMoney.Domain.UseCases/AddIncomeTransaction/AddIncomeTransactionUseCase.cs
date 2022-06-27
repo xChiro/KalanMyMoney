@@ -31,10 +31,10 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
         var account = GetFinancialAccount(request);
         var category = GetFinancialCategory(request);
 
-        var accountBalance = account.AddIncomeTransaction(request.Amount);
+        var accountBalance = account.AddIncomeTransaction(request.Amount).Amount;
         var transaction = account.Transactions.Items[0];
         
-        var categoryBalance= category.AddTransaction(transaction);
+        var categoryBalance= category.AddTransaction(transaction).Amount;
         var response = new AddTransactionResponse(transaction.Id, accountBalance, categoryBalance);
 
         _accountCommandsRepository.AddTransaction(account.Id, transaction, account.Balance);
