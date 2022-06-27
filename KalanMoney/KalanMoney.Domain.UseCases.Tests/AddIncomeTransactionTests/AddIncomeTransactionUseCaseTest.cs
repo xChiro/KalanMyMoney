@@ -1,9 +1,12 @@
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
+using KalanMoney.Domain.UseCases.AddOutcomeTransaction;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Common.Models;
 using KalanMoney.Domain.UseCases.Repositories;
+using KalanMoney.Domain.UseCases.Tests.AddOutcomeTransactionTests;
+using KalanMoney.Domain.UseCases.Tests.RepositoriesMocks;
 using Moq;
 using Xunit;
 
@@ -87,6 +90,49 @@ public class AddIncomeTransactionUseCaseTest
         Assert.Equal(transactionAmount, outputMock.CategoryBalance);
     }
     
+    [Theory]
+    [InlineData(100.00, 10.0, 110)]
+    [InlineData(100.00, -10.0, 110)]
+    public void Add_a_new_income_transaction_to_an_account_and_check_persistence_successfully(decimal accountBalance, decimal transactionAmount, decimal expectedBalance)
+    {
+        // Arrange
+        var owner = new Owner(Guid.NewGuid().ToString(), "Test");
+        
+        var financialAccount = CreateFinancialAccount(accountBalance, owner);
+        var accountCommandRepository = new AccountCommandsRepositoryMock(financialAccount);
+        
+        var financialCategory = CreateFinancialCategory(financialAccount, owner, accountBalance);
+        var categoryQueriesRepository = SetupCategoryQueryRepositoryMock(financialCategory);
+        
+        var accountQueriesRepository = SetupAccountQueryRepositoryMock(financialAccount);
+
+        var sut = new AddIncomeTransactionUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object,
+            accountCommandRepository);
+
+        var output = new AddIncomeTransactionOutputMock();
+        var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, financialCategory.Id, transactionAmount);
+        
+        // Act
+        sut.Execute(addTransactionRequest, output);
+
+        // Assert
+        Assert.Equal( Math.Abs(transactionAmount), accountCommandRepository.ResultTransaction.Amount);
+        Assert.Equal(new Balance(expectedBalance), accountCommandRepository.ResultAccountModel.Balance);
+        Assert.Equal(expectedBalance, output.AccountBalance);
+    }
+    
+    private static FinancialCategory CreateFinancialCategory(FinancialAccount financialAccount, Owner owner,
+        decimal accountBalance)
+    {
+        var financialCategory = new FinancialCategory(Guid.NewGuid().ToString(), AccountName.Create("Test"),
+            financialAccount.Id, owner, new Balance(accountBalance), new Transaction[1]
+            {
+                new (new Guid().ToString(), accountBalance, TimeStamp.CreateNow())
+            });
+        
+        return financialCategory;
+    }
+
     private static FinancialAccount CreateFinancialAccount(decimal accountBalance, Owner owner)
     {
         var balance = new Balance(accountBalance);
