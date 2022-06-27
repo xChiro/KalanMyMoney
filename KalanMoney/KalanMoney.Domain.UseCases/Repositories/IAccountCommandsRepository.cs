@@ -1,5 +1,5 @@
 using KalanMoney.Domain.Entities;
-using KalanMoney.Domain.Entities.ValueObjects;
+using KalanMoney.Domain.UseCases.Repositories.Models;
 
 namespace KalanMoney.Domain.UseCases.Repositories;
 
@@ -7,5 +7,5 @@ public interface IAccountCommandsRepository
 {
     public void OpenAccount(FinancialAccount account);
 
-    public void AddTransaction(string accountId, Transaction transaction, Balance accountBalance);
+    public void AddTransaction(AddTransactionAccountModel addTransactionAccountModel, Transaction transaction, AddTransactionCategoryModel categoryModel);
 }

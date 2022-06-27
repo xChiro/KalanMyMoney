@@ -3,6 +3,7 @@ using KalanMoney.Domain.Entities.Exceptions;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Common.Models;
 using KalanMoney.Domain.UseCases.Repositories;
+using KalanMoney.Domain.UseCases.Repositories.Models;
 
 namespace KalanMoney.Domain.UseCases.AddIncomeTransaction;
 
@@ -31,13 +32,16 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
         var account = GetFinancialAccount(request);
         var category = GetFinancialCategory(request);
 
-        var accountBalance = account.AddIncomeTransaction(request.Amount).Amount;
-        var transaction = account.Transactions.Items[0];
+        var accountBalance = account.AddIncomeTransaction(request.Amount);
+        var transaction = account.Transactions.Items.First();
         
-        var categoryBalance= category.AddTransaction(transaction).Amount;
-        var response = new AddTransactionResponse(transaction.Id, accountBalance, categoryBalance);
+        var categoryBalance= category.AddTransaction(transaction);
+        var response = new AddTransactionResponse(transaction.Id, accountBalance.Amount, categoryBalance.Amount);
 
-        _accountCommandsRepository.AddTransaction(account.Id, transaction, account.Balance);
+        var addAccountModel = new AddTransactionAccountModel(account.Id, accountBalance);
+        var addCategoryModel = new AddTransactionCategoryModel(category.Id, categoryBalance);
+        
+        _accountCommandsRepository.AddTransaction(addAccountModel, transaction, addCategoryModel);
         
         output.Results(response);
     }

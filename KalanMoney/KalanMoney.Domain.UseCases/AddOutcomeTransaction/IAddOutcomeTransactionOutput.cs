@@ -4,5 +4,5 @@ namespace KalanMoney.Domain.UseCases.AddOutcomeTransaction;
 
 public interface IAddOutcomeTransactionOutput
 {
-    public void Execute(AddTransactionRequest addTransactionRequest);
+    public void Results(AddTransactionResponse response);
 }
