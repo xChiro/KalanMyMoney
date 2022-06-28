@@ -1,0 +1,50 @@
+@startuml Open fork
+
+
+package "UseCases.OpenAccount" {
+    OpenAccountUseCase --> CreateAccountRequest
+    OpenAccountUseCase --> IOpenAccountOutput
+    IOpenAccountInput --|> OpenAccountUseCase
+    IOpenAccountOutput --> OpenAccountResponse
+
+}
+
+package "Entities" {
+    FinancialAccount <-- OpenAccountUseCase
+}
+
+package "UseCases.Repositories" {
+    IAccountCommandsRepository <-- OpenAccountUseCase
+    FinancialAccount <-- IAccountCommandsRepository
+}
+
+
+interface IAccountCommandsRepository { 
+    {method} + CreateAccount(FinancialAccount) void
+}
+
+interface IOpenAccountInput {
+    {method} + Execute(CreateAccountRequest, IOpenAccountOutput)
+}
+
+interface IOpenAccountOutput { 
+    {method} Results(OpenAccountResponse);
+}
+
+class OpenAccountUseCase { 
+    {field} - IAccountCommandsRepository _iAccountCommandsRepository
+    {method} + Execute(CreateAccountRequest, IOpenAccountOutput)
+}
+
+class FinancialAccount {
+    {field} - Id : string [1]
+    {field} - Owner : Owner [1]
+    {field} - Name : AccountName [1]
+    {field} - Transactions : Transaction [0..n]
+    {field} - Balance : Balance [1]
+    {field} - CreationTimeStamp : long [1]
+
+    {method} + FinancialAccount(string UserId, string ownerName)
+}
+
+@enduml 

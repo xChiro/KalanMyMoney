@@ -1,0 +1,18 @@
+Title: Create an outome transaction to an Account
+Primary Actor: User
+Level: Actor Goal
+Preconditions: The user must have a valid account.
+Success Guarantees: The outcome transaction is created correctly in the user transactions.
+
+Main Success Scenario:
+1. User submits an income transaction with an specifict amount.
+2. Add system hour and date to the transcation
+3. Add transaction to the account,
+4. Get category transaction.
+5. If category dosent exist create new one
+6. Add transcation to the category.
+7. Substract amount transaction from account balance.
+8. Returns transaction id and the new account balance.
+
+Exceptions:
+4.a1 If category name is empty, the chose General Expenses like default category name.

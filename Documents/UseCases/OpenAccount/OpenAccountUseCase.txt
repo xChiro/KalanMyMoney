@@ -1,0 +1,17 @@
+Title: Create an income transaction to an Account
+Primary Actor: User
+Level: Actor Goal
+Preconditions: The user must have a valid account.
+Success Guarantees: The income transaction is created correctly in the user transactions.
+
+Main Success Scenario:
+1. User submits an income transaction with an specifict amount and category name. 
+2. Add system hour and date to the transcation
+3. Add transaction to the account.
+4. Get category by idCategory
+5. Sums amount transaction from balance account.
+6. Add idTranscation and balance to the category.
+7. Returns the transaction id and the new balance account.
+
+Exceptions:
+4.a1 If category name is empty, the chose Salary like default category name.
