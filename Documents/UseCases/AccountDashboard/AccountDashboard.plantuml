@@ -1,0 +1,55 @@
+@startuml Open fork
+
+package "UseCases.AccountDashboard" {
+    AccountDashboardUseCase --> IAccountDashboardOutput
+    IAccountDashboardIntput <|-- AccountDashboardUseCase
+    IAccountDashboardOutput --> AccountDashboardResponse
+    AccountDashboardUseCase --> AccountDashboardRequest
+}
+
+package "Entities.ValueObjects" {
+    TransactionCollection <-- AccountDashboardUseCase
+}
+
+package "UseCases.Repositories" {
+    IAccountQueriesRepository <-- AccountDashboardUseCase
+    IAccountQueriesRepository <-- TransactionCollection
+}
+
+interface IAccountDashboardIntput {
+    {method} + Execute(AccountDashboardRequest ,IAccountDashboardOutput);
+}
+
+interface IAccountDashboardOutput {
+    {method} + Results(AccountDashboardResponse);
+}
+
+interface IAccountQueriesRepository {
+    {method} + GetAccountById(id) : FinancialAccount
+    {method} + GetCurrentMonthTransactions(accountId) : Transaction [0-n]
+}
+class AccountDashboardRequest {
+    {field} - AccountId: string [1]
+
+    {method} + AccountDashboardRequest(accountId: string);
+}
+class AccountDashboardResponse {
+    {field} + AccountTransactions : Transaction [0-n]
+    {field} + CategoriesBalances : Transaction [0-n]
+
+    {method} + AccountDashboardResponse(AccountTransactions, CategoriesBalances);
+}
+
+class AccountDashboardUseCase {
+    {method} + Execute(AccountDashboardRequest, IAccountDashboardOutput);
+}
+
+class TransactionCollection {
+    {field} + Transaction[] Items => _transactions.ToArray()
+    {field} - _transactions: Stack<Transaction>
+
+    {method} + GetItems() : Transaction [0-n]
+    {method} + AddTransaction(Transaction) : void
+}
+
+@enduml

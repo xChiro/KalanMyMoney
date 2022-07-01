@@ -8,7 +8,7 @@ Submit Data:
 AccountId
 
 Response Data:
-Account Name, Owner, Account Balance, Acount current month transaction, 
+Account Name, Owner, Account Balance, Account current month transaction, 
 categories name and their balances. 
 
 Main Success Scenario:
