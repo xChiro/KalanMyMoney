@@ -1,10 +1,9 @@
 @startuml Open fork
 
-
 package "UseCases.OpenAccount" {
     OpenAccountUseCase --> CreateAccountRequest
     OpenAccountUseCase --> IOpenAccountOutput
-    IOpenAccountInput --|> OpenAccountUseCase
+    IOpenAccountInput <|-- OpenAccountUseCase
     IOpenAccountOutput --> OpenAccountResponse
 
 }
