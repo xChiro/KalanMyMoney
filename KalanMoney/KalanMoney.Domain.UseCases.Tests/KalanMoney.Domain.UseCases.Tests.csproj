@@ -18,8 +18,4 @@
       <ProjectReference Include="..\KalanMoney.Domain.UseCases\KalanMoney.Domain.UseCases.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="AccountDashboardTest" />
-    </ItemGroup>
-
 </Project>

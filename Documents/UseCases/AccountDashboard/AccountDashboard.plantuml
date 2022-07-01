@@ -26,7 +26,7 @@ interface IAccountDashboardOutput {
 
 interface IAccountQueriesRepository {
     {method} + GetAccountById(id) : FinancialAccount
-    {method} + GetCurrentMonthTransactions(accountId) : Transaction [0-n]
+    {method} + GetTransactions(accountId, from, to) : Transaction [0-n]
 }
 class AccountDashboardRequest {
     {field} - AccountId: string [1]
