@@ -23,7 +23,7 @@ public class AddOutcomeTransactionUseCase : IAddOutcomeTransactionInput
 
     public void Execute(AddTransactionRequest addTransactionRequest, IAddOutcomeTransactionOutput output)
     {
-        var transactionsFilters = TransactionFilters.CreateLastMonthRange();
+        var transactionsFilters = TransactionFilter.CreateMonthRangeFromUtcNow();
         var account = _accountQueriesRepository.GetAccountById(addTransactionRequest.AccountId, transactionsFilters);
         var category = _categoryQueriesRepository.GetCategoryById(addTransactionRequest.CategoryId, transactionsFilters);
 

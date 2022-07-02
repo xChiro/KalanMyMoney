@@ -19,7 +19,7 @@ public class AddOutcomeTransactionTest
     {
         // Arrange
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilters>()))
+        accountQueriesRepository.Setup(repository => repository.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(default(FinancialAccount));
         
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
@@ -43,11 +43,11 @@ public class AddOutcomeTransactionTest
         var financialAccount = CreateFinancialAccount(baseTransaction, owner);
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilters>()))
+        accountQueriesRepository.Setup(repository => repository.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(financialAccount);
 
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
-        categoryQueriesRepository.Setup(rep => rep.GetCategoryById(It.IsAny<string>(), It.IsAny<TransactionFilters>()))
+        categoryQueriesRepository.Setup(rep => rep.GetCategoryById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(default(FinancialCategory));
         
         var accountCommandRepository = new Mock<IAccountCommandsRepository>();
@@ -125,7 +125,7 @@ public class AddOutcomeTransactionTest
     private static Mock<IAccountQueriesRepository> AccountQueriesRepositoryMockSetup(FinancialAccount financialAccount)
     {
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilters>()))
+        accountQueriesRepository.Setup(repository => repository.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(financialAccount);
         return accountQueriesRepository;
     }
@@ -133,7 +133,7 @@ public class AddOutcomeTransactionTest
     private static Mock<ICategoryQueriesRepository> CategoryQueriesRepositoryMockSetup(FinancialCategory financialCategory)
     {
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
-        categoryQueriesRepository.Setup(rep => rep.GetCategoryById(It.IsAny<string>(), It.IsAny<TransactionFilters>()))
+        categoryQueriesRepository.Setup(rep => rep.GetCategoryById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(financialCategory);
         return categoryQueriesRepository;
     }
