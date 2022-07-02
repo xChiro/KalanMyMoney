@@ -40,7 +40,7 @@ public class AccountDashboardUseCaseTest
         sut.Execute(Guid.NewGuid().ToString(), outPut);
 
         // Assert
-        Assert.Empty(outPut.AccountDashboardRequest.AccountTransactions);
+        Assert.Empty(outPut.AccountDashboardResponse.AccountTransactions);
     }
 
     [Fact]
@@ -70,11 +70,11 @@ public class AccountDashboardUseCaseTest
         sut.Execute(accountId, output);
 
         // Assert
-        Assert.Equal(accountId, output.AccountDashboardRequest.AccountId);
-        Assert.NotNull(output.AccountDashboardRequest.AccountTransactions);
-        Assert.NotEmpty(output.AccountDashboardRequest.AccountTransactions);
-        Assert.Equal(transactionsAmounts[0], output.AccountDashboardRequest.AccountTransactions[0].Amount);
-        Assert.Null(output.AccountDashboardRequest.CategoryBalanceModels);
+        Assert.Equal(accountId, output.AccountDashboardResponse.AccountId);
+        Assert.NotNull(output.AccountDashboardResponse.AccountTransactions);
+        Assert.NotEmpty(output.AccountDashboardResponse.AccountTransactions);
+        Assert.Equal(transactionsAmounts[0], output.AccountDashboardResponse.AccountTransactions[0].Amount);
+        Assert.Null(output.AccountDashboardResponse.CategoryBalanceModels);
     }
     
     [Fact]
@@ -106,13 +106,13 @@ public class AccountDashboardUseCaseTest
         sut.Execute(accountId, output);
 
         // Assert
-        Assert.Equal(accountId, output.AccountDashboardRequest.AccountId);
-        Assert.NotNull(output.AccountDashboardRequest.AccountTransactions);
-        Assert.NotEmpty(output.AccountDashboardRequest.AccountTransactions);
-        Assert.Equal(transactionsAmounts[0], output.AccountDashboardRequest.AccountTransactions[0].Amount);
-        Assert.NotNull(output.AccountDashboardRequest.CategoryBalanceModels);
-        Assert.NotEmpty(output.AccountDashboardRequest.CategoryBalanceModels);
-        Assert.Equal(transactionsAmounts[0], output.AccountDashboardRequest.CategoryBalanceModels[0].Balance);
+        Assert.Equal(accountId, output.AccountDashboardResponse.AccountId);
+        Assert.NotNull(output.AccountDashboardResponse.AccountTransactions);
+        Assert.NotEmpty(output.AccountDashboardResponse.AccountTransactions);
+        Assert.Equal(transactionsAmounts[0], output.AccountDashboardResponse.AccountTransactions[0].Amount);
+        Assert.NotNull(output.AccountDashboardResponse.CategoryBalanceModels);
+        Assert.NotEmpty(output.AccountDashboardResponse.CategoryBalanceModels);
+        Assert.Equal(transactionsAmounts[0], output.AccountDashboardResponse.CategoryBalanceModels[0].Balance);
     }
 
     private static FinancialCategory[] CreateFinancialCategories(IReadOnlyList<decimal> amounts,

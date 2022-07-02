@@ -4,5 +4,5 @@ namespace KalanMoney.Domain.UseCases.AccountDashboard;
 
 public interface IAccountDashboardOutput
 {
-    void Results(AccountDashboardRequest request);
+    void Results(AccountDashboardResponse response);
 }

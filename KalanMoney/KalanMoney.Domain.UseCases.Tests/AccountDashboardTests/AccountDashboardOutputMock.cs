@@ -6,10 +6,10 @@ namespace KalanMoney.Domain.UseCases.Tests.AccountDashboardTests;
 
 public class AccountDashboardOutputMock : IAccountDashboardOutput
 {
-    public AccountDashboardRequest AccountDashboardRequest { get; private set; }
+    public AccountDashboardResponse AccountDashboardResponse { get; private set; }
     
-    public void Results(AccountDashboardRequest request)
+    public void Results(AccountDashboardResponse response)
     {
-        AccountDashboardRequest = request;
+        AccountDashboardResponse = response;
     }
 }

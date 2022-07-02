@@ -30,7 +30,7 @@ public class AccountDashboardUseCase : IAccountDashboardInput
         
         categoriesBalances = CreateCategoryBalanceModels(categories);
         
-        var request = new AccountDashboardRequest(accountId, accountTransactions, categoriesBalances);
+        var request = new AccountDashboardResponse(accountId, accountTransactions, categoriesBalances);
         
         output.Results(request);
     }
