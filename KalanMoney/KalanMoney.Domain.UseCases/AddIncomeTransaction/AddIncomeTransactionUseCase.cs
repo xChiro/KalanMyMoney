@@ -49,7 +49,8 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
     /// <exception cref="CategoryNotFoundException"></exception>
     private FinancialCategory GetFinancialCategory(AddTransactionRequest request)
     {
-        var category = _categoryQueriesRepository.GetCategoryById(request.CategoryId);
+        var transactionsFilters = TransactionFilters.CreateLastMonthRange();
+        var category = _categoryQueriesRepository.GetCategoryById(request.CategoryId, transactionsFilters);
         
         if (category == null) throw new CategoryNotFoundException();
         
@@ -59,7 +60,8 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
     /// <exception cref="AccountNotFoundException"></exception>
     private FinancialAccount GetFinancialAccount(AddTransactionRequest request)
     {
-        var account = _accountQueriesRepository.GetAccountById(request.AccountId);
+        var transactionsFilters = TransactionFilters.CreateLastMonthRange();
+        var account = _accountQueriesRepository.GetAccountById(request.AccountId, transactionsFilters);
         
         if (account == null) throw new AccountNotFoundException();
         

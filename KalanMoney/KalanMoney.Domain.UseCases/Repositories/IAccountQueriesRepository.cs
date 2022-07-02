@@ -1,10 +1,11 @@
 using KalanMoney.Domain.Entities;
+using KalanMoney.Domain.UseCases.Repositories.Models;
 
 namespace KalanMoney.Domain.UseCases.Repositories;
 
 public interface IAccountQueriesRepository
 {
-    public FinancialAccount? GetAccountById(string id);
+    public FinancialAccount? GetAccountById(string id, TransactionFilters transactionFilters);
     
-    Transaction[]? GetTransactions(string accountId, DateOnly from, DateOnly to);
+    Transaction[]? GetTransactions(string accountId, TransactionFilters transactionFilters);
 }

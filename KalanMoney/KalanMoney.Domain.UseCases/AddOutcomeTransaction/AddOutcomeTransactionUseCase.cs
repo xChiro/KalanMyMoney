@@ -23,8 +23,9 @@ public class AddOutcomeTransactionUseCase : IAddOutcomeTransactionInput
 
     public void Execute(AddTransactionRequest addTransactionRequest, IAddOutcomeTransactionOutput output)
     {
-        var account = _accountQueriesRepository.GetAccountById(addTransactionRequest.AccountId);
-        var category = _categoryQueriesRepository.GetCategoryById(addTransactionRequest.CategoryId);
+        var transactionsFilters = TransactionFilters.CreateLastMonthRange();
+        var account = _accountQueriesRepository.GetAccountById(addTransactionRequest.AccountId, transactionsFilters);
+        var category = _categoryQueriesRepository.GetCategoryById(addTransactionRequest.CategoryId, transactionsFilters);
 
         if (account == null) throw new AccountNotFoundException();
         if (category == null) throw new CategoryNotFoundException();
