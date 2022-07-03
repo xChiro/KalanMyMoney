@@ -17,7 +17,8 @@ public class CreateCategoryUseCaseTest
     {
         // Arrange
         var categoryCommandsRepository = new CategoryCommandsRepositoryMock();
-        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
+        var accountQueriesRepository = CreateAccountQueriesRepository(true);
+
         var sut = new CreateCategoryUseCase(categoryCommandsRepository, accountQueriesRepository.Object);
 
         const string categoryName = "Salary";
@@ -36,8 +37,8 @@ public class CreateCategoryUseCaseTest
     {
         // Arrange
         var categoryCommandsRepository = new CategoryCommandsRepositoryMock();
+        var accountQueriesRepository = CreateAccountQueriesRepository(true);
         
-        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         var sut = new CreateCategoryUseCase(categoryCommandsRepository, accountQueriesRepository.Object);
         var accountId = Guid.NewGuid().ToString();
         var output = new CreateCategoryOutputMock();
@@ -48,13 +49,11 @@ public class CreateCategoryUseCaseTest
     }
 
     [Fact]
-    public void Try_to_create_a_category_in_an_existing_account()
+    public void Try_to_create_a_category_in_an_unexciting_account()
     {
         // Arrange 
         var categoryCommandsRepository = new CategoryCommandsRepositoryMock();
-        
-        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(x => x.AccountExists(It.IsAny<string>())).Returns(false);
+        var accountQueriesRepository = CreateAccountQueriesRepository(false);
         
         var sut = new CreateCategoryUseCase(categoryCommandsRepository, accountQueriesRepository.Object);
         var output = new CreateCategoryOutputMock();
@@ -63,5 +62,13 @@ public class CreateCategoryUseCaseTest
         
         // Act/Assert
         Assert.Throws<AccountNotFoundException>(() => sut.Execute(new CreateCategoryRequest(accountId, categoryName), output));
+    }
+    
+    private static Mock<IAccountQueriesRepository> CreateAccountQueriesRepository(bool existAccount)
+    {
+        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
+        accountQueriesRepository.Setup(x => x.AccountExists(It.IsAny<string>()))
+            .Returns(existAccount);
+        return accountQueriesRepository;
     }
 }
