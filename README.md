@@ -39,3 +39,7 @@ ending with a completely different one, and for that, we are using TDD in this p
 # How to contribute? 
 
 im working on it!
+
+# Licence
+
+We are using MIT license.
