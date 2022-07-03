@@ -1,0 +1,22 @@
+Title: Create a financial category
+Primary Actor: User
+Level: Actor Goal
+Preconditions: The user must have a valid account.
+Success Guarantees: The category is created correctly. 
+
+Request Data:
+AccountId, CategoryName
+
+Response Data:
+CategoryId
+
+Main Success Scenario:
+1. User submits request data to create a category.
+2. Find account by AccountId
+3. Validate if category name is available
+4. Create new financial category in especifict account wihtout transactions.
+5. Returns response data.
+
+Exceptions:
+2.a1 Account cant be found throw an error. 
+3.a1 Name is invalid throw an name error.

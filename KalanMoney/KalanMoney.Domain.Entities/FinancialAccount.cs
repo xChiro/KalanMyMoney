@@ -27,7 +27,7 @@ public class FinancialAccount : Entity
     
     public Owner Owner { get; init; }
     
-    public Balance Balance { get; init; }
+    public Balance Balance { get; private set; }
     
     public TimeStamp CreationDate { get; init; }
     
@@ -39,9 +39,9 @@ public class FinancialAccount : Entity
     public Balance AddIncomeTransaction(decimal amount)
     {
         var positiveAmount = Math.Abs(amount);
-        var balance = AddTransaction(positiveAmount);
+        Balance = AddTransaction(positiveAmount);
 
-        return balance;
+        return Balance;
     }
 
     /// <returns>

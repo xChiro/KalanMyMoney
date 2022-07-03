@@ -28,15 +28,15 @@ public class FinancialCategory : Entity
     
     public Owner Owner { get; init; }
     
-    public Balance Balance { get; init; }
+    public Balance Balance { get; private set; }
     
     public TransactionCollection Transactions { get; init; }
 
     public Balance AddTransaction(Transaction transaction)
     {
         Transactions.AddTransaction(transaction);
-        var balance = Balance.SumAmount(transaction.Amount);
+        Balance = Balance.SumAmount(transaction.Amount);
 
-        return balance;
+        return Balance;
     }
 }
