@@ -1,4 +1,4 @@
-# What is kalan my money?
+# What is Kalan My Money?
 
 According to AULEX dictionary, Kalan means guardian or protector in Maya language,
 and it's an appropriate name for a personal financial system (maybe not for commercial uses hehe), so that is Kalan My Money. 
