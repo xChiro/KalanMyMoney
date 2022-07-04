@@ -17,13 +17,13 @@ public class CreateCategoryUseCaseTest
     {
         // Arrange
         var categoryCommandsRepository = new CategoryCommandsRepositoryMock();
-        var accountQueriesRepository = AccountQueryGetAccountOnlySetup();
+        var accountQueriesRepository = AccountQueryGetAccountOnlySetup("OwnerTest");
 
         var sut = new CreateCategoryUseCase(categoryCommandsRepository, accountQueriesRepository.Object);
         var output = new CreateCategoryOutputMock();
         
         const string categoryName = "Salary";
-        var request = CreateCategoryRequest(categoryName);
+        var request = CreateCategoryRequest(categoryName, Guid.NewGuid().ToString());
         
         // Act
         sut.Execute(request, output);
@@ -37,13 +37,13 @@ public class CreateCategoryUseCaseTest
     {
         // Arrange
         var categoryCommandsRepository = new CategoryCommandsRepositoryMock();
-        var accountQueriesRepository = AccountQueryGetAccountOnlySetup();
+        var accountQueriesRepository = AccountQueryGetAccountOnlySetup("OwnerTest");
         
         var sut = new CreateCategoryUseCase(categoryCommandsRepository, accountQueriesRepository.Object);
         var output = new CreateCategoryOutputMock();
         
         const string categoryName = "This its a very very long name for a category and its invalid.";
-        var request = CreateCategoryRequest(categoryName);
+        var request = CreateCategoryRequest(categoryName, Guid.NewGuid().ToString());
         
         // Act/Assert
         Assert.Throws<AccountNameException>(() => sut.Execute(request, output));
@@ -61,7 +61,7 @@ public class CreateCategoryUseCaseTest
         
         var sut = new CreateCategoryUseCase(categoryCommandsRepository, accountQueriesRepository.Object);
         var output = new CreateCategoryOutputMock();
-        var request = CreateCategoryRequest("Salary");
+        var request = CreateCategoryRequest("Salary", Guid.NewGuid().ToString());
 
         // Act/Assert
         Assert.Throws<AccountNotFoundException>(() => sut.Execute(request, output));
@@ -72,11 +72,15 @@ public class CreateCategoryUseCaseTest
     {
         // Arrange 
         var categoryCommandsRepository = new CategoryCommandsRepositoryMock();
-        var accountQueriesRepository = AccountQueryGetAccountOnlySetup();
+        const string ownerName = "OwnerTest";
+        var accountQueriesRepository = AccountQueryGetAccountOnlySetup(ownerName);
 
         var sut = new CreateCategoryUseCase(categoryCommandsRepository, accountQueriesRepository.Object);
         var output = new CreateCategoryOutputMock();
-        var request = CreateCategoryRequest("Salary");
+        
+        const string categoryName = "Salary";
+        var accountId = Guid.NewGuid().ToString();
+        var request = CreateCategoryRequest(categoryName, accountId);
         
         // Act
         sut.Execute(request, output);
@@ -84,19 +88,22 @@ public class CreateCategoryUseCaseTest
         // Assert
         Assert.NotNull(output.CategoryId);
         Assert.Single(categoryCommandsRepository.Categories);
+        Assert.Equal(categoryName, categoryCommandsRepository.Categories.First().Value.Name.Value);
+        Assert.Equal(accountId, categoryCommandsRepository.Categories.First().Value.AccountId);
+        Assert.NotNull(categoryCommandsRepository.Categories.First().Value.Owner);
+        Assert.Equal(ownerName, categoryCommandsRepository.Categories.First().Value.Owner.Name);
     }
 
-    private static CreateCategoryRequest CreateCategoryRequest(string categoryName)
+    private static CreateCategoryRequest CreateCategoryRequest(string categoryName, string accountId)
     {
-        var accountId = Guid.NewGuid().ToString();
         var request = new CreateCategoryRequest(accountId, categoryName);
         return request;
     }
 
-    private static Mock<IAccountQueriesRepository> AccountQueryGetAccountOnlySetup()
+    private static Mock<IAccountQueriesRepository> AccountQueryGetAccountOnlySetup(string ownerName)
     {
         var financialCategory = new FinancialAccount(AccountName.Create("Account Test"), 
-            Guid.NewGuid().ToString(), "OwnerTest");
+            Guid.NewGuid().ToString(), ownerName);
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(x => x.GetAccountOnly(It.IsAny<string>()))
