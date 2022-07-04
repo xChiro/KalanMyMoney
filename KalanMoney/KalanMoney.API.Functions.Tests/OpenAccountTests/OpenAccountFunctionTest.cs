@@ -1,6 +1,7 @@
 using System.Text;
 using System.Web.Http;
 using Castle.Components.DictionaryAdapter.Xml;
+using KalanMoney.API.Functions.AccountFunctions;
 using KalanMoney.Domain.UseCases.OpenAccount;
 using KalanMoney.Domain.UseCases.Repositories;
 using Microsoft.AspNetCore.Http;

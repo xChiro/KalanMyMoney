@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web.Http;
-using KalanMoney.API.Functions.Models;
-using KalanMoney.API.Functions.Presenters;
 using KalanMoney.Domain.Entities.Exceptions;
 using KalanMoney.Domain.UseCases.Adapters;
 using KalanMoney.Domain.UseCases.OpenAccount;
@@ -14,7 +12,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace KalanMoney.API.Functions;
+namespace KalanMoney.API.Functions.AccountFunctions;
 
 public class OpenAccountFunction
 {
