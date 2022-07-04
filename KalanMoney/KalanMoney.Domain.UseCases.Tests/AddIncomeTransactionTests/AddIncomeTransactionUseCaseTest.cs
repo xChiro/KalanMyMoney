@@ -1,12 +1,10 @@
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
-using KalanMoney.Domain.UseCases.AddOutcomeTransaction;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Common.Models;
 using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Domain.UseCases.Repositories.Models;
-using KalanMoney.Domain.UseCases.Tests.AddOutcomeTransactionTests;
 using KalanMoney.Domain.UseCases.Tests.RepositoriesMocks;
 using Moq;
 using Xunit;
@@ -21,7 +19,7 @@ public class AddIncomeTransactionUseCaseTest
         // Arrange
         var accountRepositoryMock = new Mock<IAccountQueriesRepository>();
 
-        accountRepositoryMock.Setup(x => x.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountRepositoryMock.Setup(x => x.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(default(FinancialAccount));
 
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
@@ -48,7 +46,7 @@ public class AddIncomeTransactionUseCaseTest
             .Returns(default(FinancialCategory));
         
         var accountQueriesRepositoryMock = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepositoryMock.Setup(x => x.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountQueriesRepositoryMock.Setup(x => x.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(new FinancialAccount(AccountName.Create("Test"), "Owner Id", "Test Name"));
         
         var accountCommandsRepository = new Mock<IAccountCommandsRepository>();
@@ -152,7 +150,7 @@ public class AddIncomeTransactionUseCaseTest
     {
         var accountQueryRepository = new Mock<IAccountQueriesRepository>();
         
-        accountQueryRepository.Setup(x => x.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountQueryRepository.Setup(x => x.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(financialAccount);
         
         return accountQueryRepository;

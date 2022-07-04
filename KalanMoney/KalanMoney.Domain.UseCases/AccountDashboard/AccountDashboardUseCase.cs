@@ -21,16 +21,16 @@ public class AccountDashboardUseCase : IAccountDashboardInput
     public void Execute(string accountId, IAccountDashboardOutput output)
     {
         var transactionsFilters = TransactionFilter.CreateMonthRangeFromUtcNow();
-        var accountTransactions = _accountQueriesRepository.GetTransactions(accountId, transactionsFilters);
+        var account = _accountQueriesRepository.GetAccount(accountId, transactionsFilters);
 
-        if (accountTransactions == null) throw new AccountNotFoundException();
+        if (account == null) throw new AccountNotFoundException();
         
         var categories = _categoryQueriesRepository.GetCategoriesOfAccount(accountId, transactionsFilters);
         CategoryBalanceModel[]? categoriesBalances = null;
         
         categoriesBalances = CreateCategoryBalanceModels(categories);
         
-        var request = new AccountDashboardResponse(accountId, accountTransactions, categoriesBalances);
+        var request = new AccountDashboardResponse(accountId, account.AccountName.Value, account.Transactions.Items, categoriesBalances);
         
         output.Results(request);
     }

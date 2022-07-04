@@ -1,4 +1,3 @@
-using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Common.Models;
 using KalanMoney.Domain.UseCases.Repositories;
@@ -24,7 +23,7 @@ public class AddOutcomeTransactionUseCase : IAddOutcomeTransactionInput
     public void Execute(AddTransactionRequest addTransactionRequest, IAddOutcomeTransactionOutput output)
     {
         var transactionsFilters = TransactionFilter.CreateMonthRangeFromUtcNow();
-        var account = _accountQueriesRepository.GetAccountById(addTransactionRequest.AccountId, transactionsFilters);
+        var account = _accountQueriesRepository.GetAccount(addTransactionRequest.AccountId, transactionsFilters);
         var category = _categoryQueriesRepository.GetCategoryById(addTransactionRequest.CategoryId, transactionsFilters);
 
         if (account == null) throw new AccountNotFoundException();

@@ -15,7 +15,10 @@ public class AccountDashboardUseCaseTest
     public void Try_to_request_a_dashboard_of_unexciting_account()
     {
         // Arrange
-        var accountQueriesRepository = CreateAccountQueriesRepository(default);
+        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
+        accountQueriesRepository.Setup(x => x.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+            .Returns(default(FinancialAccount));
+        
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
 
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object);
@@ -30,7 +33,7 @@ public class AccountDashboardUseCaseTest
     {
         // Arrange
         var transaction = Array.Empty<Transaction>();
-        var accountQueriesRepository = CreateAccountQueriesRepository(transaction);
+        var accountQueriesRepository = CreateAccountQueriesRepository(0, transaction);
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
 
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object);
@@ -40,6 +43,7 @@ public class AccountDashboardUseCaseTest
         sut.Execute(Guid.NewGuid().ToString(), outPut);
 
         // Assert
+        Assert.NotNull(outPut.AccountDashboardResponse.AccountTransactions);
         Assert.Empty(outPut.AccountDashboardResponse.AccountTransactions);
     }
 
@@ -47,15 +51,12 @@ public class AccountDashboardUseCaseTest
     public void Request_a_dashboard_with_one_income_transaction_but_without_balance_category_successfully()
     {
         // Arrange
-        decimal[] transactionsAmounts = { 100.10m };
+        const decimal balance = 100.10m;
+        decimal[] transactionsAmounts = { balance };
         var numberOfTransactions = transactionsAmounts.Length;
 
         var transactions = CreateTransactions(numberOfTransactions, transactionsAmounts);
-
-        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository
-            .Setup(x => x.GetTransactions(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
-            .Returns(transactions);
+        var accountQueriesRepository = CreateAccountQueriesRepository(balance, transactions);
 
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
         categoryQueriesRepository
@@ -81,17 +82,14 @@ public class AccountDashboardUseCaseTest
     public void Request_a_dashboard_with_one_income_transaction_and_salary_balance_category_successfully()
     {
         // Arrange
-        decimal[] transactionsAmounts = { 100.10m };
+        const decimal balance = 100.10m;
+        decimal[] transactionsAmounts = { balance };
         var numberOfTransactions = transactionsAmounts.Length;
 
         var transactions = CreateTransactions(numberOfTransactions, transactionsAmounts);
+        var accountQueriesRepository = CreateAccountQueriesRepository(balance, transactions);
 
-        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository
-            .Setup(x => x.GetTransactions(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
-            .Returns(transactions);
-
-        var categories = CreateFinancialCategories(transactionsAmounts, transactions);
+        var categories = CreateSingleFinancialCategories(transactionsAmounts, transactions);
 
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
         categoryQueriesRepository
@@ -113,9 +111,12 @@ public class AccountDashboardUseCaseTest
         Assert.NotNull(output.AccountDashboardResponse.CategoryBalanceModels);
         Assert.NotEmpty(output.AccountDashboardResponse.CategoryBalanceModels);
         Assert.Equal(transactionsAmounts[0], output.AccountDashboardResponse.CategoryBalanceModels[0].Balance);
+        Assert.NotNull(output.AccountDashboardResponse.CategoryBalanceModels[0].Name);
+        Assert.NotEmpty(output.AccountDashboardResponse.CategoryBalanceModels[0].Name);
+        Assert.Equal(accountId, output.AccountDashboardResponse.AccountId);
     }
 
-    private static FinancialCategory[] CreateFinancialCategories(IReadOnlyList<decimal> amounts,
+    private static FinancialCategory[] CreateSingleFinancialCategories(IReadOnlyList<decimal> amounts,
         IEnumerable<Transaction> transactions)
     {
         var categories = new FinancialCategory[1];
@@ -139,12 +140,20 @@ public class AccountDashboardUseCaseTest
         return transactions;
     }
 
-    private static Mock<IAccountQueriesRepository> CreateAccountQueriesRepository(Transaction[]? transaction)
+    private static Mock<IAccountQueriesRepository> CreateAccountQueriesRepository(decimal balanceAmount, Transaction[]? transactions)
     {
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
+
+        var owner = new Owner(Guid.NewGuid().ToString(), "Owner Test");
+        var balance = new Balance(balanceAmount);
+        
+        var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), AccountName.Create("Test"), owner, balance, 
+            TimeStamp.CreateNow(), transactions ?? Array.Empty<Transaction>());
+
         accountQueriesRepository.Setup(x =>
-                x.GetTransactions(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
-            .Returns(transaction);
+                x.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+            .Returns(financialAccount);
+        
         return accountQueriesRepository;
     }
 }

@@ -1,7 +1,4 @@
-﻿using KalanMoney.Domain.UseCases.Adapters;
-using KalanMoney.Domain.UseCases.OpenAccount;
-using KalanMoney.Domain.UseCases.Repositories;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace KalanMoney.Startup;
 

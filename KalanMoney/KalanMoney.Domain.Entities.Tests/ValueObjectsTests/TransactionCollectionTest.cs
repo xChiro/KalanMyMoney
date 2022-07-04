@@ -27,5 +27,6 @@ public class TransactionCollectionTest
 
         // Assert
         Assert.Single(sut.Items);
+        Assert.True(sut.Items[0].TimeStamp.Value > 0);
     }
 }
