@@ -1,12 +1,19 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using KalanMoney.Domain.UseCases.Adapters;
+using KalanMoney.Domain.UseCases.OpenAccount;
+using KalanMoney.Domain.UseCases.Tests.RepositoriesMocks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KalanMoney.Startup;
 
 public static class AccountUseCaseServiceRegistration
 {
-    public static IServiceCollection Setup(this IServiceCollection services)
+    public static IServiceCollection AccountUseCaseService(this IServiceCollection services)
     {
-        throw new NotImplementedException();
-        // services.AddScoped<IOpenAccountInput>(provider => new OpenAccountUseCase());
+        var accountCommandsRepository = new AccountCommandsRepositoryMock();
+
+        services.AddScoped<IOpenAccountInput>(provider => new OpenAccountUseCase(accountCommandsRepository));
+        services.AddSingleton(accountCommandsRepository);
+
+        return services;
     }
 }

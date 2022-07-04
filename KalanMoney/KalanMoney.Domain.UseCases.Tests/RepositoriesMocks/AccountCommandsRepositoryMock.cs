@@ -12,6 +12,11 @@ public class AccountCommandsRepositoryMock : IAccountCommandsRepository
     public AddTransactionCategoryModel ResultCategoryModel { get; private set; }
     public Transaction ResultTransaction { get; private set; }
 
+    public AccountCommandsRepositoryMock()
+    {
+        _inAccountMemoryDb = new Dictionary<string, FinancialAccount>();
+    }
+    
     public AccountCommandsRepositoryMock(FinancialAccount firstFinancialAccount)
     {
         _inAccountMemoryDb = new Dictionary<string, FinancialAccount>();

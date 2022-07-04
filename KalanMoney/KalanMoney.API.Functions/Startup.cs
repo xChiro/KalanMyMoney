@@ -1,44 +1,16 @@
-using System;
+using KalanMoney.API.Functions;
+using KalanMoney.Startup;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 
-[assembly: FunctionsStartup(typeof(GamerZone.UserManagerService.Api.Startup))]
+[assembly: FunctionsStartup(typeof(Startup))]
 
-public class FunctionsStartupAttribute : Attribute
-{
-    public FunctionsStartupAttribute(Type type)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-namespace GamerZone.UserManagerService.Api
+namespace KalanMoney.API.Functions
 {
     public class Startup : FunctionsStartup
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            // var appSetting = new AppSetting()
-            // {
-            //     ClientID = GetEnvironmentVariable("clientID"),
-            //     TenantID = GetEnvironmentVariable("tenantID"),
-            //     VaultURI = GetEnvironmentVariable("VaultUri"),
-            //     SecretClient = GetEnvironmentVariable("secretClient"),
-            //     EndpointUri = GetEnvironmentVariable("dbEndpointUri"),
-            //     PrimaryKey = GetEnvironmentVariable("dbPrimaryKey"),
-            //     DataBaseId = GetEnvironmentVariable("dataBaseId"),
-            //     UserContainerId = GetEnvironmentVariable("userContainerId")
-            // };
-            //
-            // builder.Services.AddApplicationServices();
-            // builder.Services.AddPersistenceServices(appSetting);
-            // builder.Services.AddInfrastructureServices(appSetting);
-            //
-            // builder.Services.AddSingleton(appSetting);
-        }
-
-        private static string GetEnvironmentVariable(string name) 
-        {
-            return System.Environment.GetEnvironmentVariable(name, System.EnvironmentVariableTarget.Process);
+            builder.Services.AccountUseCaseService();
         }
     }
 }

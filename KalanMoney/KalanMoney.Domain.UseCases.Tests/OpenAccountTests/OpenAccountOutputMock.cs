@@ -8,9 +8,9 @@ public class OpenAccountOutputMock : IOpenAccountOutput
 
     public decimal AccountBalance { get; private set; }
 
-    public void Results(OpenAccountResponse openAccountResponse)
+    public void Results(OpenAccountResponse response)
     {
-        AccountId = openAccountResponse.AccountId;
-        AccountBalance = openAccountResponse.AccountBalance;
+        AccountId = response.AccountId;
+        AccountBalance = response.AccountBalance;
     }
 }

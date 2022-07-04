@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="RepositoriesMock" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0-preview-20220612-01" />
+      <PackageReference Include="xunit.extensibility.core" Version="2.4.2-pre.12" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\KalanMoney.API.Functions\KalanMoney.API.Functions.csproj" />
+    </ItemGroup>
+
+</Project>

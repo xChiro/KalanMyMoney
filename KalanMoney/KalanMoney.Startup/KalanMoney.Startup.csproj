@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\KalanMoney.Domain.UseCases.Tests\KalanMoney.Domain.UseCases.Tests.csproj" />
       <ProjectReference Include="..\KalanMoney.Domain.UseCases\KalanMoney.Domain.UseCases.csproj" />
     </ItemGroup>
 
