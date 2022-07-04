@@ -33,7 +33,8 @@ public class AccountDashboardUseCaseTest
     {
         // Arrange
         var transaction = Array.Empty<Transaction>();
-        var accountQueriesRepository = CreateAccountQueriesRepository(0, transaction);
+        var owner = CreateOwner();
+        var accountQueriesRepository = CreateAccountQueriesRepository(0, transaction, owner);
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
 
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object);
@@ -56,7 +57,8 @@ public class AccountDashboardUseCaseTest
         var numberOfTransactions = transactionsAmounts.Length;
 
         var transactions = CreateTransactions(numberOfTransactions, transactionsAmounts);
-        var accountQueriesRepository = CreateAccountQueriesRepository(balance, transactions);
+        var owner = CreateOwner();
+        var accountQueriesRepository = CreateAccountQueriesRepository(balance, transactions, owner);
 
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
         categoryQueriesRepository
@@ -87,7 +89,11 @@ public class AccountDashboardUseCaseTest
         var numberOfTransactions = transactionsAmounts.Length;
 
         var transactions = CreateTransactions(numberOfTransactions, transactionsAmounts);
-        var accountQueriesRepository = CreateAccountQueriesRepository(balance, transactions);
+        var accountId = Guid.NewGuid().ToString();
+
+        var owner = CreateOwner();
+        var accountQueriesRepository = CreateAccountQueriesRepository(balance, transactions, 
+            owner, accountId);
 
         var categories = CreateSingleFinancialCategories(transactionsAmounts, transactions);
 
@@ -98,10 +104,9 @@ public class AccountDashboardUseCaseTest
 
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object);
         var output = new AccountDashboardOutputMock();
-        var accountId = Guid.NewGuid().ToString();
         
         // Act
-        sut.Execute(accountId, output);
+        sut.Execute(owner.ExternalUserId, output);
 
         // Assert
         Assert.Equal(accountId, output.AccountDashboardResponse.AccountId);
@@ -113,14 +118,13 @@ public class AccountDashboardUseCaseTest
         Assert.Equal(transactionsAmounts[0], output.AccountDashboardResponse.CategoryBalanceModels[0].Balance);
         Assert.NotNull(output.AccountDashboardResponse.CategoryBalanceModels[0].Name);
         Assert.NotEmpty(output.AccountDashboardResponse.CategoryBalanceModels[0].Name);
-        Assert.Equal(accountId, output.AccountDashboardResponse.AccountId);
     }
 
     private static FinancialCategory[] CreateSingleFinancialCategories(IReadOnlyList<decimal> amounts,
         IEnumerable<Transaction> transactions)
     {
         var categories = new FinancialCategory[1];
-        var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
+        var owner = new Owner(Guid.NewGuid().ToString(), "Test CreateOwner");
 
         categories[0] = new FinancialCategory(Guid.NewGuid().ToString(), AccountName.Create("Test"),
             Guid.NewGuid().ToString(), owner, new Balance(amounts[0]), transactions);
@@ -140,20 +144,34 @@ public class AccountDashboardUseCaseTest
         return transactions;
     }
 
-    private static Mock<IAccountQueriesRepository> CreateAccountQueriesRepository(decimal balanceAmount, Transaction[]? transactions)
+    private static Mock<IAccountQueriesRepository> CreateAccountQueriesRepository(decimal balanceAmount, Transaction[]? transactions, 
+        Owner owner, string? accountId = null)
     {
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-
-        var owner = new Owner(Guid.NewGuid().ToString(), "Owner Test");
         var balance = new Balance(balanceAmount);
         
-        var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), AccountName.Create("Test"), owner, balance, 
-            TimeStamp.CreateNow(), transactions ?? Array.Empty<Transaction>());
+        var financialAccount = CreateFinancialAccount(accountId, transactions, owner, balance);
 
         accountQueriesRepository.Setup(x =>
-                x.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+                x.GetAccountByOwner(It.Is<string>(id => id == owner.ExternalUserId), It.IsAny<TransactionFilter>()))
             .Returns(financialAccount);
         
         return accountQueriesRepository;
+    }
+
+    private static Owner CreateOwner(string name = "CreateOwner Name")
+    {
+        var owner = new Owner(Guid.NewGuid().ToString(), name);
+        return owner;
+    }
+
+    private static FinancialAccount CreateFinancialAccount(string? accountId, Transaction[]? transactions, Owner owner, Balance balance)
+    {
+        accountId ??= Guid.NewGuid().ToString();
+        
+        var financialAccount = new FinancialAccount(accountId, AccountName.Create("Test"), owner, balance,
+            TimeStamp.CreateNow(), transactions ?? Array.Empty<Transaction>());
+        
+        return financialAccount;
     }
 }
