@@ -12,7 +12,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace KalanMoney.API.Functions.AccountFunctions;
+namespace KalanMoney.API.Functions.OpenAccountFunctions;
 
 public class OpenAccountFunction
 {

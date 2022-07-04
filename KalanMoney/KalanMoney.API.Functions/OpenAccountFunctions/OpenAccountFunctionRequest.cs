@@ -1,4 +1,4 @@
-namespace KalanMoney.API.Functions.AccountFunctions;
+namespace KalanMoney.API.Functions.OpenAccountFunctions;
 
 public class OpenAccountFunctionRequest
 {
