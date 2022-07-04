@@ -5,7 +5,7 @@ Preconditions: The user must have a valid account.
 Success Guarantees: The users wants to see all category balance, and main accoun transactions in current month. 
 
 Submit Data:
-AccountId
+OwnerId
 
 Response Data:
 Account Name, Owner, Account Balance, Account current month transaction, 
@@ -13,7 +13,7 @@ categories name and their balances.
 
 Main Success Scenario:
 1. User submits a dashboard data request
-2. Get account by the ID
+2. Get account by the OwnerID
 3. Get transactions in current month
 4. Get all categories of the account.
 5. System generate dashboard response data. 

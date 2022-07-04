@@ -18,19 +18,19 @@ public class AccountDashboardUseCase : IAccountDashboardInput
     }
 
     /// <exception cref="AccountNotFoundException"></exception>
-    public void Execute(string accountId, IAccountDashboardOutput output)
+    public void Execute(string ownerId, IAccountDashboardOutput output)
     {
         var transactionsFilters = TransactionFilter.CreateMonthRangeFromUtcNow();
-        var account = _accountQueriesRepository.GetAccount(accountId, transactionsFilters);
+        var account = _accountQueriesRepository.GetAccountByOwner(ownerId, transactionsFilters);
 
         if (account == null) throw new AccountNotFoundException();
         
-        var categories = _categoryQueriesRepository.GetCategoriesOfAccount(accountId, transactionsFilters);
+        var categories = _categoryQueriesRepository.GetCategoriesOfAccount(ownerId, transactionsFilters);
         CategoryBalanceModel[]? categoriesBalances = null;
         
         categoriesBalances = CreateCategoryBalanceModels(categories);
         
-        var request = new AccountDashboardResponse(accountId, account.AccountName.Value, account.Transactions.Items, categoriesBalances);
+        var request = new AccountDashboardResponse(account.Id, account.AccountName.Value, account.Transactions.Items, categoriesBalances);
         
         output.Results(request);
     }
