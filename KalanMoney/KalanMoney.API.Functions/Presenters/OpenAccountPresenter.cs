@@ -1,13 +1,16 @@
 using KalanMoney.Domain.UseCases.OpenAccount;
 
-namespace GamerZone.UserManagerService.Api.Presenters;
+namespace KalanMoney.API.Functions.Presenters;
 
 public class OpenAccountPresenter : IOpenAccountOutput
 {
-    public string Type { get; set; }
+    public string AccountId { get; private set; }
     
-    public void Results(OpenAccountResponse openAccountResponse)
+    public decimal AccountBalance { get; private set; }
+    
+    public void Results(OpenAccountResponse response)
     {
-        throw new System.NotImplementedException();
+        AccountId = response.AccountId;
+        AccountBalance = response.AccountBalance;
     }
 }

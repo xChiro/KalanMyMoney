@@ -16,7 +16,7 @@ public class AccountDashboardUseCaseTest
     {
         // Arrange
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(x => x.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountQueriesRepository.Setup(x => x.GetAccountByOwner(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(default(FinancialAccount));
         
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
@@ -34,14 +34,16 @@ public class AccountDashboardUseCaseTest
         // Arrange
         var transaction = Array.Empty<Transaction>();
         var owner = CreateOwner();
-        var accountQueriesRepository = CreateAccountQueriesRepository(0, transaction, owner);
+        
+        var accountId = Guid.NewGuid().ToString();
+        var accountQueriesRepository = CreateAccountQueriesRepository(0, transaction, owner, accountId);
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
 
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object);
         var outPut = new AccountDashboardOutputMock();
 
         // Act
-        sut.Execute(Guid.NewGuid().ToString(), outPut);
+        sut.Execute(owner.ExternalUserId, outPut);
 
         // Assert
         Assert.NotNull(outPut.AccountDashboardResponse.AccountTransactions);
@@ -58,7 +60,8 @@ public class AccountDashboardUseCaseTest
 
         var transactions = CreateTransactions(numberOfTransactions, transactionsAmounts);
         var owner = CreateOwner();
-        var accountQueriesRepository = CreateAccountQueriesRepository(balance, transactions, owner);
+        var accountId = Guid.NewGuid().ToString();
+        var accountQueriesRepository = CreateAccountQueriesRepository(balance, transactions, owner, accountId);
 
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
         categoryQueriesRepository
@@ -67,10 +70,9 @@ public class AccountDashboardUseCaseTest
 
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object);
         var output = new AccountDashboardOutputMock();
-        var accountId = Guid.NewGuid().ToString();
         
         // Act
-        sut.Execute(accountId, output);
+        sut.Execute(owner.ExternalUserId, output);
 
         // Assert
         Assert.Equal(accountId, output.AccountDashboardResponse.AccountId);
