@@ -26,7 +26,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.Startup", "Kalan
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{7292E138-D6EC-4EAA-A12F-F86E99947A9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.API.Functions.Test", "KalanMoney.API.Functions.Test\KalanMoney.API.Functions.Test.csproj", "{8A9FE1F3-B5CC-47F8-A7C6-371DAF5E17D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.API.Functions.Tests", "KalanMoney.API.Functions.Tests\KalanMoney.API.Functions.Tests.csproj", "{8A9FE1F3-B5CC-47F8-A7C6-371DAF5E17D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
