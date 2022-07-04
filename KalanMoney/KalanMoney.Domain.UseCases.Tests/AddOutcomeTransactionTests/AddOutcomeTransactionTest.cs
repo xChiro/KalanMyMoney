@@ -1,4 +1,3 @@
-using Castle.Components.DictionaryAdapter.Xml;
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.AddOutcomeTransaction;
@@ -19,7 +18,7 @@ public class AddOutcomeTransactionTest
     {
         // Arrange
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountQueriesRepository.Setup(repository => repository.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(default(FinancialAccount));
         
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
@@ -43,7 +42,7 @@ public class AddOutcomeTransactionTest
         var financialAccount = CreateFinancialAccount(baseTransaction, owner);
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountQueriesRepository.Setup(repository => repository.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(financialAccount);
 
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
@@ -125,7 +124,7 @@ public class AddOutcomeTransactionTest
     private static Mock<IAccountQueriesRepository> AccountQueriesRepositoryMockSetup(FinancialAccount financialAccount)
     {
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetAccountById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountQueriesRepository.Setup(repository => repository.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(financialAccount);
         return accountQueriesRepository;
     }

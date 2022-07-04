@@ -5,9 +5,9 @@ namespace KalanMoney.Domain.UseCases.Repositories;
 
 public interface IAccountQueriesRepository
 {
-    public FinancialAccount? GetAccountById(string id, TransactionFilter transactionFilter);
-
-    public bool AccountExists(string id);
+    public FinancialAccount? GetAccount(string id, TransactionFilter transactionFilter);
+    
+    public FinancialAccount? GetAccountOnly(string id);
     
     Transaction[]? GetTransactions(string accountId, TransactionFilter transactionFilter);
 }
