@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using System.Web.Http;
 using KalanMoney.Domain.Entities.Exceptions;
@@ -12,9 +11,9 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace KalanMoney.API.Functions.OpenAccountFunctions;
+namespace KalanMoney.API.Functions.OpenAccount;
 
-public class OpenAccountFunction
+public class OpenAccountFunction : BaseFunctions<OpenAccountFunctionRequest>
 {
     private readonly IOpenAccountInput _openAccountInput;
 
@@ -31,17 +30,17 @@ public class OpenAccountFunction
 
         try
         {
-            var data = await GetOpenAccountFunctionRequest(req);
+            var data = await DeserializeRequest(req);
             
-            var output = new OpenAccountPresenter();
+            var presenter = new OpenAccountPresenter();
             var createAccountRequest = new CreateAccountRequest(Guid.NewGuid().ToString(), "A name here", data.AccountName);
 
-            _openAccountInput.Execute(createAccountRequest, output);
+            _openAccountInput.Execute(createAccountRequest, presenter);
 
             return new OkObjectResult(new
             {
-                output.AccountId,
-                output.AccountBalance,
+                presenter.AccountId,
+                presenter.AccountBalance,
             });
         }
         catch (Exception ex) when (ex is JsonSerializationException | ex is InvalidCastException)
@@ -58,13 +57,5 @@ public class OpenAccountFunction
             log.LogError(ex.Message);
             return new InternalServerErrorResult();
         }
-    }
-
-    private static async Task<OpenAccountFunctionRequest> GetOpenAccountFunctionRequest(HttpRequest req)
-    {
-        var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-        var data = JsonConvert.DeserializeObject<OpenAccountFunctionRequest>(requestBody);
-        
-        return data;
     }
 }

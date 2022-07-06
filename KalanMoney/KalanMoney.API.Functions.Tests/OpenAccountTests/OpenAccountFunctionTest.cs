@@ -1,9 +1,9 @@
 using System.Text;
 using System.Web.Http;
-using Castle.Components.DictionaryAdapter.Xml;
-using KalanMoney.API.Functions.OpenAccountFunctions;
+using KalanMoney.API.Functions.OpenAccount;
+using KalanMoney.Domain.Entities.Exceptions;
+using KalanMoney.Domain.UseCases.Adapters;
 using KalanMoney.Domain.UseCases.OpenAccount;
-using KalanMoney.Domain.UseCases.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +16,10 @@ namespace KalanMoney.API.Functions.Test.OpenAccountTests;
 public class OpenAccountFunctionTest
 {
     [Fact]
-    public async void Try_to_open_an_account_with_invalid_json_request_return_bad_request()
+    public async void Try_to_open_an_account_with_invalid_json_property_return_bad_request()
     {
         // Arrange
-        var accountInput = CreateOpenAccountUseCase();
+        var accountInput = CreateOpenAccountInputException(new AccountNameException(string.Empty));
 
         var sut = new OpenAccountFunction(accountInput);
         
@@ -39,11 +39,12 @@ public class OpenAccountFunctionTest
     public async void Try_to_open_an_account_with_an_invalid_name_return_bad_request()
     {
         // Arrange
-        var accountInput = CreateOpenAccountUseCase();
+        const string categoryName = "The name of this accounts its to long to be permitted.";
+        var accountInput = CreateOpenAccountInputException(new AccountNameException(categoryName));
 
         var sut = new OpenAccountFunction(accountInput);
         
-        const string requestBody = "{ 'AccountName': 'The name of this accounts its to long to be permitted.' }";
+        const string requestBody = $"{{ 'AccountName': '${{categoryName}}' }}";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
         
         var loggerMock = new Mock<ILogger>(); 
@@ -60,7 +61,7 @@ public class OpenAccountFunctionTest
     public async void Try_to_open_an_account_with_an_invalid_json_return_bad_request()
     {
         // Arrange
-        var accountInput = CreateOpenAccountUseCase();
+        var accountInput = CreateOpenAccountInputException(new Exception());
 
         var sut = new OpenAccountFunction(accountInput);
         
@@ -81,9 +82,9 @@ public class OpenAccountFunctionTest
     public async void Open_an_account_successfully_returns_ok_result()
     {
         // Arrange
-        var accountInput = CreateOpenAccountUseCase();
+        var accountInput = new Mock<IOpenAccountInput>();
 
-        var sut = new OpenAccountFunction(accountInput);
+        var sut = new OpenAccountFunction(accountInput.Object);
         
         const string requestBody = "{ 'AccountName': 'Test Account.' }";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
@@ -98,12 +99,13 @@ public class OpenAccountFunctionTest
         
     }
 
-    private static OpenAccountUseCase CreateOpenAccountUseCase()
+    private static IOpenAccountInput CreateOpenAccountInputException(Exception exception)
     {
-        var accountRepository = new Mock<IAccountCommandsRepository>();
-        var accountInput = new OpenAccountUseCase(accountRepository.Object);
+        var openAccountInput = new Mock<IOpenAccountInput>();
+        openAccountInput.Setup(x => x.Execute(It.IsAny<CreateAccountRequest>(), It.IsAny<IOpenAccountOutput>()))
+            .Throws(exception);
         
-        return accountInput;
+        return openAccountInput.Object;
     }
 
     private static DefaultHttpRequest CreateHttpRequest(string requestBody)

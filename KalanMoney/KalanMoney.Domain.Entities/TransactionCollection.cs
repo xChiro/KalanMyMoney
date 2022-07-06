@@ -1,6 +1,6 @@
-namespace KalanMoney.Domain.Entities.ValueObjects;
+namespace KalanMoney.Domain.Entities;
 
-public record TransactionCollection
+public class TransactionCollection
 {
     public TransactionCollection() : this(new List<Transaction>()) { } 
 
