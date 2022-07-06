@@ -1,4 +1,5 @@
 ﻿using KalanMoney.Domain.UseCases.Adapters;
+using KalanMoney.Domain.UseCases.CreateCategory;
 using KalanMoney.Domain.UseCases.OpenAccount;
 using KalanMoney.Domain.UseCases.Tests.RepositoriesMocks;
 using Microsoft.Extensions.DependencyInjection;

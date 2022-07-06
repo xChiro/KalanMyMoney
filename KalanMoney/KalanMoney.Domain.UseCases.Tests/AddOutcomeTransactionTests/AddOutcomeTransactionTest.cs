@@ -41,9 +41,7 @@ public class AddOutcomeTransactionTest
         var owner = new Owner(Guid.NewGuid().ToString(), "Test");
         var financialAccount = CreateFinancialAccount(baseTransaction, owner);
 
-        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
-            .Returns(financialAccount);
+        var accountQueriesRepository = CreateAccountQueriesRepositoryMock(financialAccount);
 
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
         categoryQueriesRepository.Setup(rep => rep.GetCategoryById(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
@@ -119,6 +117,15 @@ public class AddOutcomeTransactionTest
         Assert.Equal( -Math.Abs(transactionAmount), accountCommandRepository.ResultTransaction.Amount);
         Assert.Equal(new Balance(expectedBalance), accountCommandRepository.ResultAccountModel.Balance);
         Assert.Equal(expectedBalance, output.AccountBalance);
+    }
+
+    private static Mock<IAccountQueriesRepository> CreateAccountQueriesRepositoryMock(FinancialAccount financialAccount)
+    {
+        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
+        accountQueriesRepository
+            .Setup(repository => repository.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+            .Returns(financialAccount);
+        return accountQueriesRepository;
     }
 
     private static Mock<IAccountQueriesRepository> AccountQueriesRepositoryMockSetup(FinancialAccount financialAccount)

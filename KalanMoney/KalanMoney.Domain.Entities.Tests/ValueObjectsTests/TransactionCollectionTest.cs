@@ -1,4 +1,3 @@
-using KalanMoney.Domain.Entities.ValueObjects;
 using Xunit;
 
 namespace KalanMoney.Domain.Entities.Tests.ValueObjectsTests;

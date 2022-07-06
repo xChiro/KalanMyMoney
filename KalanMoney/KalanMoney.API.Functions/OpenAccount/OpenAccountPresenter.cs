@@ -1,6 +1,6 @@
 using KalanMoney.Domain.UseCases.OpenAccount;
 
-namespace KalanMoney.API.Functions.OpenAccountFunctions;
+namespace KalanMoney.API.Functions.OpenAccount;
 
 public class OpenAccountPresenter : IOpenAccountOutput
 {
