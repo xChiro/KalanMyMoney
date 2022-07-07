@@ -1,3 +1,4 @@
+using System.Text;
 using KalanMoney.API.Functions.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
@@ -20,7 +21,7 @@ public class AddIncomeTransactionFunctionTest
         var addIncomeTransactionInput = SetupAddIncomeTransactionInputMock(new AccountNotFoundException());
 
         var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
-        var defaultHttpRequest = CreateDefaultHttpRequestNoBody();
+        var defaultHttpRequest = CreateHttpRequestWithoutNoBody();
 
         // Act
         var result = await sut.RunAsync(defaultHttpRequest, new Mock<ILogger>().Object);
@@ -36,7 +37,7 @@ public class AddIncomeTransactionFunctionTest
         var addIncomeTransactionInput = SetupAddIncomeTransactionInputMock(new CategoryNotFoundException());
 
         var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
-        var defaultHttpRequest = CreateDefaultHttpRequestNoBody();
+        var defaultHttpRequest = CreateHttpRequestWithoutNoBody();
 
         // Act
         var result = await sut.RunAsync(defaultHttpRequest, new Mock<ILogger>().Object);
@@ -45,7 +46,54 @@ public class AddIncomeTransactionFunctionTest
         Assert.IsType<NotFoundResult>(result);
     }
 
-    private static DefaultHttpRequest CreateDefaultHttpRequestNoBody()
+    [Theory]
+    [InlineData("{'badRequest': ")]
+    [InlineData("{'badRequest': }")]
+    [InlineData("{'AccountId': 1, 'CategoryId': 1, 'Amount': null}")]
+    public async void Try_to_add_a_new_income_transaction_with_a_wrong_json_body_returns_bad_request(string jsonBody)
+    {
+        // Arrange
+        var addIncomeTransactionInput = new Mock<IAddIncomeTransactionInput>();
+        addIncomeTransactionInput.Setup(x => x.Execute(It.IsAny<AddTransactionRequest>(),
+            It.IsAny<IAddIncomeTransactionOutput>()));
+
+        var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
+        var defaultHttpContext = CreateHttpRequest(jsonBody);
+
+        // Act
+        var result = await sut.RunAsync(defaultHttpContext, new Mock<ILogger>().Object);
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public async void Add_a_new_income_transaction_successfully()
+    {
+        // Arrange
+        var addIncomeTransactionInput = new Mock<IAddIncomeTransactionInput>();
+        var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
+        var httpRequest = CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': 100}");
+        
+        // Act
+        var result = await sut.RunAsync(httpRequest, new Mock<ILogger>().Object);
+        
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+    }
+    
+    private static DefaultHttpRequest CreateHttpRequest(string requestBody)
+    {
+        var badRequestBytes = Encoding.ASCII.GetBytes(requestBody);
+        var defaultHttpRequest = new DefaultHttpRequest(new DefaultHttpContext())
+        {
+            Body = new MemoryStream(badRequestBytes)
+        };
+        
+        return defaultHttpRequest;
+    }
+    
+    private static DefaultHttpRequest CreateHttpRequestWithoutNoBody()
     {
         var defaultHttpContext = new DefaultHttpContext();
         var defaultHttpRequest = new DefaultHttpRequest(defaultHttpContext);

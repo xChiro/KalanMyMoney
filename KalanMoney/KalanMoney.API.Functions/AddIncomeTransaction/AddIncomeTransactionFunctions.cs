@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace KalanMoney.API.Functions.AddIncomeTransaction;
 
-public class AddIncomeTransactionFunctions
+public class AddIncomeTransactionFunctions : BaseFunctions<AddIncomeTransactionFunctionRequest>
 {
     private readonly IAddIncomeTransactionInput _addIncomeTransactionInput;
 
@@ -29,14 +29,23 @@ public class AddIncomeTransactionFunctions
     {
         try
         {
-            var addTransactionRequest = new AddTransactionRequest("AccountId", "CategoryId", decimal.Zero);
-            _addIncomeTransactionInput.Execute(addTransactionRequest, new AddIncomeTransactionPresenter());
+            var addIncomeTransactionFunctionRequest =  await DeserializeRequest(req);
+            var addTransactionRequest = new AddTransactionRequest(addIncomeTransactionFunctionRequest.AccountId, 
+                addIncomeTransactionFunctionRequest.CategoryId, addIncomeTransactionFunctionRequest.Amount);
             
-            return new OkResult();
+            var outputPresenter = new AddIncomeTransactionPresenter();
+            _addIncomeTransactionInput.Execute(addTransactionRequest, outputPresenter);
+            
+            return new OkObjectResult(outputPresenter);
         }
         catch (Exception e) when(e is AccountNotFoundException | e is CategoryNotFoundException)
         {
             return new NotFoundResult();
+        }
+        catch (Exception ex) when (ex is JsonException | ex is InvalidCastException)
+        {   
+            log.LogInformation("Bad Request");
+            return new BadRequestResult();
         }
     }
 }

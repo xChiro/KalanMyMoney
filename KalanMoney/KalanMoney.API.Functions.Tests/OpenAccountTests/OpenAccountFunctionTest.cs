@@ -35,18 +35,17 @@ public class OpenAccountFunctionTest
         Assert.IsType<BadRequestErrorMessageResult>(result);
     }
 
-    [Fact]
-    public async void Try_to_open_an_account_with_an_invalid_name_return_bad_request()
+    [Theory]
+    [InlineData("The name of this accounts its to long to be permitted.")]
+    [InlineData("")]
+    [InlineData(null)]
+    public async void Try_to_open_an_account_with_an_invalid_name_return_bad_request(string categoryName)
     {
         // Arrange
-        const string categoryName = "The name of this accounts its to long to be permitted.";
         var accountInput = CreateOpenAccountInputException(new AccountNameException(categoryName));
-
         var sut = new OpenAccountFunction(accountInput);
         
-        const string requestBody = $"{{ 'AccountName': '${{categoryName}}' }}";
-        var defaultHttpRequest = CreateHttpRequest(requestBody);
-        
+        var defaultHttpRequest = CreateHttpRequestCategoryName(categoryName);
         var loggerMock = new Mock<ILogger>(); 
 
         // Act
@@ -54,7 +53,6 @@ public class OpenAccountFunctionTest
         
         // Assert
         Assert.IsType<BadRequestErrorMessageResult>(result);
-        
     }
 
     [Fact]
@@ -77,7 +75,7 @@ public class OpenAccountFunctionTest
         Assert.IsType<BadRequestResult>(result);
         
     }
-    
+
     [Fact]
     public async void Open_an_account_successfully_returns_ok_result()
     {
@@ -106,6 +104,13 @@ public class OpenAccountFunctionTest
             .Throws(exception);
         
         return openAccountInput.Object;
+    }
+
+    private static DefaultHttpRequest CreateHttpRequestCategoryName(string categoryName)
+    {
+        var requestBody = $"{{ 'AccountName': '${categoryName}' }}";
+        var defaultHttpRequest = CreateHttpRequest(requestBody);
+        return defaultHttpRequest;
     }
 
     private static DefaultHttpRequest CreateHttpRequest(string requestBody)

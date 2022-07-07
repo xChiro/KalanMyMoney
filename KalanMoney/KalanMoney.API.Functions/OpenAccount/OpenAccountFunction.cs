@@ -37,13 +37,9 @@ public class OpenAccountFunction : BaseFunctions<OpenAccountFunctionRequest>
 
             _openAccountInput.Execute(createAccountRequest, presenter);
 
-            return new OkObjectResult(new
-            {
-                presenter.AccountId,
-                presenter.AccountBalance,
-            });
+            return new OkObjectResult(presenter);
         }
-        catch (Exception ex) when (ex is JsonSerializationException | ex is InvalidCastException)
+        catch (Exception ex) when (ex is JsonException | ex is InvalidCastException)
         {   
             log.LogInformation("Bad Request");
             return new BadRequestResult();

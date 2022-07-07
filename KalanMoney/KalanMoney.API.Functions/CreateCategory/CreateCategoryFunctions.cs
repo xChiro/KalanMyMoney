@@ -36,10 +36,7 @@ public class CreateCategoryFunctions : BaseFunctions<CreateCategoryFunctionReque
 
             _categoryInput.Execute(categoryRequest, presenter);
 
-            return new OkObjectResult(new
-            {
-                presenter.CategoryId,
-            });
+            return new OkObjectResult(presenter);
         }
         catch (AccountNotFoundException)
         {
