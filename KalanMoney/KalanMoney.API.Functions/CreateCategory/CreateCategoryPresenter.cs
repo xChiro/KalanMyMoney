@@ -2,7 +2,7 @@ using KalanMoney.Domain.UseCases.CreateCategory;
 
 namespace KalanMoney.API.Functions.CreateCategory;
 
-public class CreateCategoryPresenter : ICreateCategoryOutput
+public record CreateCategoryPresenter : ICreateCategoryOutput
 {
     public string CategoryId { get; private set; }
     
