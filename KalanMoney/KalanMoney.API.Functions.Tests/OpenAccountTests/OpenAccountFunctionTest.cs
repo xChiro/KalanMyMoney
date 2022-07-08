@@ -63,7 +63,7 @@ public class OpenAccountFunctionTest
 
         var sut = new OpenAccountFunction(accountInput);
         
-        const string requestBody = "'AccountName': 'The name of this accounts its to long to be permitted.' }";
+        const string requestBody = "'Name': 'The name of this accounts its to long to be permitted.' }";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
         
         var loggerMock = new Mock<ILogger>(); 
@@ -84,7 +84,7 @@ public class OpenAccountFunctionTest
 
         var sut = new OpenAccountFunction(accountInput.Object);
         
-        const string requestBody = "{ 'AccountName': 'Test Account.' }";
+        const string requestBody = "{ 'Name': 'Test Account.' }";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
         
         var loggerMock = new Mock<ILogger>(); 
@@ -108,7 +108,7 @@ public class OpenAccountFunctionTest
 
     private static DefaultHttpRequest CreateHttpRequestCategoryName(string categoryName)
     {
-        var requestBody = $"{{ 'AccountName': '${categoryName}' }}";
+        var requestBody = $"{{ 'Name': '${categoryName}' }}";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
         return defaultHttpRequest;
     }

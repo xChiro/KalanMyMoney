@@ -4,26 +4,26 @@ namespace KalanMoney.Domain.Entities;
 
 public class FinancialAccount : Entity
 {
-    public FinancialAccount(AccountName accountName, string ownerId, string ownerName)
+    public FinancialAccount(AccountName name, string ownerId, string ownerName)
     {
         Owner = new Owner(ownerId, ownerName);
-        AccountName = accountName;
+        Name = name;
         Transactions = new TransactionCollection();
         CreationDate = TimeStamp.CreateNow();
         Balance = new Balance(0);
     }
 
-    public FinancialAccount(string id, AccountName accountName, Owner owner, Balance balance, TimeStamp creationDate,
+    public FinancialAccount(string id, AccountName name, Owner owner, Balance balance, TimeStamp creationDate,
         IEnumerable<Transaction> transactions) : base(id)
     {
-        AccountName = accountName; 
+        Name = name; 
         Owner = owner;
         Balance = balance;
         CreationDate = creationDate;
         Transactions = new TransactionCollection(transactions);
     }
     
-    public AccountName AccountName { get; private set; }
+    public AccountName Name { get; private set; }
     
     public Owner Owner { get; init; }
     

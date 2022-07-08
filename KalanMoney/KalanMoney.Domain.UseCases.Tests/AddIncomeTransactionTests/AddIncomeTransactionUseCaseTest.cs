@@ -116,7 +116,7 @@ public class AddIncomeTransactionUseCaseTest
 
         // Assert
         Assert.Equal( Math.Abs(transactionAmount), accountCommandRepository.ResultTransaction.Amount);
-        Assert.Equal(new Balance(expectedBalance), accountCommandRepository.ResultAccountModel.Balance);
+        Assert.Equal(new Balance(expectedBalance), accountCommandRepository.ResultModel.CategoryBalance);
         Assert.Equal(expectedBalance, output.AccountBalance);
     }
     
