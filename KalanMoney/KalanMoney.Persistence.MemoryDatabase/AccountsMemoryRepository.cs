@@ -5,7 +5,7 @@ using KalanMoney.Persistence.MemoryDatabase.DTOs;
 
 namespace KalanMoney.Persistence.MemoryDatabase;
 
-public class AccountsMemoryRepository : IAccountCommandsRepository
+public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQueriesRepository
 {
     public Dictionary<string, FinancialAccountModel> FinancialAccounts { get; }
 
@@ -38,5 +38,27 @@ public class AccountsMemoryRepository : IAccountCommandsRepository
     public int ItemsCount()
     {
         return FinancialAccounts.Count;
+    }
+
+    public FinancialAccount? GetAccount(string id, TransactionFilter transactionFilter)
+    {
+        if (!FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
+
+        var transactions = financialAccountModel.Transactions.Where(x =>
+            x.TimeStamp.ToDateTime() >= transactionFilter.From.ToDateTime(TimeOnly.MinValue) &&  
+            x.TimeStamp.ToDateTime() <= transactionFilter.To.ToDateTime(TimeOnly.MaxValue)).ToList();
+
+        financialAccountModel.Transactions = transactions;
+        return financialAccountModel?.ToFinancialAccount();
+    }
+
+    public FinancialAccount? GetAccountByOwner(string ownerId, TransactionFilter transactionFilter)
+    {
+        throw new NotImplementedException();
+    }
+
+    public FinancialAccount? GetAccountOnly(string id)
+    {
+        throw new NotImplementedException();
     }
 }

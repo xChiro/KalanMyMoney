@@ -12,7 +12,7 @@ public record TimeStamp(long Value)
     
     public static TimeStamp CreateNow()
     {
-        var timeStampValue = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var timeStampValue = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
         return new TimeStamp(timeStampValue);
     }

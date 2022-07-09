@@ -1,4 +1,5 @@
 using KalanMoney.Domain.Entities;
+using KalanMoney.Domain.Entities.ValueObjects;
 
 namespace KalanMoney.Persistence.MemoryDatabase.DTOs;
 
@@ -20,6 +21,12 @@ public class FinancialAccountModel
     
     public Dictionary<string, FinancialCategoryModel> CategoryModels { get; set; }
 
+    public FinancialAccount ToFinancialAccount()
+    {
+        return new FinancialAccount(Id, Domain.Entities.ValueObjects.AccountName.Create(AccountName), 
+            new Owner(OwnerId, OwnerName), new Balance(), TimeStamp.CreateNow(), Transactions);
+    }
+    
     public static FinancialAccountModel CreateFromFinancialAccount(FinancialAccount financialAccount)
     {
         return new FinancialAccountModel()

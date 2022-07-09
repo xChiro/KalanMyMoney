@@ -9,13 +9,13 @@ public class TransactionFilterTest
     void Create_transaction_filter_for_last_moth_range_utc_time_successfully()
     {
         // Arrange
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        var lastMoth =  DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-30));
+        var to = DateOnly.FromDateTime(DateTime.UtcNow);
+        var from =  DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-30));
 
         // Act
         var sut = TransactionFilter.CreateMonthRangeFromUtcNow();
 
         // Assert
-        Assert.True(sut.From == today && sut.To == lastMoth);
+        Assert.True(sut.From == from && sut.To == to);
     }
 }
