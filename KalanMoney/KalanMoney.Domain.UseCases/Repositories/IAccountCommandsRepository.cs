@@ -7,5 +7,5 @@ public interface IAccountCommandsRepository
 {
     public void OpenAccount(FinancialAccount account);
 
-    public void AddTransaction(AddTransactionAccountModel addTransactionAccountModel, Transaction transaction, AddTransactionCategoryModel categoryModel);
+    public void AddTransaction(AddTransactionModel addTransactionModel, Transaction transaction);
 }

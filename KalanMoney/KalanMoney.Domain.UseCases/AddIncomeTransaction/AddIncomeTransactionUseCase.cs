@@ -38,10 +38,9 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
         var categoryBalance= category.AddTransaction(transaction);
         var response = new AddTransactionResponse(transaction.Id, accountBalance.Amount, categoryBalance.Amount);
 
-        var addAccountModel = new AddTransactionAccountModel(account.Id, accountBalance);
-        var addCategoryModel = new AddTransactionCategoryModel(category.Id, categoryBalance);
+        var addAccountModel = new AddTransactionModel(account.Id, accountBalance, category.Id, categoryBalance);
         
-        _accountCommandsRepository.AddTransaction(addAccountModel, transaction, addCategoryModel);
+        _accountCommandsRepository.AddTransaction(addAccountModel, transaction);
         
         output.Results(response);
     }

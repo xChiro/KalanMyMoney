@@ -8,8 +8,7 @@ public class AccountCommandsRepositoryMock : IAccountCommandsRepository
 {
     private readonly Dictionary<string, FinancialAccount> _inAccountMemoryDb;
 
-    public AddTransactionAccountModel ResultAccountModel { get; private set; }
-    public AddTransactionCategoryModel ResultCategoryModel { get; private set; }
+    public AddTransactionModel ResultModel { get; private set; }
     public Transaction ResultTransaction { get; private set; }
 
     public AccountCommandsRepositoryMock()
@@ -28,11 +27,9 @@ public class AccountCommandsRepositoryMock : IAccountCommandsRepository
         _inAccountMemoryDb.Add(account.Id, account);
     }
 
-    public void AddTransaction(AddTransactionAccountModel addTransactionAccountModel, Transaction transaction,
-        AddTransactionCategoryModel categoryModel)
+    public void AddTransaction(AddTransactionModel addTransactionModel, Transaction transaction)
     {
         ResultTransaction = transaction;
-        ResultAccountModel = addTransactionAccountModel;
-        ResultCategoryModel = categoryModel;
+        ResultModel = addTransactionModel;
     }
 } 

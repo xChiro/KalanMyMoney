@@ -21,7 +21,7 @@ public class AddIncomeTransactionFunctionTest
         var addIncomeTransactionInput = SetupAddIncomeTransactionInputMock(new AccountNotFoundException());
 
         var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
-        var defaultHttpRequest = CreateHttpRequestWithoutNoBody();
+        var defaultHttpRequest = CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': '110'}");
 
         // Act
         var result = await sut.RunAsync(defaultHttpRequest, new Mock<ILogger>().Object);
@@ -37,7 +37,7 @@ public class AddIncomeTransactionFunctionTest
         var addIncomeTransactionInput = SetupAddIncomeTransactionInputMock(new CategoryNotFoundException());
 
         var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
-        var defaultHttpRequest = CreateHttpRequestWithoutNoBody();
+        var defaultHttpRequest = CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': '110'}");
 
         // Act
         var result = await sut.RunAsync(defaultHttpRequest, new Mock<ILogger>().Object);

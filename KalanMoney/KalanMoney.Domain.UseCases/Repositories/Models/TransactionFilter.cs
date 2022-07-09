@@ -6,6 +6,6 @@ public record TransactionFilter(DateOnly From, DateOnly To)
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         
-        return new TransactionFilter(today, today.AddDays(-30));
+        return new TransactionFilter(today.AddDays(-30), today);
     }
 }
