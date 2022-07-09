@@ -42,4 +42,4 @@ im working on it!
 
 # Licence
 
-We are using MIT license.
+https://github.com/xChiro/KalanMyMoney/blob/main/LICENSE.md
