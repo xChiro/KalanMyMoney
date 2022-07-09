@@ -14,7 +14,7 @@ public class AccountsMemoryRepositoryTest
         // Arrange
         var sut = new AccountsMemoryRepository();
         const string accountName = "Test";
-        var financialAccount = CreateFinancialAccount(accountName);
+        var financialAccount = CreateFinancialAccount(accountName, CreateOwner("Owner Name Test"));
 
         // Act
         sut.OpenAccount(financialAccount);
@@ -28,7 +28,7 @@ public class AccountsMemoryRepositoryTest
     public void Add_transaction_to_an_account_successfully()
     {
         // Arrange 
-        var financialAccount = CreateFinancialAccount("Test");
+        var financialAccount = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"));
         var financialAccountModel = FinancialAccountModel.CreateFromFinancialAccount(financialAccount);
 
         var financialCategory = CreateFinancialCategory(financialAccount);
@@ -55,7 +55,7 @@ public class AccountsMemoryRepositoryTest
     }
 
     [Fact]
-    public void Try_to_get_an_unexciting_account_returns_null()
+    public void Try_to_get_an_unexciting_account_return_null()
     {
         // Arrange
         var sut = new AccountsMemoryRepository();
@@ -68,19 +68,99 @@ public class AccountsMemoryRepositoryTest
     }
 
     [Fact]
-    public void Get_an_account_with_to_days_transactions_successfully()
+    public void Get_an_account_with_dairy_transaction_filters_successfully()
     {
         // Arrange
         var todayTransaction = new Transaction(Guid.NewGuid().ToString(), 100, TimeStamp.CreateNow());
         var oldTransaction = new Transaction(Guid.NewGuid().ToString(), -50, new TimeStamp(1625847972000));
         var transactions = new[] { todayTransaction, oldTransaction };
         
-        var financialCategory = CreateFinancialAccount("Test", transactions);
+        var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"), transactions);
 
         var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
 
         // Act
         var result = sut.GetAccount(financialCategory.Id, TransactionFilter.CreateMonthRangeFromUtcNow());
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Contains(todayTransaction, result.Transactions.Items);
+        Assert.DoesNotContain(oldTransaction, result.Transactions.Items);
+    }
+
+    [Fact]
+    public void Try_to_get_an_unexciting_account_only_return_null()
+    {
+        // Arrange
+        var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"));
+        var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
+        
+        // Act 
+        var result = sut.GetAccountOnly(Guid.NewGuid().ToString());
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void Get_an_account_only_successfully()
+    {
+        // Arrange
+        var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"), new []{ new Transaction(0) });
+        var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
+        
+        // Act 
+        var result = sut.GetAccountOnly(financialCategory.Id);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result.Transactions.Items);
+    }
+
+    [Fact]
+    public void Try_to_get_an_unexciting_account_by_owner_id_return_null()
+    {
+        // Arrange
+        var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"));
+        var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
+        
+        // Act 
+        var result = sut.GetAccountByOwner(Guid.NewGuid().ToString(), TransactionFilter.CreateMonthRangeFromUtcNow());
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void Get_an_account_by_owner_id_successfully()
+    {
+        // Arrange
+        var owner = CreateOwner("Owner Name Test");
+        var financialCategory = CreateFinancialAccount("Test", owner);
+        var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
+
+        // Act
+        var result = sut.GetAccountByOwner(owner.ExternalUserId, TransactionFilter.CreateMonthRangeFromUtcNow());
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(owner.ExternalUserId, result.Owner.ExternalUserId);
+    }
+
+    [Fact]
+    public void Get_an_account_by_owner_id_with_dairy_transaction_filters_successfully()
+    {
+        // Arrange
+        var todayTransaction = new Transaction(Guid.NewGuid().ToString(), 100, TimeStamp.CreateNow());
+        var oldTransaction = new Transaction(Guid.NewGuid().ToString(), -50, new TimeStamp(1625847972000));
+        var transactions = new[] { todayTransaction, oldTransaction };
+        
+        var owner = CreateOwner("Owner Name Test");
+        var financialCategory = CreateFinancialAccount("Test", owner, transactions);
+        var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
+        
+        // Act
+        var result = sut.GetAccountByOwner(owner.ExternalUserId, TransactionFilter.CreateMonthRangeFromUtcNow());
 
         // Assert
         Assert.NotNull(result);
@@ -97,15 +177,19 @@ public class AccountsMemoryRepositoryTest
         return financialCategory;
     }
 
-    private static FinancialAccount CreateFinancialAccount(string name, IEnumerable<Transaction>? transactions = null)
+    private static FinancialAccount CreateFinancialAccount(string name, Owner owner, IEnumerable<Transaction>? transactions = null)
     {
         var accountName = AccountName.Create(name);
-        var ownerId = Guid.NewGuid().ToString();
-        var owner = new Owner(ownerId, "Owner Name Test");
-
         var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner,
             new Balance(0), TimeStamp.CreateNow(), transactions ?? Array.Empty<Transaction>());
 
         return financialAccount;
+    }
+
+    private static Owner CreateOwner(string ownerNameTest)
+    {
+        var ownerId = Guid.NewGuid().ToString();
+        var owner = new Owner(ownerId, ownerNameTest);
+        return owner;
     }
 }

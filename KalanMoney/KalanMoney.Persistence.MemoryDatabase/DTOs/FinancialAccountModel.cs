@@ -27,6 +27,13 @@ public class FinancialAccountModel
             new Owner(OwnerId, OwnerName), new Balance(), TimeStamp.CreateNow(), Transactions);
     }
     
+    public static FinancialAccount ToFinancialAccount(FinancialAccountModel financialAccountModel, IEnumerable<Transaction> transactions)
+    {
+        return new FinancialAccount(financialAccountModel.Id, Domain.Entities.ValueObjects.AccountName.Create(financialAccountModel.AccountName), 
+            new Owner(financialAccountModel.OwnerId, financialAccountModel.OwnerName), new Balance(), TimeStamp.CreateNow(), transactions);
+    }
+
+    
     public static FinancialAccountModel CreateFromFinancialAccount(FinancialAccount financialAccount)
     {
         return new FinancialAccountModel()
