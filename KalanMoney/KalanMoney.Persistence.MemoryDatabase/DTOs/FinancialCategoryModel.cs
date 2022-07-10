@@ -1,4 +1,5 @@
 using KalanMoney.Domain.Entities;
+using KalanMoney.Domain.Entities.ValueObjects;
 
 namespace KalanMoney.Persistence.MemoryDatabase.DTOs;
 
@@ -12,6 +13,18 @@ public class FinancialCategoryModel
     
     public List<Transaction> Transactions { get; set; }
 
+    public FinancialCategory ToFinancialCategory(FinancialAccountModel account)
+    {
+        var owner = new Owner(account.OwnerId, account.OwnerName);
+        var accountName = AccountName.Create(CategoryName);
+        var balance = new Balance(Balance);
+        
+        var financialCategory = new FinancialCategory(Id, accountName, account.Id, owner,
+            balance, Transactions);
+
+        return financialCategory;
+    }
+    
     public static FinancialCategoryModel CreateFromFinancialCategory(FinancialCategory financialCategory)
     {
         return new FinancialCategoryModel()

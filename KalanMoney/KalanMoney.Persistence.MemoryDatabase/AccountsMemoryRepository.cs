@@ -7,37 +7,36 @@ namespace KalanMoney.Persistence.MemoryDatabase;
 
 public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQueriesRepository
 {
-    public Dictionary<string, FinancialAccountModel> FinancialAccounts { get; }
+    public MemoryDb DataBase { get; }
 
     public AccountsMemoryRepository()
     {
-        FinancialAccounts = new Dictionary<string, FinancialAccountModel>();
+        DataBase = new MemoryDb();
     }
 
     public AccountsMemoryRepository(FinancialAccountModel financialAccountModel)
     {
-        FinancialAccounts = new Dictionary<string, FinancialAccountModel>()
-            {{financialAccountModel.Id, financialAccountModel}};
+        DataBase = new MemoryDb(financialAccountModel);
     }
 
     public void OpenAccount(FinancialAccount account)
     {
-        FinancialAccounts.Add(account.Id, FinancialAccountModel.CreateFromFinancialAccount(account));
+        DataBase.FinancialAccounts.Add(account.Id, FinancialAccountModel.CreateFromFinancialAccount(account));
     }
 
     public void AddTransaction(AddTransactionModel addTransactionModel, Transaction transaction)
     {
-        FinancialAccounts[addTransactionModel.AccountId].Balance = addTransactionModel.AccountBalance.Amount;
-        FinancialAccounts[addTransactionModel.AccountId].Transactions.Add(transaction);
-        FinancialAccounts[addTransactionModel.AccountId].CategoryModels[addTransactionModel.CategoryId].Balance =
+        DataBase.FinancialAccounts[addTransactionModel.AccountId].Balance = addTransactionModel.AccountBalance.Amount;
+        DataBase.FinancialAccounts[addTransactionModel.AccountId].Transactions.Add(transaction);
+        DataBase.FinancialAccounts[addTransactionModel.AccountId].CategoryModels[addTransactionModel.CategoryId].Balance =
             addTransactionModel.CategoryBalance.Amount;
-        FinancialAccounts[addTransactionModel.AccountId].CategoryModels[addTransactionModel.CategoryId].Transactions
+        DataBase.FinancialAccounts[addTransactionModel.AccountId].CategoryModels[addTransactionModel.CategoryId].Transactions
             .Add(transaction);
     }
 
     public FinancialAccount? GetAccount(string id, TransactionFilter transactionFilter)
     {
-        if (!FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
+        if (! DataBase.FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
 
         var transactions = ApplyFilters(transactionFilter, financialAccountModel);
         return  FinancialAccountModel.ToFinancialAccount(financialAccountModel, transactions);
@@ -45,7 +44,7 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
 
     public FinancialAccount? GetAccountByOwner(string ownerId, TransactionFilter transactionFilter)
     {
-        var accountModel = FinancialAccounts.Where(x => x.Value.OwnerId == ownerId)
+        var accountModel =  DataBase.FinancialAccounts.Where(x => x.Value.OwnerId == ownerId)
             .Select(x => x.Value).FirstOrDefault();
 
         if (accountModel == null) return null;
@@ -57,7 +56,7 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
 
     public FinancialAccount? GetAccountOnly(string id)
     {
-        if(!FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
+        if(! DataBase.FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
         financialAccountModel.Transactions = new List<Transaction>();
         
         return financialAccountModel.ToFinancialAccount();
@@ -72,6 +71,6 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
 
     public int ItemsCount()
     {
-        return FinancialAccounts.Count;
+        return  DataBase.FinancialAccounts.Count;
     }
 }
