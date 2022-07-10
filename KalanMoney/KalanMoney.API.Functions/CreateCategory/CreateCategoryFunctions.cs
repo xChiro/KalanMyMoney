@@ -23,7 +23,7 @@ public class CreateCategoryFunctions : BaseFunctions<CreateCategoryFunctionReque
 
     [FunctionName("CreateCategoryFunctions")]
     public async Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]
         HttpRequest req, ILogger log)
     {
         log.LogInformation("Init request to CreateCategoryFunctions");

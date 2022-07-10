@@ -13,6 +13,7 @@
     <ItemGroup>
       <ProjectReference Include="..\KalanMoney.Domain.UseCases.Tests\KalanMoney.Domain.UseCases.Tests.csproj" />
       <ProjectReference Include="..\KalanMoney.Domain.UseCases\KalanMoney.Domain.UseCases.csproj" />
+      <ProjectReference Include="..\KalanMoney.Persistence.MemoryDatabase\KalanMoney.Persistence.MemoryDatabase.csproj" />
     </ItemGroup>
 
 </Project>

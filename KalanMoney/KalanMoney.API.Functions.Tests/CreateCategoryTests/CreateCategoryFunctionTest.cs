@@ -3,8 +3,6 @@ using KalanMoney.API.Functions.CreateCategory;
 using KalanMoney.Domain.Entities.Exceptions;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.CreateCategory;
-using KalanMoney.Domain.UseCases.Repositories;
-using KalanMoney.Domain.UseCases.Repositories.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;

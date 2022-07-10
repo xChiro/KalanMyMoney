@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -25,7 +23,7 @@ public class AddIncomeTransactionFunctions : BaseFunctions<AddIncomeTransactionF
 
     [FunctionName("AddIncomeTransactionFunctions")]
     public async Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
     {
         try
         {
