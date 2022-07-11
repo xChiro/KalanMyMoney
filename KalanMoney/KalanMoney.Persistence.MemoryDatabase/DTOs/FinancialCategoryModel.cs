@@ -5,12 +5,23 @@ namespace KalanMoney.Persistence.MemoryDatabase.DTOs;
 
 public class FinancialCategoryModel
 {
+
+    public FinancialCategoryModel() { }
+    
+    public FinancialCategoryModel(FinancialCategoryModel financialCategoryModel)
+    {
+        Id = financialCategoryModel.Id;
+        CategoryName = financialCategoryModel.CategoryName;
+        Balance = financialCategoryModel.Balance;
+        Transactions = financialCategoryModel.Transactions;
+    }
+
     public string Id { get; set; }
 
     public string CategoryName { get; set; }
-    
+
     public decimal Balance { get; set; }
-    
+
     public List<Transaction> Transactions { get; set; }
 
     public FinancialCategory ToFinancialCategory(FinancialAccountModel account)

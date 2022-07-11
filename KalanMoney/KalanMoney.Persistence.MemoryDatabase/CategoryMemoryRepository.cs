@@ -39,8 +39,24 @@ public class CategoryMemoryRepository : ICategoryCommandsRepository, ICategoryQu
             }).SingleOrDefault();
 
         if (queryResult == null) throw new IndexOutOfRangeException();
+       
+        var transactions = ApplyFilterTransactions(transactionFilter, queryResult.CategoryAccountModel);
+
+        var returnModel = new FinancialCategoryModel(queryResult.CategoryAccountModel)
+        {
+            Transactions = new List<Transaction>(transactions)
+        };
+
+        return returnModel.ToFinancialCategory(queryResult.FinancialAccountModel);
+    }
+
+    private static IEnumerable<Transaction> ApplyFilterTransactions(TransactionFilter transactionFilter, FinancialCategoryModel financialCategoryModel)
+    {
+        var transactions = financialCategoryModel.Transactions.Where(x =>
+            x.TimeStamp.ToDateTime() >= transactionFilter.From.ToDateTime(TimeOnly.MinValue) &&
+            x.TimeStamp.ToDateTime() <= transactionFilter.To.ToDateTime(TimeOnly.MaxValue));
         
-        return queryResult.CategoryAccountModel.ToFinancialCategory(queryResult.FinancialAccountModel);
+        return transactions;
     }
 
     public FinancialCategory[]? GetCategoriesOfAccount(string accountId, TransactionFilter transactionFilter)
