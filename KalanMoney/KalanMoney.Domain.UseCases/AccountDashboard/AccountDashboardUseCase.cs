@@ -25,7 +25,7 @@ public class AccountDashboardUseCase : IAccountDashboardInput
 
         if (account == null) throw new AccountNotFoundException();
         
-        var categories = _categoryQueriesRepository.GetCategoriesOfAccount(ownerId, transactionsFilters);
+        var categories = _categoryQueriesRepository.GetCategoriesFromAccount(ownerId, transactionsFilters);
         CategoryBalanceModel[]? categoriesBalances = null;
         
         categoriesBalances = CreateCategoryBalanceModels(categories);

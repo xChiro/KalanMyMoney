@@ -6,5 +6,5 @@ namespace KalanMoney.Domain.UseCases.Repositories;
 public interface ICategoryQueriesRepository
 {
     FinancialCategory? GetCategoryById(string categoryId, TransactionFilter transactionFilter);
-    FinancialCategory[]? GetCategoriesOfAccount(string accountId, TransactionFilter transactionFilter);
+    FinancialCategory[]? GetCategoriesFromAccount(string accountId, TransactionFilter transactionFilter);
 }

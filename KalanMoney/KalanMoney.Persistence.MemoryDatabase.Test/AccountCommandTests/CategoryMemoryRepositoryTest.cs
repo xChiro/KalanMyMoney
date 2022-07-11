@@ -17,7 +17,7 @@ public class CategoryMemoryRepositoryTest
         var sut = new CategoryMemoryRepository();
 
         // Act/Assert
-        Assert.Throws<IndexOutOfRangeException>(() => sut.CreateCategory(financialCategory));
+        Assert.Throws<KeyNotFoundException>(() => sut.CreateCategory(financialCategory));
     }
 
     [Fact]
@@ -41,14 +41,17 @@ public class CategoryMemoryRepositoryTest
     }
 
     [Fact]
-    public void Try_to_get_a_category_from_unexciting_category_throw_exception()
+    public void Try_to_get_an_unexciting_category_returns_null()
     {
         // Arrange
         var categoryId = Guid.NewGuid().ToString();
         var sut = new CategoryMemoryRepository();
 
-        // Act/Assert
-        Assert.Throws<IndexOutOfRangeException>(() => sut.GetCategoryById(categoryId, TransactionFilter.CreateMonthRangeFromUtcNow()));
+        // Act
+        var result = sut.GetCategoryById(categoryId, TransactionFilter.CreateMonthRangeFromUtcNow());
+        
+        // Assert
+        Assert.Null(result);
     }
 
     [Fact]
@@ -60,7 +63,7 @@ public class CategoryMemoryRepositoryTest
         var ownerId = Guid.NewGuid().ToString();
         const string ownerName = "Test Name";
         
-        var financialModel = CreateFinancialAccountModel(accountId, ownerId, ownerName, category);
+        var financialModel = CreateFinancialAccountModel(accountId, ownerId, ownerName, new[] { category });
 
         var sut = new CategoryMemoryRepository(financialModel);
         
@@ -88,7 +91,7 @@ public class CategoryMemoryRepositoryTest
         var ownerId = Guid.NewGuid().ToString();
         const string ownerName = "Test Name";
         
-        var financialModel = CreateFinancialAccountModel(accountId, ownerId, ownerName, category);
+        var financialModel = CreateFinancialAccountModel(accountId, ownerId, ownerName, new[] { category });
 
         var sut = new CategoryMemoryRepository(financialModel);
         
@@ -101,6 +104,42 @@ public class CategoryMemoryRepositoryTest
         Assert.Contains(todayTransaction, resultCategory.Transactions.Items);
     }
 
+    [Fact]
+    public void Try_to_get_a_categories_from_unexciting_account_by_account_id_return_null()
+    {
+        // Arrange
+        var accountId = Guid.NewGuid().ToString();
+        var sut = new CategoryMemoryRepository();
+
+        // Act
+        var result = sut.GetCategoriesFromAccount(accountId, TransactionFilter.CreateMonthRangeFromUtcNow());
+        
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void Get_two_categories_from_account_successfully()
+    {
+        // Arrange
+        var accountId = Guid.NewGuid().ToString();
+        var firstCategory = CreateFinancialCategory(accountId, new List<Transaction>());
+        var secondCategory = CreateFinancialCategory(accountId, new List<Transaction>());
+        var financialAccount = CreateFinancialAccountModel(accountId, Guid.NewGuid().ToString(), "OwnerName",
+                new[] {firstCategory, secondCategory});
+        
+        var sut = new CategoryMemoryRepository(financialAccount);
+
+        // Act
+        var response = sut.GetCategoriesFromAccount(accountId, TransactionFilter.CreateMonthRangeFromUtcNow());
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.NotEmpty(response);
+        Assert.Contains(response, x => x.Id == firstCategory.Id);
+        Assert.Contains(response, x => x.Id == secondCategory.Id);
+    }
+
     private static List<Transaction> CreateTransactions(Transaction todayTransaction, Transaction oldTransaction)
     {
         var transactions = new List<Transaction>();
@@ -110,7 +149,7 @@ public class CategoryMemoryRepositoryTest
     }
 
     private static FinancialAccountModel CreateFinancialAccountModel(string accountId, string ownerId, string ownerName,
-        FinancialCategory category)
+        IEnumerable<FinancialCategory> categories)
     {
         var financialModel = new FinancialAccountModel()
         {
@@ -123,9 +162,12 @@ public class CategoryMemoryRepositoryTest
             OwnerId = ownerId,
             OwnerName = ownerName
         };
-        
-        financialModel.CategoryModels.Add(category.Id, FinancialCategoryModel.CreateFromFinancialCategory(category));
-        
+
+        foreach (var category in categories)
+        { 
+            financialModel.CategoryModels.Add(category.Id, FinancialCategoryModel.CreateFromFinancialCategory(category));   
+        }
+
         return financialModel;
     }
 

@@ -22,7 +22,7 @@ public class CategoryMemoryRepository : ICategoryCommandsRepository, ICategoryQu
     public void CreateCategory(FinancialCategory category)
     {
         if (!Database.FinancialAccounts.TryGetValue(category.AccountId, out var financialAccountModel))
-            throw new IndexOutOfRangeException();
+            throw new KeyNotFoundException();
 
         var categoryModel = FinancialCategoryModel.CreateFromFinancialCategory(category);
         financialAccountModel.CategoryModels.Add(categoryModel.Id, categoryModel);
@@ -38,7 +38,7 @@ public class CategoryMemoryRepository : ICategoryCommandsRepository, ICategoryQu
                 CategoryAccountModel = pair.Value.CategoryModels[categoryId]
             }).SingleOrDefault();
 
-        if (queryResult == null) throw new IndexOutOfRangeException();
+        if (queryResult == null) return null;
        
         var transactions = ApplyFilterTransactions(transactionFilter, queryResult.CategoryAccountModel);
 
@@ -59,8 +59,20 @@ public class CategoryMemoryRepository : ICategoryCommandsRepository, ICategoryQu
         return transactions;
     }
 
-    public FinancialCategory[]? GetCategoriesOfAccount(string accountId, TransactionFilter transactionFilter)
+    public FinancialCategory[]? GetCategoriesFromAccount(string accountId, TransactionFilter transactionFilter)
     {
-        throw new NotImplementedException();
+        if (!Database.FinancialAccounts.TryGetValue(accountId, out var financialAccount)) return null;
+        
+        var financialCategoriesModels = financialAccount.CategoryModels
+            .Select(x => x.Value).ToArray();
+        
+        var financialCategories = new FinancialCategory[financialCategoriesModels.Length];
+        
+        for(var i = 0; i < financialCategoriesModels.Length; i++)
+        {
+            financialCategories[i] = financialCategoriesModels[i].ToFinancialCategory(financialAccount);
+        }
+
+        return financialCategories;
     }
 }
