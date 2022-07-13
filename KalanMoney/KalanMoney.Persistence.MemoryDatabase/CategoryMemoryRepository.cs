@@ -9,9 +9,11 @@ public class CategoryMemoryRepository : ICategoryCommandsRepository, ICategoryQu
 {
     public MemoryDb Database { get; }
 
-    public CategoryMemoryRepository()
+    public CategoryMemoryRepository() : this(new MemoryDb()) { }
+
+    public CategoryMemoryRepository(MemoryDb memoryDb)
     {
-        Database = new MemoryDb();
+        Database = memoryDb;
     }
 
     public CategoryMemoryRepository(FinancialAccountModel financialAccountModel)

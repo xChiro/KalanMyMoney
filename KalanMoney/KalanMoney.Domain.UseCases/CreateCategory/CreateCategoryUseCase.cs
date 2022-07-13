@@ -5,7 +5,7 @@ using KalanMoney.Domain.UseCases.Repositories;
 
 namespace KalanMoney.Domain.UseCases.CreateCategory;
 
-public class CreateCategoryUseCase
+public class CreateCategoryUseCase : ICreateCategoryInput
 {
     private readonly ICategoryCommandsRepository _categoryCommandsRepository;
     private readonly IAccountQueriesRepository _accountQueriesRepository;

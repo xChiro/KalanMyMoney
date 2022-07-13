@@ -9,9 +9,11 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
 {
     public MemoryDb DataBase { get; }
 
-    public AccountsMemoryRepository()
+    public AccountsMemoryRepository() : this(new MemoryDb()) { }
+
+    public AccountsMemoryRepository(MemoryDb memoryDb)
     {
-        DataBase = new MemoryDb();
+        DataBase = memoryDb;
     }
 
     public AccountsMemoryRepository(FinancialAccountModel financialAccountModel)
