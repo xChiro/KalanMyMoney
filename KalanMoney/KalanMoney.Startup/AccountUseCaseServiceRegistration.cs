@@ -1,4 +1,5 @@
 ﻿using KalanMoney.Domain.UseCases.Adapters;
+using KalanMoney.Domain.UseCases.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.CreateCategory;
 using KalanMoney.Domain.UseCases.OpenAccount;
 using KalanMoney.Persistence.MemoryDatabase;
@@ -11,14 +12,15 @@ public static class AccountUseCaseServiceRegistration
     public static IServiceCollection SetupWithMemoryDataBase(this IServiceCollection services)
     {
         var memoryDb = new MemoryDb();
-        var accountCommandsRepository = new AccountsMemoryRepository(memoryDb);
-        var categoryCommandsRepository = new CategoryMemoryRepository(memoryDb);
+        var accountMemoryRepository = new AccountsMemoryRepository(memoryDb);
+        var categoryMemoryRepository = new CategoryMemoryRepository(memoryDb);
 
-        services.AddScoped<IOpenAccountInput>(_ => new OpenAccountUseCase(accountCommandsRepository));
-        services.AddScoped<ICreateCategoryInput>(_ => new CreateCategoryUseCase(categoryCommandsRepository, accountCommandsRepository));
+        services.AddScoped<IOpenAccountInput>(_ => new OpenAccountUseCase(accountMemoryRepository));
+        services.AddScoped<ICreateCategoryInput>(_ => new CreateCategoryUseCase(categoryMemoryRepository, accountMemoryRepository));
+        services.AddScoped<IAddIncomeTransactionInput>(_ => new AddIncomeTransactionUseCase(accountMemoryRepository, categoryMemoryRepository, accountMemoryRepository));
         
-        services.AddSingleton(accountCommandsRepository);
-        services.AddSingleton(categoryCommandsRepository);
+        services.AddSingleton(accountMemoryRepository);
+        services.AddSingleton(categoryMemoryRepository);
 
         return services;
     }

@@ -27,6 +27,6 @@ public class CreateCategoryUseCase : ICreateCategoryInput
         var category = new FinancialCategory(categoryName, request.AccountId, account.Owner);
         _categoryCommandsRepository.CreateCategory(category);
         
-        output.Response(Guid.NewGuid().ToString());
+        output.Response(category.Id);
     }
 }

@@ -90,6 +90,7 @@ public class CreateCategoryUseCaseTest
         Assert.Single(categoryCommandsRepository.Categories);
         Assert.Equal(categoryName, categoryCommandsRepository.Categories.First().Value.Name.Value);
         Assert.Equal(accountId, categoryCommandsRepository.Categories.First().Value.AccountId);
+        Assert.Equal(output.CategoryId, categoryCommandsRepository.Categories.First().Value.Id);
         Assert.NotNull(categoryCommandsRepository.Categories.First().Value.Owner);
         Assert.Equal(ownerName, categoryCommandsRepository.Categories.First().Value.Owner.Name);
     }
