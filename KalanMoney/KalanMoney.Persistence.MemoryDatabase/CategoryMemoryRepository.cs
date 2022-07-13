@@ -41,22 +41,9 @@ public class CategoryMemoryRepository : ICategoryCommandsRepository, ICategoryQu
         if (queryResult == null) return null;
        
         var transactions = ApplyFilterTransactions(transactionFilter, queryResult.CategoryAccountModel);
-
-        var returnModel = new FinancialCategoryModel(queryResult.CategoryAccountModel)
-        {
-            Transactions = new List<Transaction>(transactions)
-        };
+        var returnModel = CloneCategoryModel(queryResult.CategoryAccountModel, transactions);
 
         return returnModel.ToFinancialCategory(queryResult.FinancialAccountModel);
-    }
-
-    private static IEnumerable<Transaction> ApplyFilterTransactions(TransactionFilter transactionFilter, FinancialCategoryModel financialCategoryModel)
-    {
-        var transactions = financialCategoryModel.Transactions.Where(x =>
-            x.TimeStamp.ToDateTime() >= transactionFilter.From.ToDateTime(TimeOnly.MinValue) &&
-            x.TimeStamp.ToDateTime() <= transactionFilter.To.ToDateTime(TimeOnly.MaxValue));
-        
-        return transactions;
     }
 
     public FinancialCategory[]? GetCategoriesFromAccount(string accountId, TransactionFilter transactionFilter)
@@ -70,9 +57,32 @@ public class CategoryMemoryRepository : ICategoryCommandsRepository, ICategoryQu
         
         for(var i = 0; i < financialCategoriesModels.Length; i++)
         {
-            financialCategories[i] = financialCategoriesModels[i].ToFinancialCategory(financialAccount);
+            var financialCategoriesModel = financialCategoriesModels[i];
+            var transactions = ApplyFilterTransactions(transactionFilter, financialCategoriesModel);
+            var clonedCategoryModel = CloneCategoryModel(financialCategoriesModel, transactions);
+
+            financialCategories[i] = clonedCategoryModel.ToFinancialCategory(financialAccount);
         }
 
         return financialCategories;
+    }
+
+    private static FinancialCategoryModel CloneCategoryModel(FinancialCategoryModel financialCategoriesModel,
+        IEnumerable<Transaction> transactions)
+    {
+        var returnModel = new FinancialCategoryModel(financialCategoriesModel)
+        {
+            Transactions = new List<Transaction>(transactions)
+        };
+        return returnModel;
+    }
+
+    private static IEnumerable<Transaction> ApplyFilterTransactions(TransactionFilter transactionFilter, FinancialCategoryModel financialCategoryModel)
+    {
+        var transactions = financialCategoryModel.Transactions.Where(x =>
+            x.TimeStamp.ToDateTime() >= transactionFilter.From.ToDateTime(TimeOnly.MinValue) &&
+            x.TimeStamp.ToDateTime() <= transactionFilter.To.ToDateTime(TimeOnly.MaxValue));
+        
+        return transactions;
     }
 }

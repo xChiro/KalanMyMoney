@@ -140,6 +140,43 @@ public class CategoryMemoryRepositoryTest
         Assert.Contains(response, x => x.Id == secondCategory.Id);
     }
 
+    [Fact]
+    public void Get_two_categories_with_current_month_transactions_from_account_successfully()
+    {
+        // Arrange
+        var accountId = Guid.NewGuid().ToString();
+        
+        var monthTransaction = new Transaction(10);
+        var oldTransaction = new Transaction( Guid.NewGuid().ToString(), 10.0m, new TimeStamp(1625847972000));
+        var returnModel = new List<Transaction>
+        {
+            monthTransaction,
+            oldTransaction
+        };
+
+        var firstCategory = CreateFinancialCategory(accountId, returnModel);
+        var secondCategory = CreateFinancialCategory(accountId, new List<Transaction>());
+
+        var financialAccountModel = CreateFinancialAccountModel(accountId, firstCategory.Owner.ExternalUserId,
+            firstCategory.Owner.Name, new[] {firstCategory, secondCategory});        
+        
+        var sut = new CategoryMemoryRepository(financialAccountModel);
+        
+        // Act
+        var financialCategories = sut.GetCategoriesFromAccount(accountId, TransactionFilter.CreateMonthRangeFromUtcNow());
+
+        // Assert
+        Assert.NotNull(financialCategories);
+        Assert.Contains(financialCategories, x => x.Id == firstCategory.Id);
+        Assert.Contains(financialCategories, x => x.Id == secondCategory.Id);
+        Assert.DoesNotContain(oldTransaction,
+            financialCategories.First(x => x.Id == firstCategory.Id).Transactions.Items);
+        Assert.Contains(monthTransaction,
+            financialCategories.First(x => x.Id == firstCategory.Id).Transactions.Items);
+        Assert.Empty(financialCategories.First(x => x.Id == secondCategory.Id).Transactions.Items);
+        
+    }
+
     private static List<Transaction> CreateTransactions(Transaction todayTransaction, Transaction oldTransaction)
     {
         var transactions = new List<Transaction>();
