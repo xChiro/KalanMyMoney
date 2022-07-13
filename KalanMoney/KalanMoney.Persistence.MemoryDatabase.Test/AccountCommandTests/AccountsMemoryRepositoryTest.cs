@@ -21,7 +21,7 @@ public class AccountsMemoryRepositoryTest
 
         // Assert
         Assert.Equal(1, sut.ItemsCount());
-        Assert.Equal(accountName, sut.FinancialAccounts.First().Value.AccountName);
+        Assert.Equal(accountName, sut.  DataBase.FinancialAccounts.First().Value.AccountName);
     }
 
     [Fact]
@@ -47,11 +47,11 @@ public class AccountsMemoryRepositoryTest
         sut.AddTransaction(addTransactionModel, transaction);
 
         // Assert
-        Assert.Equal(balance.Amount, sut.FinancialAccounts.First().Value.Balance);
-        Assert.Equal(balance.Amount, sut.FinancialAccounts.First().Value.CategoryModels[financialCategory.Id].Balance);
+        Assert.Equal(balance.Amount, sut.  DataBase.FinancialAccounts.First().Value.Balance);
+        Assert.Equal(balance.Amount, sut. DataBase.FinancialAccounts.First().Value.CategoryModels[financialCategory.Id].Balance);
         Assert.Contains(transaction,
-            sut.FinancialAccounts.First().Value.CategoryModels[financialCategory.Id].Transactions);
-        Assert.Contains(transaction, sut.FinancialAccounts.First().Value.Transactions);
+            sut. DataBase.FinancialAccounts.First().Value.CategoryModels[financialCategory.Id].Transactions);
+        Assert.Contains(transaction, sut. DataBase.FinancialAccounts.First().Value.Transactions);
     }
 
     [Fact]

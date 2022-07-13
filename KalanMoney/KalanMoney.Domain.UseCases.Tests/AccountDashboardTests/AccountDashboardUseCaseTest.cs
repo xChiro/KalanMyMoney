@@ -65,7 +65,7 @@ public class AccountDashboardUseCaseTest
 
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
         categoryQueriesRepository
-            .Setup(x => x.GetCategoriesOfAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+            .Setup(x => x.GetCategoriesFromAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(default(FinancialCategory[]));
 
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object);
@@ -101,7 +101,7 @@ public class AccountDashboardUseCaseTest
 
         var categoryQueriesRepository = new Mock<ICategoryQueriesRepository>();
         categoryQueriesRepository
-            .Setup(x => x.GetCategoriesOfAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+            .Setup(x => x.GetCategoriesFromAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(categories);
 
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object);
