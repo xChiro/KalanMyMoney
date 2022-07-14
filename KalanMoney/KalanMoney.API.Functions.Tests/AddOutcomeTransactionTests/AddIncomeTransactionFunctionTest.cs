@@ -12,7 +12,7 @@ using Xunit;
 
 namespace KalanMoney.API.Functions.Test.AddOutcomeTransactionTests;
 
-public class AddIncomeTransactionFunctionTest
+public class AddIncomeTransactionFunctionTest : BaseApiTest
 {
     [Fact]
     public async void Try_to_add_an_outcome_transaction_from_unexciting_account_return_not_found()
@@ -22,7 +22,7 @@ public class AddIncomeTransactionFunctionTest
 
         var sut = new AddOutcomeTransactionFunctions(addOutcomeTransactionInput.Object);
         const string requestBody = "{ 'AccountId': '' }";
-        var defaultHttpRequest = CreateDefaultHttpRequest(requestBody);
+        var defaultHttpRequest = CreateHttpRequest(requestBody);
 
         // Act
         var response = await sut.RunAsync(defaultHttpRequest, new Mock<ILogger>().Object);
@@ -38,7 +38,7 @@ public class AddIncomeTransactionFunctionTest
         var addOutcomeTransactionInput = new Mock<IAddOutcomeTransactionInput>();
         var sut = new AddOutcomeTransactionFunctions(addOutcomeTransactionInput.Object);
         const string requestBody = "{ 'AccountId': '' ";
-        var defaultHttpRequest = CreateDefaultHttpRequest(requestBody);
+        var defaultHttpRequest = CreateHttpRequest(requestBody);
         
         // Act
         var response = await sut.RunAsync(defaultHttpRequest, new Mock<ILogger>().Object);
@@ -59,7 +59,7 @@ public class AddIncomeTransactionFunctionTest
             It.IsAny<IAddOutcomeTransactionOutput>()));
 
         var sut = new AddOutcomeTransactionFunctions(addOutcomeTransactionInput.Object);
-        var defaultHttpContext = CreateDefaultHttpRequest(jsonBody);
+        var defaultHttpContext = CreateHttpRequest(jsonBody);
 
         // Act
         var result = await sut.RunAsync(defaultHttpContext, new Mock<ILogger>().Object);
@@ -75,7 +75,7 @@ public class AddIncomeTransactionFunctionTest
         var addOutcomeTransactionInput = new Mock<IAddOutcomeTransactionInput>();
         var sut = new AddOutcomeTransactionFunctions(addOutcomeTransactionInput.Object);
         const string requestBody = "{'AccountId': 1, 'CategoryId': 1, 'Amount': 100}";
-        var defaultHttpRequest = CreateDefaultHttpRequest(requestBody);
+        var defaultHttpRequest = CreateHttpRequest(requestBody);
         
         // Act
         var response = await sut.RunAsync(defaultHttpRequest, new Mock<ILogger>().Object);
@@ -92,15 +92,5 @@ public class AddIncomeTransactionFunctionTest
             .Throws<T>();
         
         return addOutcomeTransactionInput;
-    }
-
-    private static DefaultHttpRequest CreateDefaultHttpRequest(string requestBody)
-    {
-        var badRequestBytes = Encoding.ASCII.GetBytes(requestBody);
-        var defaultHttpRequest = new DefaultHttpRequest(new DefaultHttpContext())
-        {
-            Body = new MemoryStream(badRequestBytes)
-        };
-        return defaultHttpRequest;
     }
 }

@@ -13,7 +13,7 @@ using Xunit;
 
 namespace KalanMoney.API.Functions.Test.OpenAccountTests;
 
-public class OpenAccountFunctionTest
+public class OpenAccountFunctionTest : BaseApiTest
 {
     [Fact]
     public async void Try_to_open_an_account_with_invalid_json_property_return_bad_request()
@@ -110,17 +110,6 @@ public class OpenAccountFunctionTest
     {
         var requestBody = $"{{ 'Name': '${categoryName}' }}";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
-        return defaultHttpRequest;
-    }
-
-    private static DefaultHttpRequest CreateHttpRequest(string requestBody)
-    {
-        var badRequestBytes = Encoding.ASCII.GetBytes(requestBody);
-        var defaultHttpRequest = new DefaultHttpRequest(new DefaultHttpContext())
-        {
-            Body = new MemoryStream(badRequestBytes)
-        };
-        
         return defaultHttpRequest;
     }
 }

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace KalanMoney.API.Functions.Test.AddIncomeTransactionTests;
 
-public class AddIncomeTransactionFunctionTest
+public class AddIncomeTransactionFunctionTest : BaseApiTest
 {
     [Fact]
     public async void Try_to_add_an_income_transaction_in_an_unexciting_account_return_not_found_request()
@@ -21,7 +21,7 @@ public class AddIncomeTransactionFunctionTest
         var addIncomeTransactionInput = SetupAddIncomeTransactionInputMock(new AccountNotFoundException());
 
         var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
-        var defaultHttpRequest = CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': '110'}");
+        var defaultHttpRequest = BaseApiTest.CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': '110'}");
 
         // Act
         var result = await sut.RunAsync(defaultHttpRequest, new Mock<ILogger>().Object);
@@ -37,7 +37,7 @@ public class AddIncomeTransactionFunctionTest
         var addIncomeTransactionInput = SetupAddIncomeTransactionInputMock(new CategoryNotFoundException());
 
         var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
-        var defaultHttpRequest = CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': '110'}");
+        var defaultHttpRequest = BaseApiTest.CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': '110'}");
 
         // Act
         var result = await sut.RunAsync(defaultHttpRequest, new Mock<ILogger>().Object);
@@ -50,7 +50,7 @@ public class AddIncomeTransactionFunctionTest
     [InlineData("{'badRequest': ")]
     [InlineData("{'badRequest': }")]
     [InlineData("{'AccountId': 1, 'CategoryId': 1, 'Amount': null}")]
-    public async void Try_to_add_a_new_income_transaction_with_a_wrong_json_body_returns_bad_request(string jsonBody)
+    public async void Try_to_add_a_new_income_transaction_with_wrong_json_body_returns_bad_request(string jsonBody)
     {
         // Arrange
         var addIncomeTransactionInput = new Mock<IAddIncomeTransactionInput>();
@@ -73,7 +73,7 @@ public class AddIncomeTransactionFunctionTest
         // Arrange
         var addIncomeTransactionInput = new Mock<IAddIncomeTransactionInput>();
         var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
-        var httpRequest = CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': 100}");
+        var httpRequest = BaseApiTest.CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': 100}");
         
         // Act
         var result = await sut.RunAsync(httpRequest, new Mock<ILogger>().Object);
@@ -81,18 +81,7 @@ public class AddIncomeTransactionFunctionTest
         // Assert
         Assert.IsType<OkObjectResult>(result);
     }
-    
-    private static DefaultHttpRequest CreateHttpRequest(string requestBody)
-    {
-        var badRequestBytes = Encoding.ASCII.GetBytes(requestBody);
-        var defaultHttpRequest = new DefaultHttpRequest(new DefaultHttpContext())
-        {
-            Body = new MemoryStream(badRequestBytes)
-        };
-        
-        return defaultHttpRequest;
-    }
-    
+
     private static DefaultHttpRequest CreateHttpRequestWithoutNoBody()
     {
         var defaultHttpContext = new DefaultHttpContext();

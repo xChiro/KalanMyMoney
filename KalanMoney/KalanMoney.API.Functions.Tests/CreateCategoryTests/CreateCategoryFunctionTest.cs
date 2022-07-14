@@ -12,7 +12,7 @@ using Xunit;
 
 namespace KalanMoney.API.Functions.Test.CreateCategoryTests;
 
-public class CreateCategoryFunctionTest
+public class CreateCategoryFunctionTest : BaseApiTest
 {
     [Fact]
     public async void Try_to_create_a_new_category_in_an_unexciting_account_return_not_found()
@@ -87,16 +87,5 @@ public class CreateCategoryFunctionTest
         var requestBody = $"{{ 'CategoryName': '{categoryName}', 'AccountId': '{accountId}' }}";
         
         return requestBody;
-    }
-
-    private static DefaultHttpRequest CreateHttpRequest(string requestBody)
-    {
-        var badRequestBytes = Encoding.ASCII.GetBytes(requestBody);
-        var defaultHttpRequest = new DefaultHttpRequest(new DefaultHttpContext())
-        {
-            Body = new MemoryStream(badRequestBytes)
-        };
-        
-        return defaultHttpRequest;
     }
 }

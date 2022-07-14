@@ -100,7 +100,7 @@ public class AddIncomeTransactionUseCaseTest
         var financialAccount = CreateFinancialAccount(accountBalance, owner);
         var accountCommandRepository = new AccountCommandsRepositoryMock(financialAccount);
         
-        var financialCategory = CreateFinancialCategory(financialAccount, owner, accountBalance);
+        var financialCategory = CreateFinancialCategory(financialAccount.Id, owner, accountBalance);
         var categoryQueriesRepository = SetupCategoryQueryRepositoryMock(financialCategory);
         
         var accountQueriesRepository = SetupAccountQueryRepositoryMock(financialAccount);
@@ -115,16 +115,17 @@ public class AddIncomeTransactionUseCaseTest
         sut.Execute(addTransactionRequest, output);
 
         // Assert
+        Assert.NotNull(output.TransactionId);
         Assert.Equal( Math.Abs(transactionAmount), accountCommandRepository.ResultTransaction.Amount);
         Assert.Equal(new Balance(expectedBalance), accountCommandRepository.ResultModel.CategoryBalance);
         Assert.Equal(expectedBalance, output.AccountBalance);
     }
     
-    private static FinancialCategory CreateFinancialCategory(FinancialAccount financialAccount, Owner owner,
+    private static FinancialCategory CreateFinancialCategory(string financialAccountId, Owner owner,
         decimal accountBalance)
     {
         var financialCategory = new FinancialCategory(Guid.NewGuid().ToString(), AccountName.Create("Test"),
-            financialAccount.Id, owner, accountBalance, new Transaction[1]
+            financialAccountId, owner, accountBalance, new Transaction[1]
             {
                 new (new Guid().ToString(), accountBalance, TimeStamp.CreateNow())
             });
