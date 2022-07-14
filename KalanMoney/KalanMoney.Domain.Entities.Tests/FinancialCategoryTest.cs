@@ -33,11 +33,10 @@ public class FinancialCategoryTest
         // Arrange
         var accountName = AccountName.Create("Test Name");
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
-        var currentBalance = new Balance(actualBalance);
         var openTransaction = new List<Transaction>();
         openTransaction.Add(new Transaction(actualBalance));
 
-        var sut = new FinancialCategory(Guid.NewGuid().ToString(), accountName, Guid.NewGuid().ToString(), owner, currentBalance, openTransaction);
+        var sut = new FinancialCategory(Guid.NewGuid().ToString(), accountName, Guid.NewGuid().ToString(), owner, actualBalance, openTransaction);
         var secondTransaction = new Transaction(transactionAmount);
         
         // Act

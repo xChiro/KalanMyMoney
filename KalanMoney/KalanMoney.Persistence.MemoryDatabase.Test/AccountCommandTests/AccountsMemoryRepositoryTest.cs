@@ -172,8 +172,7 @@ public class AccountsMemoryRepositoryTest
     {
         var categoryId = Guid.NewGuid().ToString();
         var financialCategory = new FinancialCategory(categoryId, AccountName.Create("Test"), financialAccount.Id,
-            financialAccount.Owner,
-            new Balance(0), Array.Empty<Transaction>());
+            financialAccount.Owner, 0, Array.Empty<Transaction>());
         return financialCategory;
     }
 
@@ -181,7 +180,7 @@ public class AccountsMemoryRepositoryTest
     {
         var accountName = AccountName.Create(name);
         var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner,
-            new Balance(0), TimeStamp.CreateNow(), transactions ?? Array.Empty<Transaction>());
+            0, TimeStamp.CreateNow(), transactions ?? Array.Empty<Transaction>());
 
         return financialAccount;
     }

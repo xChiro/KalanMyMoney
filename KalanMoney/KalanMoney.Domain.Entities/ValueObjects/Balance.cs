@@ -1,6 +1,6 @@
 namespace KalanMoney.Domain.Entities.ValueObjects;
 
-public record Balance(decimal Amount = 0)
+public record Balance(decimal Amount)
 {
     public Balance SumAmount(decimal amount)
     {

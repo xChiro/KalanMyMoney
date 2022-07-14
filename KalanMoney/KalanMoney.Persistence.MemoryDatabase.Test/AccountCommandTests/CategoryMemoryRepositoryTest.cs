@@ -27,7 +27,7 @@ public class CategoryMemoryRepositoryTest
         var accountId = Guid.NewGuid().ToString();
         var financialCategory = CreateFinancialCategory(accountId, new List<Transaction>());
         var financialAccount = new FinancialAccount(accountId, AccountName.Create("Test"), financialCategory.Owner, 
-            new Balance(0), TimeStamp.CreateNow(), new List<Transaction>());
+            0, TimeStamp.CreateNow(), new List<Transaction>());
         var financialModel = FinancialAccountModel.CreateFromFinancialAccount(financialAccount);
         
         var sut = new CategoryMemoryRepository(financialModel);

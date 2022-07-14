@@ -9,16 +9,16 @@ public class FinancialCategory : Entity
         Name = name;
         AccountId = accountId;
         Owner = owner;
-        Balance = new Balance();
+        Balance = new Balance(0);
         Transactions = new TransactionCollection();
     }
 
-    public FinancialCategory(string id, AccountName name, string accountId, Owner owner, Balance balance, IEnumerable<Transaction> transactions) : base(id)
+    public FinancialCategory(string id, AccountName name, string accountId, Owner owner, decimal balance, IEnumerable<Transaction> transactions) : base(id)
     {
         Name = name;
         AccountId = accountId;
         Owner = owner;
-        Balance = balance;
+        Balance = new Balance(balance);
         Transactions = new(transactions);
     }
     

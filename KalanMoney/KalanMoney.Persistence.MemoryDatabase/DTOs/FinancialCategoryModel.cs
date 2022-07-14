@@ -28,10 +28,9 @@ public class FinancialCategoryModel
     {
         var owner = new Owner(account.OwnerId, account.OwnerName);
         var accountName = AccountName.Create(CategoryName);
-        var balance = new Balance(Balance);
         
         var financialCategory = new FinancialCategory(Id, accountName, account.Id, owner,
-            balance, Transactions);
+            Balance, Transactions);
 
         return financialCategory;
     }

@@ -24,13 +24,13 @@ public class FinancialAccountModel
     public FinancialAccount ToFinancialAccount()
     {
         return new FinancialAccount(Id, Domain.Entities.ValueObjects.AccountName.Create(AccountName), 
-            new Owner(OwnerId, OwnerName), new Balance(), TimeStamp.CreateNow(), Transactions);
+            new Owner(OwnerId, OwnerName), Balance, TimeStamp.CreateNow(), Transactions);
     }
     
     public static FinancialAccount ToFinancialAccount(FinancialAccountModel financialAccountModel, IEnumerable<Transaction> transactions)
     {
         return new FinancialAccount(financialAccountModel.Id, Domain.Entities.ValueObjects.AccountName.Create(financialAccountModel.AccountName), 
-            new Owner(financialAccountModel.OwnerId, financialAccountModel.OwnerName), new Balance(), TimeStamp.CreateNow(), transactions);
+            new Owner(financialAccountModel.OwnerId, financialAccountModel.OwnerName), financialAccountModel.Balance, TimeStamp.CreateNow(), transactions);
     }
 
     

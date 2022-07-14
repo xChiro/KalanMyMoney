@@ -129,7 +129,7 @@ public class AccountDashboardUseCaseTest
         var owner = new Owner(Guid.NewGuid().ToString(), "Test CreateOwner");
 
         categories[0] = new FinancialCategory(Guid.NewGuid().ToString(), AccountName.Create("Test"),
-            Guid.NewGuid().ToString(), owner, new Balance(amounts[0]), transactions);
+            Guid.NewGuid().ToString(), owner, amounts[0], transactions);
 
         return categories;
     }
@@ -150,9 +150,7 @@ public class AccountDashboardUseCaseTest
         Owner owner, string? accountId = null)
     {
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        var balance = new Balance(balanceAmount);
-        
-        var financialAccount = CreateFinancialAccount(accountId, transactions, owner, balance);
+        var financialAccount = CreateFinancialAccount(accountId, transactions, owner, balanceAmount);
 
         accountQueriesRepository.Setup(x =>
                 x.GetAccountByOwner(It.Is<string>(id => id == owner.ExternalUserId), It.IsAny<TransactionFilter>()))
@@ -167,7 +165,7 @@ public class AccountDashboardUseCaseTest
         return owner;
     }
 
-    private static FinancialAccount CreateFinancialAccount(string? accountId, Transaction[]? transactions, Owner owner, Balance balance)
+    private static FinancialAccount CreateFinancialAccount(string? accountId, Transaction[]? transactions, Owner owner, decimal balance)
     {
         accountId ??= Guid.NewGuid().ToString();
         

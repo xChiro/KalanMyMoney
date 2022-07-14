@@ -13,16 +13,16 @@ public class FinancialAccount : Entity
         Balance = new Balance(0);
     }
 
-    public FinancialAccount(string id, AccountName name, Owner owner, Balance balance, TimeStamp creationDate,
+    public FinancialAccount(string id, AccountName name, Owner owner, decimal balance, TimeStamp creationDate,
         IEnumerable<Transaction> transactions) : base(id)
     {
         Name = name; 
         Owner = owner;
-        Balance = balance;
+        Balance = new Balance(balance);
         CreationDate = creationDate;
         Transactions = new TransactionCollection(transactions);
     }
-    
+
     public AccountName Name { get; private set; }
     
     public Owner Owner { get; init; }
@@ -50,9 +50,9 @@ public class FinancialAccount : Entity
     public Balance AddOutcomeTransaction(decimal amount)
     {
         var negativeAmount = -Math.Abs(amount);
-        var balance = AddTransaction(negativeAmount);
+        Balance = AddTransaction(negativeAmount);
         
-        return balance;
+        return Balance;
     }
 
     private Balance AddTransaction(decimal amount)

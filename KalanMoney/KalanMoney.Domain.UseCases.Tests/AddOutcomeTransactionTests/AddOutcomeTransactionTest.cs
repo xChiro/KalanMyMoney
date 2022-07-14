@@ -147,7 +147,7 @@ public class AddOutcomeTransactionTest
         decimal accountBalance)
     {
         var financialCategory = new FinancialCategory(Guid.NewGuid().ToString(), AccountName.Create("Test"),
-            financialAccount.Id, owner, new Balance(accountBalance), new Transaction[1]
+            financialAccount.Id, owner, accountBalance, new Transaction[1]
             {
                 new (new Guid().ToString(), accountBalance, TimeStamp.CreateNow())
             });
@@ -157,14 +157,13 @@ public class AddOutcomeTransactionTest
 
     private static FinancialAccount CreateFinancialAccount(decimal baseTransaction, Owner owner)
     {
-        var balance = new Balance(baseTransaction);
         var transactions = new Transaction[1]
         {
             new(Guid.NewGuid().ToString(), baseTransaction, TimeStamp.CreateNow())
         };
 
         var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), AccountName.Create("Test"), owner,
-            balance, TimeStamp.CreateNow(), transactions);
+            baseTransaction, TimeStamp.CreateNow(), transactions);
         
         return financialAccount;
     }
