@@ -20,7 +20,7 @@ public class AddIncomeTransactionFunctionTest : BaseApiTest
         // Arrange
         var addIncomeTransactionInput = SetupAddIncomeTransactionInputMock(new AccountNotFoundException());
 
-        var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
+        var sut = new AddIncomeTransactionRequestFunction(addIncomeTransactionInput.Object);
         var defaultHttpRequest = BaseApiTest.CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': '110'}");
 
         // Act
@@ -36,7 +36,7 @@ public class AddIncomeTransactionFunctionTest : BaseApiTest
         // Arrange
         var addIncomeTransactionInput = SetupAddIncomeTransactionInputMock(new CategoryNotFoundException());
 
-        var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
+        var sut = new AddIncomeTransactionRequestFunction(addIncomeTransactionInput.Object);
         var defaultHttpRequest = BaseApiTest.CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': '110'}");
 
         // Act
@@ -57,7 +57,7 @@ public class AddIncomeTransactionFunctionTest : BaseApiTest
         addIncomeTransactionInput.Setup(x => x.Execute(It.IsAny<AddTransactionRequest>(),
             It.IsAny<IAddIncomeTransactionOutput>()));
 
-        var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
+        var sut = new AddIncomeTransactionRequestFunction(addIncomeTransactionInput.Object);
         var defaultHttpContext = CreateHttpRequest(jsonBody);
 
         // Act
@@ -72,7 +72,7 @@ public class AddIncomeTransactionFunctionTest : BaseApiTest
     {
         // Arrange
         var addIncomeTransactionInput = new Mock<IAddIncomeTransactionInput>();
-        var sut = new AddIncomeTransactionFunctions(addIncomeTransactionInput.Object);
+        var sut = new AddIncomeTransactionRequestFunction(addIncomeTransactionInput.Object);
         var httpRequest = BaseApiTest.CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': 100}");
         
         // Act

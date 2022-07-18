@@ -43,7 +43,7 @@ public class AccountDashboardUseCaseTest
         var outPut = new AccountDashboardOutputMock();
 
         // Act
-        sut.Execute(owner.ExternalUserId, outPut);
+        sut.Execute(owner.SubId, outPut);
 
         // Assert
         Assert.NotNull(outPut.AccountDashboardResponse.AccountTransactions);
@@ -72,7 +72,7 @@ public class AccountDashboardUseCaseTest
         var output = new AccountDashboardOutputMock();
         
         // Act
-        sut.Execute(owner.ExternalUserId, output);
+        sut.Execute(owner.SubId, output);
 
         // Assert
         Assert.Equal(accountId, output.AccountDashboardResponse.AccountId);
@@ -108,7 +108,7 @@ public class AccountDashboardUseCaseTest
         var output = new AccountDashboardOutputMock();
         
         // Act
-        sut.Execute(owner.ExternalUserId, output);
+        sut.Execute(owner.SubId, output);
 
         // Assert
         Assert.Equal(accountId, output.AccountDashboardResponse.AccountId);
@@ -153,7 +153,7 @@ public class AccountDashboardUseCaseTest
         var financialAccount = CreateFinancialAccount(accountId, transactions, owner, balanceAmount);
 
         accountQueriesRepository.Setup(x =>
-                x.GetAccountByOwner(It.Is<string>(id => id == owner.ExternalUserId), It.IsAny<TransactionFilter>()))
+                x.GetAccountByOwner(It.Is<string>(id => id == owner.SubId), It.IsAny<TransactionFilter>()))
             .Returns(financialAccount);
         
         return accountQueriesRepository;

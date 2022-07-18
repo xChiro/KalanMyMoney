@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace KalanMoney.API.Functions;
 
-public abstract class BaseFunctions<TRequest>
+public abstract class BaseRequestFunction<TRequest>
 {
     protected static async Task<TRequest> DeserializeRequest(HttpRequest req)
     {

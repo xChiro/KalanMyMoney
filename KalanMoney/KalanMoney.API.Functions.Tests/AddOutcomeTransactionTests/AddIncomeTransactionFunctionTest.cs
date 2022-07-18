@@ -20,7 +20,7 @@ public class AddIncomeTransactionFunctionTest : BaseApiTest
         // Arrange
         var addOutcomeTransactionInput = SetupThrowableAddOutcomeTransactionInput<AccountNotFoundException>();
 
-        var sut = new AddOutcomeTransactionFunctions(addOutcomeTransactionInput.Object);
+        var sut = new AddOutcomeTransactionRequestFunction(addOutcomeTransactionInput.Object);
         const string requestBody = "{ 'AccountId': '' }";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
 
@@ -36,7 +36,7 @@ public class AddIncomeTransactionFunctionTest : BaseApiTest
     {
         // Arrange
         var addOutcomeTransactionInput = new Mock<IAddOutcomeTransactionInput>();
-        var sut = new AddOutcomeTransactionFunctions(addOutcomeTransactionInput.Object);
+        var sut = new AddOutcomeTransactionRequestFunction(addOutcomeTransactionInput.Object);
         const string requestBody = "{ 'AccountId': '' ";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
         
@@ -58,7 +58,7 @@ public class AddIncomeTransactionFunctionTest : BaseApiTest
         addOutcomeTransactionInput.Setup(x => x.Execute(It.IsAny<AddTransactionRequest>(),
             It.IsAny<IAddOutcomeTransactionOutput>()));
 
-        var sut = new AddOutcomeTransactionFunctions(addOutcomeTransactionInput.Object);
+        var sut = new AddOutcomeTransactionRequestFunction(addOutcomeTransactionInput.Object);
         var defaultHttpContext = CreateHttpRequest(jsonBody);
 
         // Act
@@ -73,7 +73,7 @@ public class AddIncomeTransactionFunctionTest : BaseApiTest
     {
         // Arrange
         var addOutcomeTransactionInput = new Mock<IAddOutcomeTransactionInput>();
-        var sut = new AddOutcomeTransactionFunctions(addOutcomeTransactionInput.Object);
+        var sut = new AddOutcomeTransactionRequestFunction(addOutcomeTransactionInput.Object);
         const string requestBody = "{'AccountId': 1, 'CategoryId': 1, 'Amount': 100}";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
         

@@ -21,7 +21,7 @@ public class CreateCategoryFunctionTest : BaseApiTest
         var accountNotFoundException = new AccountNotFoundException();
         var accountQueriesRepository = SetupCreateCategoryInputMock(accountNotFoundException);
         
-        var sut = new CreateCategoryFunctions(accountQueriesRepository.Object);
+        var sut = new CreateCategoryRequestFunction(accountQueriesRepository.Object);
         
         var requestBody = CreateRequestBodyJson("Test", Guid.NewGuid().ToString());
         var defaultHttpRequest = CreateHttpRequest(requestBody);
@@ -43,7 +43,7 @@ public class CreateCategoryFunctionTest : BaseApiTest
         var accountNameException = new AccountNameException(categoryName);
         var createCategoryInputMock = SetupCreateCategoryInputMock(accountNameException);
 
-        var sut = new CreateCategoryFunctions(createCategoryInputMock.Object);
+        var sut = new CreateCategoryRequestFunction(createCategoryInputMock.Object);
         var body = CreateRequestBodyJson(categoryName, Guid.NewGuid().ToString());
         var httpRequest = CreateHttpRequest(body);
 
@@ -63,7 +63,7 @@ public class CreateCategoryFunctionTest : BaseApiTest
         
         var createCategoryInput = new Mock<ICreateCategoryInput>();
 
-        var sut = new CreateCategoryFunctions(createCategoryInput.Object);
+        var sut = new CreateCategoryRequestFunction(createCategoryInput.Object);
         var body = CreateRequestBodyJson(categoryName, accountId);
         var httpRequest = CreateHttpRequest(body);
         

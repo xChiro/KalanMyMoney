@@ -12,18 +12,18 @@ using Newtonsoft.Json;
 
 namespace KalanMoney.API.Functions.AddIncomeTransaction;
 
-public class AddIncomeTransactionFunctions : BaseFunctions<AddIncomeTransactionFunctionRequest>
+public class AddIncomeTransactionRequestFunction : BaseRequestFunction<AddIncomeTransactionFunctionRequest>
 {
     private readonly IAddIncomeTransactionInput _addIncomeTransactionInput;
 
-    public AddIncomeTransactionFunctions(IAddIncomeTransactionInput addIncomeTransactionInput)
+    public AddIncomeTransactionRequestFunction(IAddIncomeTransactionInput addIncomeTransactionInput)
     {
         _addIncomeTransactionInput = addIncomeTransactionInput;
     }
 
-    [FunctionName("AddIncomeTransactionFunctions")]
+    [FunctionName("AddIncomeTransactionRequestFunction")]
     public async Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Api/Transactions/Income")] HttpRequest req, ILogger log)
     {
         try
         {

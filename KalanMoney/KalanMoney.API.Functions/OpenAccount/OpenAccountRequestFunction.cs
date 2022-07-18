@@ -13,20 +13,20 @@ using Newtonsoft.Json;
 
 namespace KalanMoney.API.Functions.OpenAccount;
 
-public class OpenAccountFunction : BaseFunctions<OpenAccountFunctionRequest>
+public class OpenAccountRequestFunction : BaseRequestFunction<OpenAccountFunctionRequest>
 {
     private readonly IOpenAccountInput _openAccountInput;
 
-    public OpenAccountFunction(IOpenAccountInput input)
+    public OpenAccountRequestFunction(IOpenAccountInput input)
     {
         _openAccountInput = input;
     }
     
-    [FunctionName("OpenAccountFunction")]
+    [FunctionName("OpenAccountRequestFunction")]
     public async Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Api/Accounts")] HttpRequest req, ILogger log)
     {
-        log.LogInformation("Init request to OpenAccountFunction");
+        log.LogInformation("Init request to OpenAccountRequestFunction");
 
         try
         {

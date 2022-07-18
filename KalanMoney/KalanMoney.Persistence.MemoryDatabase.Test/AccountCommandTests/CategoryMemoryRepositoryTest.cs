@@ -74,7 +74,7 @@ public class CategoryMemoryRepositoryTest
         Assert.NotNull(resultCategory);
         Assert.Equal(category.Id, resultCategory.Id);
         Assert.Equal(accountId, resultCategory.AccountId);
-        Assert.Equal(ownerId, resultCategory.Owner.ExternalUserId);
+        Assert.Equal(ownerId, resultCategory.Owner.SubId);
         Assert.Equal(ownerName, resultCategory.Owner.Name);
     }
 
@@ -157,7 +157,7 @@ public class CategoryMemoryRepositoryTest
         var firstCategory = CreateFinancialCategory(accountId, returnModel);
         var secondCategory = CreateFinancialCategory(accountId, new List<Transaction>());
 
-        var financialAccountModel = CreateFinancialAccountModel(accountId, firstCategory.Owner.ExternalUserId,
+        var financialAccountModel = CreateFinancialAccountModel(accountId, firstCategory.Owner.SubId,
             firstCategory.Owner.Name, new[] {firstCategory, secondCategory});        
         
         var sut = new CategoryMemoryRepository(financialAccountModel);

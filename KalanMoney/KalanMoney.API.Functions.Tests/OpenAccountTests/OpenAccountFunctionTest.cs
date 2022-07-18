@@ -21,7 +21,7 @@ public class OpenAccountFunctionTest : BaseApiTest
         // Arrange
         var accountInput = CreateOpenAccountInputException(new AccountNameException(string.Empty));
 
-        var sut = new OpenAccountFunction(accountInput);
+        var sut = new OpenAccountRequestFunction(accountInput);
         
         const string requestBody = "{ 'badRequest': 'Test' }";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
@@ -43,7 +43,7 @@ public class OpenAccountFunctionTest : BaseApiTest
     {
         // Arrange
         var accountInput = CreateOpenAccountInputException(new AccountNameException(categoryName));
-        var sut = new OpenAccountFunction(accountInput);
+        var sut = new OpenAccountRequestFunction(accountInput);
         
         var defaultHttpRequest = CreateHttpRequestCategoryName(categoryName);
         var loggerMock = new Mock<ILogger>(); 
@@ -61,7 +61,7 @@ public class OpenAccountFunctionTest : BaseApiTest
         // Arrange
         var accountInput = CreateOpenAccountInputException(new Exception());
 
-        var sut = new OpenAccountFunction(accountInput);
+        var sut = new OpenAccountRequestFunction(accountInput);
         
         const string requestBody = "'Name': 'The name of this accounts its to long to be permitted.' }";
         var defaultHttpRequest = CreateHttpRequest(requestBody);
@@ -82,7 +82,7 @@ public class OpenAccountFunctionTest : BaseApiTest
         // Arrange
         var accountInput = new Mock<IOpenAccountInput>();
 
-        var sut = new OpenAccountFunction(accountInput.Object);
+        var sut = new OpenAccountRequestFunction(accountInput.Object);
         
         const string requestBody = "{ 'Name': 'Test Account.' }";
         var defaultHttpRequest = CreateHttpRequest(requestBody);

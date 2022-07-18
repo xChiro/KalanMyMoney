@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.Extensions.Primitives;
 
 namespace KalanMoney.API.Functions.Test;
 
@@ -15,5 +16,15 @@ public abstract class BaseApiTest
         };
         
         return defaultHttpRequest;
+    }
+    
+    protected static DefaultHttpRequest CreateHttpRequestWithToken(StringValues token)
+    {
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Headers.Add("Authorization", token);
+        
+        var httpRequest = new DefaultHttpRequest(httpContext);
+        
+        return httpRequest;
     }
 }

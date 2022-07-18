@@ -40,7 +40,7 @@ public class FinancialAccountModel
         {
             Id = financialAccount.Id,
             AccountName = financialAccount.Name.Value,
-            OwnerId = financialAccount.Owner.ExternalUserId,
+            OwnerId = financialAccount.Owner.SubId,
             OwnerName = financialAccount.Owner.Name,
             Balance = financialAccount.Balance.Amount,
             CreationDate = financialAccount.CreationDate.Value,

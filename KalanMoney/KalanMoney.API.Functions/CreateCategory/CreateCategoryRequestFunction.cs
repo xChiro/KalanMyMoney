@@ -12,21 +12,21 @@ using Microsoft.Extensions.Logging;
 
 namespace KalanMoney.API.Functions.CreateCategory;
 
-public class CreateCategoryFunctions : BaseFunctions<CreateCategoryFunctionRequest>
+public class CreateCategoryRequestFunction : BaseRequestFunction<CreateCategoryFunctionRequest>
 {
     private readonly ICreateCategoryInput _categoryInput;
 
-    public CreateCategoryFunctions(ICreateCategoryInput categoryInput)
+    public CreateCategoryRequestFunction(ICreateCategoryInput categoryInput)
     {
         _categoryInput = categoryInput;
     }
 
-    [FunctionName("CreateCategoryFunctions")]
+    [FunctionName("CreateCategoryRequestFunction")]
     public async Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Api/Categories")]
         HttpRequest req, ILogger log)
     {
-        log.LogInformation("Init request to CreateCategoryFunctions");
+        log.LogInformation("Init request to CreateCategoryRequestFunction");
 
         try
         {
