@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using KalanMoney.Domain.UseCases.AccountDashboard;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
-using KalanMoney.Domain.UseCases.Tests.AccountDashboardTests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -27,15 +26,17 @@ public class AccountDashboardFunction
         var tokenHandler = new TokenHandler(req);
         
         if (!tokenHandler.TryGetSubjectFromToken(out var ownerId)) return new UnauthorizedResult();
-
+        var accountDashboardPresenter = new AccountDashboardPresenter();
+        
         try
         {
-            _dashboardInputObject.Execute(ownerId, new AccountDashboardOutputMock());
-            return new NotFoundObjectResult(ownerId);
+            _dashboardInputObject.Execute(ownerId, accountDashboardPresenter);
         }
         catch (AccountNotFoundException)
         {
             return new NotFoundResult();
-        }
+        } 
+        
+        return new OkObjectResult(accountDashboardPresenter);
     }
 }

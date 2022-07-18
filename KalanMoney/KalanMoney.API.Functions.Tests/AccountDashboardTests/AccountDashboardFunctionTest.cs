@@ -84,4 +84,24 @@ public class AccountDashboardFunctionTest : BaseApiTest
         // Assert
         Assert.IsType<NotFoundResult>(result);
     }
+
+    [Fact]
+    public async void Get_dashboard_successfully()
+    {
+        // Arrange
+        var dashboardInput = new Mock<IAccountDashboardInput>();
+        dashboardInput.Setup(x => x.Execute(It.IsAny<string>(), 
+            It.IsAny<IAccountDashboardOutput>()));
+
+        var sut = new AccountDashboardFunction(dashboardInput.Object);
+        const string token =
+            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJUZXN0SXNzdWVyIiwiaWF0IjoxNjU4MTAxNzIxLCJleHAiOjE2ODk2Mzc3MjEsImF1ZCI6Ind3dy5leGFtcGxlLmNvbSIsInN1YiI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJHaXZlbk5hbWUiOiJKb2hubnkifQ._tGy-Rh1FpeH1PjuySi4Lh5yyetCMPkhClaBFGZxdtI";
+        var defaultHttpRequest = CreateHttpRequestWithToken(token);
+
+        // Act
+        var result = await sut.RunAsync(defaultHttpRequest, new Mock<ILogger>().Object);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+    }
 }

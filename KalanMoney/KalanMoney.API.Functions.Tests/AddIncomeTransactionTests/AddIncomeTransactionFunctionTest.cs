@@ -73,7 +73,7 @@ public class AddIncomeTransactionFunctionTest : BaseApiTest
         // Arrange
         var addIncomeTransactionInput = new Mock<IAddIncomeTransactionInput>();
         var sut = new AddIncomeTransactionRequestFunction(addIncomeTransactionInput.Object);
-        var httpRequest = BaseApiTest.CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': 100}");
+        var httpRequest = CreateHttpRequest("{'AccountId': 1, 'CategoryId': 1, 'Amount': 100}");
         
         // Act
         var result = await sut.RunAsync(httpRequest, new Mock<ILogger>().Object);
