@@ -23,7 +23,7 @@ public class AddIncomeTransactionRequestFunction : BaseRequestFunction<AddIncome
 
     [FunctionName("AddIncomeTransactionRequestFunction")]
     public async Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Api/AccountTransactions/Income")] HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "accounts/transactions/income")] HttpRequest req, ILogger log)
     {
         try
         {

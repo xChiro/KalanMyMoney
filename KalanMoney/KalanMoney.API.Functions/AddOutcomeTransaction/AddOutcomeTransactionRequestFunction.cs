@@ -25,7 +25,7 @@ public class AddOutcomeTransactionRequestFunction : BaseRequestFunction<AddOutco
 
     [FunctionName("AddOutcomeTransactionRequestFunction")]
     public async Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Api/AccountTransactions/Outcome")] HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "accounts/transactions/outcome")] HttpRequest req, ILogger log)
     {
         try
         {

@@ -24,7 +24,7 @@ public class OpenAccountRequestFunction : BaseRequestFunction<OpenAccountFunctio
     
     [FunctionName("OpenAccountRequestFunction")]
     public async Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Api/Accounts")] HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "accounts/open")] HttpRequest req, ILogger log)
     {
         log.LogInformation("Init request to OpenAccountRequestFunction");
 

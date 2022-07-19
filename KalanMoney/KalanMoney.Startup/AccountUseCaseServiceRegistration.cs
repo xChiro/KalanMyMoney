@@ -1,4 +1,5 @@
-﻿using KalanMoney.Domain.UseCases.Adapters;
+﻿using KalanMoney.Domain.UseCases.AccountDashboard;
+using KalanMoney.Domain.UseCases.Adapters;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.AddOutcomeTransaction;
 using KalanMoney.Domain.UseCases.CreateCategory;
@@ -20,6 +21,7 @@ public static class AccountUseCaseServiceRegistration
         services.AddScoped<ICreateCategoryInput>(_ => new CreateCategoryUseCase(categoryMemoryRepository, accountMemoryRepository));
         services.AddScoped<IAddIncomeTransactionInput>(_ => new AddIncomeTransactionUseCase(accountMemoryRepository, categoryMemoryRepository, accountMemoryRepository));
         services.AddScoped<IAddOutcomeTransactionInput>(_ => new AddOutcomeTransactionUseCase(accountMemoryRepository, categoryMemoryRepository, accountMemoryRepository));
+        services.AddScoped<IAccountDashboardInput>(_ => new AccountDashboardUseCase(accountMemoryRepository, categoryMemoryRepository));
         
         services.AddSingleton(accountMemoryRepository);
         services.AddSingleton(categoryMemoryRepository);

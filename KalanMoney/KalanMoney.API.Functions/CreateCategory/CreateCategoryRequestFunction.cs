@@ -23,7 +23,7 @@ public class CreateCategoryRequestFunction : BaseRequestFunction<CreateCategoryF
 
     [FunctionName("CreateCategoryRequestFunction")]
     public async Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Api/Categories")]
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "categories")]
         HttpRequest req, ILogger log)
     {
         log.LogInformation("Init request to CreateCategoryRequestFunction");
