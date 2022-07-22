@@ -58,7 +58,8 @@ public class AccountDashboardUseCaseTest
         decimal[] transactionsAmounts = { balance };
         var numberOfTransactions = transactionsAmounts.Length;
 
-        var transactions = CreateTransactions(numberOfTransactions, transactionsAmounts);
+        const string description = "Test";
+        var transactions = CreateTransactions(numberOfTransactions, description, transactionsAmounts);
         var owner = CreateOwner();
         var accountId = Guid.NewGuid().ToString();
         var accountQueriesRepository = CreateAccountQueriesRepository(balance, transactions, owner, accountId);
@@ -79,6 +80,7 @@ public class AccountDashboardUseCaseTest
         Assert.NotNull(output.AccountDashboardResponse.AccountTransactions);
         Assert.NotEmpty(output.AccountDashboardResponse.AccountTransactions);
         Assert.Equal(transactionsAmounts[0], output.AccountDashboardResponse.AccountTransactions[0].Amount);
+        Assert.Equal(description, output.AccountDashboardResponse.AccountTransactions[0].Description);
         Assert.Null(output.AccountDashboardResponse.CategoryBalanceModels);
     }
     
@@ -90,7 +92,8 @@ public class AccountDashboardUseCaseTest
         decimal[] transactionsAmounts = { balance };
         var numberOfTransactions = transactionsAmounts.Length;
 
-        var transactions = CreateTransactions(numberOfTransactions, transactionsAmounts);
+        const string description = "Test";
+        var transactions = CreateTransactions(numberOfTransactions, description, transactionsAmounts);
         var accountId = Guid.NewGuid().ToString();
 
         var owner = CreateOwner();
@@ -120,6 +123,7 @@ public class AccountDashboardUseCaseTest
         Assert.Equal(transactionsAmounts[0], output.AccountDashboardResponse.CategoryBalanceModels[0].Balance);
         Assert.NotNull(output.AccountDashboardResponse.CategoryBalanceModels[0].Name);
         Assert.NotEmpty(output.AccountDashboardResponse.CategoryBalanceModels[0].Name);
+        Assert.Equal(description, output.AccountDashboardResponse.AccountTransactions[0].Description);
     }
 
     private static FinancialCategory[] CreateSingleFinancialCategories(IReadOnlyList<decimal> amounts,
@@ -134,13 +138,13 @@ public class AccountDashboardUseCaseTest
         return categories;
     }
 
-    private static Transaction[] CreateTransactions(int numberOfTransactions, IReadOnlyList<decimal> amounts)
+    private static Transaction[] CreateTransactions(int numberOfTransactions, string description, IReadOnlyList<decimal> amounts)
     {
         var transactions = new Transaction[numberOfTransactions];
 
         for (var i = 0; i < numberOfTransactions; i++)
         {
-            transactions[i] = new Transaction(Guid.NewGuid().ToString(), amounts[i], TimeStamp.CreateNow());
+            transactions[i] = new Transaction(Guid.NewGuid().ToString(), amounts[i], description, TimeStamp.CreateNow());
         }
 
         return transactions;

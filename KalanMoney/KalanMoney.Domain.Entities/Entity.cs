@@ -4,12 +4,12 @@ public abstract class Entity
 {
     public string Id { get; init; }
 
-    public Entity()
+    protected Entity()
     {
         Id = Guid.NewGuid().ToString();
     }
-    
-    public Entity(string id)
+
+    protected Entity(string id)
     {
         Id = id;
     }

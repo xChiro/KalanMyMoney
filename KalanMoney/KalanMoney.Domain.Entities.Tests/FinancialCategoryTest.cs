@@ -16,12 +16,14 @@ public class FinancialCategoryTest
         var owner = new Owner(Guid.NewGuid().ToString(), "Name Test");
 
         var sut = new FinancialCategory(name, accountId, owner);
-        var openTransaction = new Transaction(openBalance); 
+        const string transactionDescription = "Test Transaction";
+        var openTransaction = new Transaction(openBalance, transactionDescription); 
         // Act
         var result = sut.AddTransaction(openTransaction);
 
         // Assert
         Assert.True(result == new Balance(openBalance) && sut.Transactions.Items.Length > 0 && !string.IsNullOrEmpty(sut.Id));
+        Assert.Equal(sut.Transactions.Items.First().Description, transactionDescription);
     }
     
     [Theory]
@@ -33,16 +35,20 @@ public class FinancialCategoryTest
         // Arrange
         var accountName = AccountName.Create("Test Name");
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
-        var openTransaction = new List<Transaction>();
-        openTransaction.Add(new Transaction(actualBalance));
+        const string transactionDescription = "Test Transaction";
+        var openTransaction = new List<Transaction>
+        {
+            new (actualBalance, transactionDescription)
+        };
 
         var sut = new FinancialCategory(Guid.NewGuid().ToString(), accountName, Guid.NewGuid().ToString(), owner, actualBalance, openTransaction);
-        var secondTransaction = new Transaction(transactionAmount);
+        var secondTransaction = new Transaction(transactionAmount, transactionDescription);
         
         // Act
         var result = sut.AddTransaction(secondTransaction);
 
         // Assert 
-        Assert.Equal(new Balance(expected), result);
+        Assert.Equal(new Balance(expected), result);;
+        Assert.Equal(sut.Transactions.Items.First().Description, transactionDescription);
     }
 }

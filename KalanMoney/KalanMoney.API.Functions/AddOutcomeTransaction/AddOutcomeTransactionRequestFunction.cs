@@ -33,7 +33,8 @@ public class AddOutcomeTransactionRequestFunction : BaseRequestFunction<AddOutco
             var output = new AddOutcomeTransactionPresenter();
 
             _addOutcomeTransactionInput.Execute(
-                new AddTransactionRequest(request.AccountId, request.CategoryId, request.Amount), output);
+                new AddTransactionRequest(request.AccountId, request.CategoryId, request.Amount,
+                    request.TransactionDescription), output);
 
             return new OkObjectResult(new
             {

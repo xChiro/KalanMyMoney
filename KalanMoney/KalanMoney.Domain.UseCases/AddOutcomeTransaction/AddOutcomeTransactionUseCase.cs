@@ -20,16 +20,16 @@ public class AddOutcomeTransactionUseCase : IAddOutcomeTransactionInput
         _accountCommandsRepository = accountCommandsRepository;
     }
 
-    public void Execute(AddTransactionRequest addTransactionRequest, IAddOutcomeTransactionOutput output)
+    public void Execute(AddTransactionRequest request, IAddOutcomeTransactionOutput output)
     {
         var transactionsFilters = TransactionFilter.CreateMonthRangeFromUtcNow();
-        var account = _accountQueriesRepository.GetAccount(addTransactionRequest.AccountId, transactionsFilters);
-        var category = _categoryQueriesRepository.GetCategoryById(addTransactionRequest.CategoryId, transactionsFilters);
+        var account = _accountQueriesRepository.GetAccount(request.AccountId, transactionsFilters);
+        var category = _categoryQueriesRepository.GetCategoryById(request.CategoryId, transactionsFilters);
 
         if (account == null) throw new AccountNotFoundException();
         if (category == null) throw new CategoryNotFoundException();
 
-        var accountBalance = account.AddOutcomeTransaction(addTransactionRequest.Amount);
+        var accountBalance = account.AddOutcomeTransaction(request.Amount, request.Description);
         var transaction = account.Transactions.Items.First();
         
         var categoryBalance = category.AddTransaction(transaction);

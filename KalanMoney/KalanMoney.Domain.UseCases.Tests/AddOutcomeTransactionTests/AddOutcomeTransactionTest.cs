@@ -26,7 +26,7 @@ public class AddOutcomeTransactionTest
         var accountCommandRepository = new Mock<IAccountCommandsRepository>();
         
         var sut = new AddOutcomeTransactionUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object, accountCommandRepository.Object);
-        var addTransactionRequest = new AddTransactionRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 1005.2m);
+        var addTransactionRequest = new AddTransactionRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 1005.2m,"Test");
 
         // Act/Assert
         Assert.Throws<AccountNotFoundException>(() => sut.Execute(addTransactionRequest, new AddOutcomeTransactionOutput()));
@@ -37,9 +37,10 @@ public class AddOutcomeTransactionTest
     {
         // Arrange
         const decimal baseTransaction = 1005.4m;
+        const string transactionDescription = "Transaction Description";
         
         var owner = new Owner(Guid.NewGuid().ToString(), "Test");
-        var financialAccount = CreateFinancialAccount(baseTransaction, owner);
+        var financialAccount = CreateFinancialAccount(baseTransaction, owner, transactionDescription);
 
         var accountQueriesRepository = CreateAccountQueriesRepositoryMock(financialAccount);
 
@@ -50,7 +51,7 @@ public class AddOutcomeTransactionTest
         var accountCommandRepository = new Mock<IAccountCommandsRepository>();
 
         var sut = new AddOutcomeTransactionUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object, accountCommandRepository.Object);
-        var addTransactionRequest = new AddTransactionRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 100.5m);
+        var addTransactionRequest = new AddTransactionRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 100.5m, "Test");
 
         // Act/Assert
         Assert.Throws<CategoryNotFoundException>(() => sut.Execute(addTransactionRequest, new AddOutcomeTransactionOutput()));
@@ -63,21 +64,23 @@ public class AddOutcomeTransactionTest
     {
         // Arrange
         var owner = new Owner(Guid.NewGuid().ToString(), "Test");
+        const string transactionDescription = "Transaction Description";
         
-        var financialAccount = CreateFinancialAccount(accountBalance, owner);
-        var accountQueriesRepository = AccountQueriesRepositoryMockSetup(financialAccount);
+        var financialAccount = CreateFinancialAccount(accountBalance, owner, transactionDescription);
 
-        var financialCategory = CreateFinancialCategory(financialAccount, owner, accountBalance);
-        var categoryQueriesRepository = CategoryQueriesRepositoryMockSetup(financialCategory);
+        var financialCategory = CreateFinancialCategory(financialAccount, owner, accountBalance, transactionDescription);
 
         var accountCommandRepository = new Mock<IAccountCommandsRepository>();
         accountCommandRepository.Setup(x =>
             x.AddTransaction(It.IsAny<AddTransactionModel>(), It.IsAny<Transaction>()));
-
+        
+        var categoryQueriesRepository = CategoryQueriesRepositoryMockSetup(financialCategory);
+        var accountQueriesRepository = AccountQueriesRepositoryMockSetup(financialAccount);
+        
         var sut = new AddOutcomeTransactionUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object,
             accountCommandRepository.Object);
         
-        var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, financialCategory.Id, transactionAmount);
+        var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, financialCategory.Id, transactionAmount, "Test");
         var output = new AddOutcomeTransactionOutput();
 
         // Act
@@ -95,26 +98,27 @@ public class AddOutcomeTransactionTest
     {
         // Arrange
         var owner = new Owner(Guid.NewGuid().ToString(), "Test");
+        const string transactionDescription = "Transaction Description";
         
-        var financialAccount = CreateFinancialAccount(accountBalance, owner);
-        var accountCommandRepository = new AccountCommandsRepositoryMock(financialAccount);
+        var financialAccount = CreateFinancialAccount(accountBalance, owner, transactionDescription);
+        var financialCategory = CreateFinancialCategory(financialAccount, owner, accountBalance, transactionDescription);
         
-        var financialCategory = CreateFinancialCategory(financialAccount, owner, accountBalance);
         var categoryQueriesRepository = CategoryQueriesRepositoryMockSetup(financialCategory);
-        
         var accountQueriesRepository = AccountQueriesRepositoryMockSetup(financialAccount);
 
+        var accountCommandRepository = new AccountCommandsRepositoryMock(financialAccount);
         var sut = new AddOutcomeTransactionUseCase(accountQueriesRepository.Object, categoryQueriesRepository.Object,
             accountCommandRepository);
 
         var output = new AddOutcomeTransactionOutput();
-        var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, financialCategory.Id, transactionAmount);
+        var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, financialCategory.Id, transactionAmount, transactionDescription);
         // Act
         sut.Execute(addTransactionRequest, output);
 
         // Assert
         Assert.Equal( -Math.Abs(transactionAmount), accountCommandRepository.ResultTransaction.Amount);
         Assert.Equal(new Balance(expectedBalance), accountCommandRepository.ResultModel.CategoryBalance);
+        Assert.Equal(transactionDescription, accountCommandRepository.ResultTransaction.Description);
         Assert.Equal(expectedBalance, output.AccountBalance);
     }
 
@@ -144,22 +148,22 @@ public class AddOutcomeTransactionTest
     }
 
     private static FinancialCategory CreateFinancialCategory(FinancialAccount financialAccount, Owner owner,
-        decimal accountBalance)
+        decimal accountBalance, string transactionDescription)
     {
         var financialCategory = new FinancialCategory(Guid.NewGuid().ToString(), AccountName.Create("Test"),
             financialAccount.Id, owner, accountBalance, new Transaction[1]
             {
-                new (new Guid().ToString(), accountBalance, TimeStamp.CreateNow())
+                new (new Guid().ToString(), accountBalance, transactionDescription, TimeStamp.CreateNow())
             });
         
         return financialCategory;
     }
 
-    private static FinancialAccount CreateFinancialAccount(decimal baseTransaction, Owner owner)
+    private static FinancialAccount CreateFinancialAccount(decimal baseTransaction, Owner owner, string transactionDescription)
     {
         var transactions = new Transaction[1]
         {
-            new(Guid.NewGuid().ToString(), baseTransaction, TimeStamp.CreateNow())
+            new(Guid.NewGuid().ToString(), baseTransaction, transactionDescription, TimeStamp.CreateNow())
         };
 
         var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), AccountName.Create("Test"), owner,

@@ -16,77 +16,83 @@ public class FinancialAccountTest
         var sut = new FinancialAccount(accountName, Guid.NewGuid().ToString(), "Test Name");
         
         // Act
-        var balance = sut.AddIncomeTransaction(incomeAmount);
+        var balance = sut.AddIncomeTransaction(incomeAmount, "Transaction Description");
         
         // Assert
         Assert.True(balance == new Balance(expectedBalance) && sut.Transactions.Items.Length > 0 && !string.IsNullOrEmpty(sut.Id));
     }
 
     [Theory]
-    [InlineData(10, 5, 15)]
-    [InlineData(-5, 5, 0)]
-    [InlineData(-5, -5, 0)]
-    public void Add_income_transaction_to_an_existing_account_successfully(decimal actualBalance, decimal transactionAmount, decimal expected)
+    [InlineData(10, 5, "Transaction", 15)]
+    [InlineData(-5, 5, "Transaction", 0)]
+    [InlineData(-5, -5, "Transaction", 0)]
+    public void Add_income_transaction_to_an_existing_account_successfully(decimal actualBalance, decimal transactionAmount, 
+        string transactionDescription, decimal expected)
     {
         // Arrange
         var accountName = AccountName.Create("Test Name");
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
         var timeStamp = TimeStamp.CreateNow();
-        var transaction = new List<Transaction> { new (actualBalance) };
+        var transaction = new List<Transaction> { new (actualBalance, transactionDescription) };
 
         var sut = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner, actualBalance, timeStamp,
             transaction);
         
         // Act
-        var result = sut.AddIncomeTransaction(transactionAmount);
+        var result = sut.AddIncomeTransaction(transactionAmount, "Transaction");
 
         // Assert 
         Assert.Equal(new Balance(expected), result);
         Assert.Equal(new Balance(expected), sut.Balance);
+        Assert.Equal(transactionDescription, sut.Transactions.Items.Last().Description);
     }
 
     [Theory]
-    [InlineData(10, -5, 5)]
-    [InlineData(5, 5, 0)]
-    [InlineData(-5, -5, -10)]
-    public void Add_outcome_transaction_to_an_existing_account_successfully(decimal actualBalance, decimal transactionAmount, decimal expected)
+    [InlineData(10, 5, "Transaction", 5)]
+    [InlineData(-5, 5, "Transaction 2", -10)]
+    [InlineData(-5, -5, "Transaction 3", -10)]
+    public void Add_outcome_transaction_to_an_existing_account_successfully(decimal actualBalance, decimal transactionAmount, 
+        string transactionDescription, decimal expected)
     {
         // Arrange
         var accountName = AccountName.Create("Test Name");
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
         var timeStamp = TimeStamp.CreateNow();
         var transaction = new List<Transaction>();
-        transaction.Add(new Transaction(actualBalance));
+        transaction.Add(new Transaction(actualBalance, transactionDescription));
         
         var sut = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner, actualBalance, timeStamp,
             transaction);
         
         // Act
-        var result = sut.AddOutcomeTransaction(transactionAmount);
+        var result = sut.AddOutcomeTransaction(transactionAmount, transactionDescription);
 
         // Assert 
         Assert.Equal(new Balance(expected), result);
         Assert.Equal(new Balance(expected), sut.Balance);
+        Assert.Equal(transactionDescription, sut.Transactions.Items.First().Description);
     }
 
     [Theory]
     [InlineData(10, 5, -5, 10)]
     [InlineData(5, 5, 0, 10)]
     [InlineData(-5, 5, -10, -10)]
-    public void Add_two_transactions_income_and_outcome_to_an_account_successfully(decimal actualBalance, decimal incomeTransactionAmount,  decimal outputTransactionAmount, decimal expected)
+    public void Add_two_transactions_income_and_outcome_to_an_account_successfully(decimal actualBalance, decimal incomeTransactionAmount,  
+        decimal outputTransactionAmount, decimal expected)
     {
         // Arrange
         var accountName = AccountName.Create("Test Name");
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
         var timeStamp = TimeStamp.CreateNow();
-        var transaction = new List<Transaction> { new (actualBalance) };
+        const string transactionDescription = "Transaction Description";
+        var transaction = new List<Transaction> { new (actualBalance, transactionDescription) };
 
         var sut = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner, actualBalance, timeStamp,
             transaction);
         
         // Act
-        sut.AddIncomeTransaction(incomeTransactionAmount);
-        sut.AddOutcomeTransaction(outputTransactionAmount);
+        sut.AddIncomeTransaction(incomeTransactionAmount, transactionDescription);
+        sut.AddOutcomeTransaction(outputTransactionAmount, transactionDescription);
 
         // Assert 
         Assert.Equal(new Balance(expected), sut.Balance);

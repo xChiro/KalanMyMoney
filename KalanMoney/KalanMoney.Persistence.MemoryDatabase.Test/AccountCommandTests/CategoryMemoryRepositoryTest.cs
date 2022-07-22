@@ -83,8 +83,9 @@ public class CategoryMemoryRepositoryTest
     {
         // Arrange
         var accountId = Guid.NewGuid().ToString();
-        var todayTransaction = new Transaction(100.00m);
-        var oldTransaction = new Transaction(Guid.NewGuid().ToString(), -50.0m, new TimeStamp(1625847972000));
+        const string testTransaction = "Test Transaction";
+        var todayTransaction = new Transaction(100.00m, testTransaction);
+        var oldTransaction = new Transaction(Guid.NewGuid().ToString(), -50.0m, testTransaction, new TimeStamp(1625847972000));
         var transactions = CreateTransactions(todayTransaction, oldTransaction);
 
         var category = CreateFinancialCategory(accountId, transactions);
@@ -145,9 +146,11 @@ public class CategoryMemoryRepositoryTest
     {
         // Arrange
         var accountId = Guid.NewGuid().ToString();
+        const string testTransaction = "Test Transaction";
         
-        var monthTransaction = new Transaction(10);
-        var oldTransaction = new Transaction( Guid.NewGuid().ToString(), 10.0m, new TimeStamp(1625847972000));
+        var monthTransaction = new Transaction(10, testTransaction);
+        var oldTransaction = new Transaction( Guid.NewGuid().ToString(), 10.0m, testTransaction, new TimeStamp(1625847972000));
+        
         var returnModel = new List<Transaction>
         {
             monthTransaction,

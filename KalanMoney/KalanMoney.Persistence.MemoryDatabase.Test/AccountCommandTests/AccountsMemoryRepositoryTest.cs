@@ -38,7 +38,8 @@ public class AccountsMemoryRepositoryTest
 
         var sut = new AccountsMemoryRepository(financialAccountModel);
 
-        var transaction = new Transaction(0);
+        const string testTransaction = "Test Transaction";
+        var transaction = new Transaction(0, testTransaction);
         var balance = new Balance(100.13m);
         var addTransactionModel =
             new AddTransactionModel(financialAccount.Id, balance, financialCategory.Id, balance);
@@ -47,11 +48,12 @@ public class AccountsMemoryRepositoryTest
         sut.AddTransaction(addTransactionModel, transaction);
 
         // Assert
-        Assert.Equal(balance.Amount, sut.  DataBase.FinancialAccounts.First().Value.Balance);
-        Assert.Equal(balance.Amount, sut. DataBase.FinancialAccounts.First().Value.CategoryModels[financialCategory.Id].Balance);
+        Assert.Equal(balance.Amount, sut.DataBase.FinancialAccounts.First().Value.Balance);
+        Assert.Equal(balance.Amount, sut.DataBase.FinancialAccounts.First().Value.CategoryModels[financialCategory.Id].Balance);
+        Assert.Equal(testTransaction, sut.DataBase.FinancialAccounts.First().Value.Transactions.First().Description);
         Assert.Contains(transaction,
-            sut. DataBase.FinancialAccounts.First().Value.CategoryModels[financialCategory.Id].Transactions);
-        Assert.Contains(transaction, sut. DataBase.FinancialAccounts.First().Value.Transactions);
+            sut.DataBase.FinancialAccounts.First().Value.CategoryModels[financialCategory.Id].Transactions);
+        Assert.Contains(transaction, sut.DataBase.FinancialAccounts.First().Value.Transactions);
     }
 
     [Fact]
@@ -71,8 +73,9 @@ public class AccountsMemoryRepositoryTest
     public void Get_an_account_with_dairy_transaction_filters_successfully()
     {
         // Arrange
-        var todayTransaction = new Transaction(Guid.NewGuid().ToString(), 100, TimeStamp.CreateNow());
-        var oldTransaction = new Transaction(Guid.NewGuid().ToString(), -50, new TimeStamp(1625847972000));
+        const string testTransaction = "Test Transaction";
+        var todayTransaction = new Transaction(Guid.NewGuid().ToString(), 100,testTransaction, TimeStamp.CreateNow());
+        var oldTransaction = new Transaction(Guid.NewGuid().ToString(), -50,testTransaction, new TimeStamp(1625847972000));
         var transactions = new[] { todayTransaction, oldTransaction };
         
         var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"), transactions);
@@ -106,7 +109,9 @@ public class AccountsMemoryRepositoryTest
     public void Get_an_account_only_successfully()
     {
         // Arrange
-        var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"), new []{ new Transaction(0) });
+        const string testDescription = "Test Description";
+        var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"),
+            new[] {new Transaction(0, testDescription)});
         var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
         
         // Act 
@@ -151,8 +156,9 @@ public class AccountsMemoryRepositoryTest
     public void Get_an_account_by_owner_id_with_dairy_transaction_filters_successfully()
     {
         // Arrange
-        var todayTransaction = new Transaction(Guid.NewGuid().ToString(), 100, TimeStamp.CreateNow());
-        var oldTransaction = new Transaction(Guid.NewGuid().ToString(), -50, new TimeStamp(1625847972000));
+        const string testTransaction = "Test Transaction";
+        var todayTransaction = new Transaction(Guid.NewGuid().ToString(), 100, testTransaction, TimeStamp.CreateNow());
+        var oldTransaction = new Transaction(Guid.NewGuid().ToString(), -50, testTransaction, new TimeStamp(1625847972000));
         var transactions = new[] { todayTransaction, oldTransaction };
         
         var owner = CreateOwner("Owner Name Test");
