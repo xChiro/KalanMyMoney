@@ -23,9 +23,9 @@ public class FinancialAccountTest
     }
 
     [Theory]
-    [InlineData(10, 5, "Transaction", 15)]
-    [InlineData(-5, 5, "Transaction", 0)]
-    [InlineData(-5, -5, "Transaction", 0)]
+    [InlineData(10, 5, "Transaction 1", 15)]
+    [InlineData(-5, 5, "Transaction 2", 0)]
+    [InlineData(-5, -5, "Transaction 3", 0)]
     public void Add_income_transaction_to_an_existing_account_successfully(decimal actualBalance, decimal transactionAmount, 
         string transactionDescription, decimal expected)
     {
@@ -39,12 +39,12 @@ public class FinancialAccountTest
             transaction);
         
         // Act
-        var result = sut.AddIncomeTransaction(transactionAmount, "Transaction");
+        var result = sut.AddIncomeTransaction(transactionAmount, transactionDescription);
 
         // Assert 
         Assert.Equal(new Balance(expected), result);
         Assert.Equal(new Balance(expected), sut.Balance);
-        Assert.Equal(transactionDescription, sut.Transactions.Items.Last().Description);
+        Assert.Equal(transactionDescription, sut.Transactions.Items.First().Description);
     }
 
     [Theory]
