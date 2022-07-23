@@ -6,7 +6,7 @@ namespace KalanMoney.Domain.Entities.Tests;
 public class FinancialAccountTest
 {
     [Fact]
-    public void Add_a_transaction_to_a_new_account_successfully()
+    public void Add_transaction_to_a_new_account_successfully()
     {
         // Arrange
         const decimal incomeAmount = 10;
