@@ -1,3 +1,4 @@
+using KalanMoney.Domain.Entities.ValueObjects;
 using Xunit;
 
 namespace KalanMoney.Domain.Entities.Tests.ValueObjectsTests;
@@ -21,7 +22,7 @@ public class TransactionCollectionTest
         const decimal amount = 105.43m;
         const string description = "Test";
         
-        var transaction = new Transaction(amount, description);
+        var transaction = new Transaction(amount, Description.Create(description));
         var sut = new TransactionCollection();
 
         // Act
@@ -30,7 +31,7 @@ public class TransactionCollectionTest
         // Assert
         Assert.Single(sut.Items);
         Assert.Equal(sut.Items.First().Amount, amount);
-        Assert.Equal(description, sut.Items.First().Description);
+        Assert.Equal(Description.Create(description), sut.Items.First().Description);
         Assert.True(sut.Items[0].TimeStamp.Value > 0);
     }
 }

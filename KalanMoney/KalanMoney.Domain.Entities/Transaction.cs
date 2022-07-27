@@ -4,14 +4,14 @@ namespace KalanMoney.Domain.Entities;
 
 public class Transaction : Entity
 {
-    public Transaction(decimal amount, string description)
+    public Transaction(decimal amount, Description description)
     {
         Amount = amount;
         Description = description;
         TimeStamp = TimeStamp.CreateNow();
     }
     
-    public Transaction(string id, decimal amount, string description, TimeStamp timeStamp) : base(id)
+    public Transaction(string id, decimal amount, Description description, TimeStamp timeStamp) : base(id)
     {
         Amount = amount;
         Description = description;
@@ -20,7 +20,7 @@ public class Transaction : Entity
     
     public decimal Amount { get; }
 
-    public string Description { get; }
+    public Description Description { get; }
     
     public TimeStamp TimeStamp { get;  }
 }

@@ -117,7 +117,7 @@ public class AddIncomeTransactionUseCaseTest
         // Assert
         Assert.NotNull(output.TransactionId);
         Assert.Equal(Math.Abs(transactionAmount), accountCommandRepository.ResultTransaction.Amount);
-        Assert.Equal(transactionDescription, accountCommandRepository.ResultTransaction.Description);
+        Assert.Equal(Description.Create(transactionDescription), accountCommandRepository.ResultTransaction.Description);
         Assert.Equal(new Balance(expectedBalance), accountCommandRepository.ResultModel.CategoryBalance);
         Assert.Equal(expectedBalance, output.AccountBalance);
     }
@@ -128,7 +128,7 @@ public class AddIncomeTransactionUseCaseTest
         var financialCategory = new FinancialCategory(Guid.NewGuid().ToString(), AccountName.Create("Test"),
             financialAccountId, owner, accountBalance, new Transaction[1]
             {
-                new (new Guid().ToString(), accountBalance, transactionDescription, TimeStamp.CreateNow())
+                new (new Guid().ToString(), accountBalance, Description.Create(transactionDescription), TimeStamp.CreateNow())
             });
         
         return financialCategory;
@@ -138,7 +138,7 @@ public class AddIncomeTransactionUseCaseTest
     {
         var currentTransactions = new Transaction[1]
         {
-            new(Guid.NewGuid().ToString(), accountBalance, transactionDescription, TimeStamp.CreateNow())
+            new(Guid.NewGuid().ToString(), accountBalance, Description.Create(transactionDescription), TimeStamp.CreateNow())
         };
 
         var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), AccountName.Create("Test"), owner,

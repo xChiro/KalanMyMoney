@@ -80,7 +80,7 @@ public class AccountDashboardUseCaseTest
         Assert.NotNull(output.AccountDashboardResponse.AccountTransactions);
         Assert.NotEmpty(output.AccountDashboardResponse.AccountTransactions);
         Assert.Equal(transactionsAmounts[0], output.AccountDashboardResponse.AccountTransactions[0].Amount);
-        Assert.Equal(description, output.AccountDashboardResponse.AccountTransactions[0].Description);
+        Assert.Equal(Description.Create(description), output.AccountDashboardResponse.AccountTransactions[0].Description);
         Assert.Null(output.AccountDashboardResponse.CategoryBalanceModels);
     }
     
@@ -123,7 +123,7 @@ public class AccountDashboardUseCaseTest
         Assert.Equal(transactionsAmounts[0], output.AccountDashboardResponse.CategoryBalanceModels[0].Balance);
         Assert.NotNull(output.AccountDashboardResponse.CategoryBalanceModels[0].Name);
         Assert.NotEmpty(output.AccountDashboardResponse.CategoryBalanceModels[0].Name);
-        Assert.Equal(description, output.AccountDashboardResponse.AccountTransactions[0].Description);
+        Assert.Equal(Description.Create(description), output.AccountDashboardResponse.AccountTransactions[0].Description);
     }
 
     private static FinancialCategory[] CreateSingleFinancialCategories(IReadOnlyList<decimal> amounts,
@@ -144,7 +144,7 @@ public class AccountDashboardUseCaseTest
 
         for (var i = 0; i < numberOfTransactions; i++)
         {
-            transactions[i] = new Transaction(Guid.NewGuid().ToString(), amounts[i], description, TimeStamp.CreateNow());
+            transactions[i] = new Transaction(Guid.NewGuid().ToString(), amounts[i], Description.Create(description), TimeStamp.CreateNow());
         }
 
         return transactions;

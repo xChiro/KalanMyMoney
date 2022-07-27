@@ -33,7 +33,7 @@ public class FinancialAccountTest
         var accountName = AccountName.Create("Test Name");
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
         var timeStamp = TimeStamp.CreateNow();
-        var transaction = new List<Transaction> { new (actualBalance, transactionDescription) };
+        var transaction = new List<Transaction> { new (actualBalance, Description.Create(transactionDescription)) };
 
         var sut = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner, actualBalance, timeStamp,
             transaction);
@@ -44,7 +44,7 @@ public class FinancialAccountTest
         // Assert 
         Assert.Equal(new Balance(expected), result);
         Assert.Equal(new Balance(expected), sut.Balance);
-        Assert.Equal(transactionDescription, sut.Transactions.Items.First().Description);
+        Assert.Equal(Description.Create(transactionDescription), sut.Transactions.Items.First().Description);
     }
 
     [Theory]
@@ -59,7 +59,7 @@ public class FinancialAccountTest
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
         var timeStamp = TimeStamp.CreateNow();
         var transaction = new List<Transaction>();
-        transaction.Add(new Transaction(actualBalance, transactionDescription));
+        transaction.Add(new Transaction(actualBalance, Description.Create(transactionDescription)));
         
         var sut = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner, actualBalance, timeStamp,
             transaction);
@@ -70,7 +70,7 @@ public class FinancialAccountTest
         // Assert 
         Assert.Equal(new Balance(expected), result);
         Assert.Equal(new Balance(expected), sut.Balance);
-        Assert.Equal(transactionDescription, sut.Transactions.Items.First().Description);
+        Assert.Equal(Description.Create(transactionDescription), sut.Transactions.Items.First().Description);
     }
 
     [Theory]
@@ -85,7 +85,7 @@ public class FinancialAccountTest
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
         var timeStamp = TimeStamp.CreateNow();
         const string transactionDescription = "Transaction Description";
-        var transaction = new List<Transaction> { new (actualBalance, transactionDescription) };
+        var transaction = new List<Transaction> { new (actualBalance, Description.Create(transactionDescription)) };
 
         var sut = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner, actualBalance, timeStamp,
             transaction);

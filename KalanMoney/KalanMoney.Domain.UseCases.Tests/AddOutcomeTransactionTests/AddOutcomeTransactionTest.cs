@@ -118,7 +118,7 @@ public class AddOutcomeTransactionTest
         // Assert
         Assert.Equal( -Math.Abs(transactionAmount), accountCommandRepository.ResultTransaction.Amount);
         Assert.Equal(new Balance(expectedBalance), accountCommandRepository.ResultModel.CategoryBalance);
-        Assert.Equal(transactionDescription, accountCommandRepository.ResultTransaction.Description);
+        Assert.Equal(Description.Create(transactionDescription), accountCommandRepository.ResultTransaction.Description);
         Assert.Equal(expectedBalance, output.AccountBalance);
     }
 
@@ -153,7 +153,7 @@ public class AddOutcomeTransactionTest
         var financialCategory = new FinancialCategory(Guid.NewGuid().ToString(), AccountName.Create("Test"),
             financialAccount.Id, owner, accountBalance, new Transaction[1]
             {
-                new (new Guid().ToString(), accountBalance, transactionDescription, TimeStamp.CreateNow())
+                new (new Guid().ToString(), accountBalance, Description.Create(transactionDescription), TimeStamp.CreateNow())
             });
         
         return financialCategory;
@@ -163,7 +163,7 @@ public class AddOutcomeTransactionTest
     {
         var transactions = new Transaction[1]
         {
-            new(Guid.NewGuid().ToString(), baseTransaction, transactionDescription, TimeStamp.CreateNow())
+            new(Guid.NewGuid().ToString(), baseTransaction, Description.Create(transactionDescription), TimeStamp.CreateNow())
         };
 
         var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), AccountName.Create("Test"), owner,
