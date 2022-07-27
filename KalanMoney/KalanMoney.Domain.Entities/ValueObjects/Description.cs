@@ -13,8 +13,9 @@ public struct Description
 
     public static Description Create(string description)
     {
-        if (description.Length > 155) throw new DescriptionException();
+        var newDescription = description;
+        if (newDescription.Length > 155) newDescription = newDescription[..155];
 
-        return new Description(description);
+        return new Description(newDescription);
     }
 }
