@@ -24,14 +24,14 @@ public class AccountDashboardUseCase : IAccountDashboardInput
         if (account == null) throw new AccountNotFoundException();
 
         var categories = MapCategoriesToDictionary(account.Transactions);
-        var request = new AccountDashboardResponse(account.Id, account.Name.Value, account.Transactions.Items, categories);
-        
+        var request =
+            new AccountDashboardResponse(account.Id, account.Name.Value, account.Transactions.Items, categories);
+
         output.Results(request);
     }
 
-    private static Dictionary<Category, Balance> MapCategoriesToDictionary(TransactionCollection transactions)
+    private static Dictionary<string, decimal> MapCategoriesToDictionary(TransactionCollection transactions)
     {
-        return transactions.Items.ToDictionary(current => current.Category, current => new Balance(current.Amount));
+        return transactions.Items.ToDictionary(current => current.Category.Value, current => current.Amount);
     }
-
 }

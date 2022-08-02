@@ -80,8 +80,8 @@ public class AccountDashboardUseCaseTest
         Assert.NotNull(output.AccountDashboardResponse.AccountTransactions);
         Assert.Contains(transaction[0], output.AccountDashboardResponse.AccountTransactions);
         Assert.Contains(transaction[1], output.AccountDashboardResponse.AccountTransactions);
-        Assert.Contains(output.AccountDashboardResponse.CategoriesBalances, pair => pair.Key == categorySalary && pair.Value == new Balance(amountSalary));
-        Assert.Contains(output.AccountDashboardResponse.CategoriesBalances, pair => pair.Key == categoryGroceries && pair.Value == new Balance(amountGroceries));
+        Assert.Contains(output.AccountDashboardResponse.CategoriesBalances, pair => pair.Key == categorySalary.Value && pair.Value == amountSalary);
+        Assert.Contains(output.AccountDashboardResponse.CategoriesBalances, pair => pair.Key == categoryGroceries.Value && pair.Value == amountGroceries);
     }
     
     private static Mock<IAccountQueriesRepository> CreateAccountQueriesRepository(decimal balanceAmount, Transaction[]? transactions, 
