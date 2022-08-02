@@ -9,12 +9,9 @@ public class AddIncomeTransactionOutputMock : IAddIncomeTransactionOutput
     
     public decimal AccountBalance { get; private set; }
     
-    public decimal CategoryBalance { get; private set; }
-    
     public void Results(AddTransactionResponse response)
     {
         TransactionId = response.TransactionId;
-        CategoryBalance = response.CategoryBalance;
         AccountBalance = response.AccountBalance;
     }
 }

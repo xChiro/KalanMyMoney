@@ -1,10 +1,8 @@
-using System.Text;
 using System.Web.Http;
 using KalanMoney.API.Functions.OpenAccount;
 using KalanMoney.Domain.Entities.Exceptions;
 using KalanMoney.Domain.UseCases.Adapters;
 using KalanMoney.Domain.UseCases.OpenAccount;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

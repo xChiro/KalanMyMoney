@@ -28,8 +28,7 @@ public class AddIncomeTransactionRequestFunction : BaseRequestFunction<AddIncome
         try
         {
             var request =  await DeserializeRequest(req);
-            var addTransactionRequest = new AddTransactionRequest(request.AccountId, 
-                request.CategoryId, request.Amount, request.TransactionDescription);
+            var addTransactionRequest = new AddTransactionRequest(request.AccountId, request.Amount,  request.TransactionDescription, request.Category);
             
             var outputPresenter = new AddIncomeTransactionPresenter();
             _addIncomeTransactionInput.Execute(addTransactionRequest, outputPresenter);

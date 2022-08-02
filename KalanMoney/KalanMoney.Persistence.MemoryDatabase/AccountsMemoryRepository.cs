@@ -30,10 +30,6 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
     {
         DataBase.FinancialAccounts[addTransactionModel.AccountId].Balance = addTransactionModel.AccountBalance.Amount;
         DataBase.FinancialAccounts[addTransactionModel.AccountId].Transactions.Add(transaction);
-        DataBase.FinancialAccounts[addTransactionModel.AccountId].CategoryModels[addTransactionModel.CategoryId].Balance =
-            addTransactionModel.CategoryBalance.Amount;
-        DataBase.FinancialAccounts[addTransactionModel.AccountId].CategoryModels[addTransactionModel.CategoryId].Transactions
-            .Add(transaction);
     }
 
     public FinancialAccount? GetAccount(string id, TransactionFilter transactionFilter)
@@ -54,14 +50,6 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
         var transactions = ApplyFilters(transactionFilter, accountModel);
         return FinancialAccountModel.ToFinancialAccount(accountModel, transactions);
 
-    }
-
-    public FinancialAccount? GetAccountOnly(string id)
-    {
-        if(! DataBase.FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
-        financialAccountModel.Transactions = new List<Transaction>();
-        
-        return financialAccountModel.ToFinancialAccount();
     }
 
     private static IEnumerable<Transaction> ApplyFilters(TransactionFilter transactionFilter, FinancialAccountModel financialAccountModel)

@@ -1,3 +1,3 @@
 namespace KalanMoney.API.Functions.AddIncomeTransaction;
 
-public record AddIncomeTransactionFunctionRequest(string AccountId, string CategoryId, decimal Amount, string TransactionDescription);
+public record AddIncomeTransactionFunctionRequest(string AccountId, decimal Amount, string Category, string TransactionDescription);

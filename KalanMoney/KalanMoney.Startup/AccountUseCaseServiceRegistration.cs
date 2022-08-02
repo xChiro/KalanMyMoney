@@ -2,7 +2,6 @@
 using KalanMoney.Domain.UseCases.Adapters;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.AddOutcomeTransaction;
-using KalanMoney.Domain.UseCases.CreateCategory;
 using KalanMoney.Domain.UseCases.OpenAccount;
 using KalanMoney.Persistence.MemoryDatabase;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,17 +14,13 @@ public static class AccountUseCaseServiceRegistration
     {
         var memoryDb = new MemoryDb();
         var accountMemoryRepository = new AccountsMemoryRepository(memoryDb);
-        var categoryMemoryRepository = new CategoryMemoryRepository(memoryDb);
-
+        
         services.AddScoped<IOpenAccountInput>(_ => new OpenAccountUseCase(accountMemoryRepository));
-        services.AddScoped<ICreateCategoryInput>(_ => new CreateCategoryUseCase(categoryMemoryRepository, accountMemoryRepository));
-        services.AddScoped<IAddIncomeTransactionInput>(_ => new AddIncomeTransactionUseCase(accountMemoryRepository, categoryMemoryRepository, accountMemoryRepository));
-        services.AddScoped<IAddOutcomeTransactionInput>(_ => new AddOutcomeTransactionUseCase(accountMemoryRepository, categoryMemoryRepository, accountMemoryRepository));
-        services.AddScoped<IAccountDashboardInput>(_ => new AccountDashboardUseCase(accountMemoryRepository, categoryMemoryRepository));
+        services.AddScoped<IAddIncomeTransactionInput>(_ => new AddIncomeTransactionUseCase(accountMemoryRepository, accountMemoryRepository));
+        services.AddScoped<IAddOutcomeTransactionInput>(_ => new AddOutcomeTransactionUseCase(accountMemoryRepository, accountMemoryRepository));
+        services.AddScoped<IAccountDashboardInput>(_ => new AccountDashboardUseCase(accountMemoryRepository));
         
         services.AddSingleton(accountMemoryRepository);
-        services.AddSingleton(categoryMemoryRepository);
-
         return services;
     }
 }

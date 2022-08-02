@@ -1,7 +1,5 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
-using KalanMoney.API.Functions.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.AddOutcomeTransaction;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Common.Models;
@@ -33,14 +31,12 @@ public class AddOutcomeTransactionRequestFunction : BaseRequestFunction<AddOutco
             var output = new AddOutcomeTransactionPresenter();
 
             _addOutcomeTransactionInput.Execute(
-                new AddTransactionRequest(request.AccountId, request.CategoryId, request.Amount,
-                    request.TransactionDescription), output);
+                new AddTransactionRequest(request.AccountId, request.Amount, request.TransactionDescription, request.Category), output);
 
             return new OkObjectResult(new
             {
                 output.TransactionId,
-                output.AccountBalance,
-                output.CategoryBalance,
+                output.AccountBalance
             });
         }
         catch (Exception ex) when (ex is AccountNotFoundException | ex is CategoryNotFoundException)

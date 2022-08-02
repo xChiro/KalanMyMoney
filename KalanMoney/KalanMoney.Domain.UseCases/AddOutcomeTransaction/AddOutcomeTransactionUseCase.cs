@@ -8,15 +8,12 @@ namespace KalanMoney.Domain.UseCases.AddOutcomeTransaction;
 public class AddOutcomeTransactionUseCase : IAddOutcomeTransactionInput
 {
     private readonly IAccountQueriesRepository _accountQueriesRepository;
-    private readonly ICategoryQueriesRepository _categoryQueriesRepository;
     private readonly IAccountCommandsRepository _accountCommandsRepository;
 
     public AddOutcomeTransactionUseCase(IAccountQueriesRepository accountQueriesRepository,
-        ICategoryQueriesRepository categoryQueriesRepository, 
         IAccountCommandsRepository accountCommandsRepository)
     {
         _accountQueriesRepository = accountQueriesRepository;
-        _categoryQueriesRepository = categoryQueriesRepository;
         _accountCommandsRepository = accountCommandsRepository;
     }
 
@@ -24,20 +21,17 @@ public class AddOutcomeTransactionUseCase : IAddOutcomeTransactionInput
     {
         var transactionsFilters = TransactionFilter.CreateMonthRangeFromUtcNow();
         var account = _accountQueriesRepository.GetAccount(request.AccountId, transactionsFilters);
-        var category = _categoryQueriesRepository.GetCategoryById(request.CategoryId, transactionsFilters);
 
         if (account == null) throw new AccountNotFoundException();
-        if (category == null) throw new CategoryNotFoundException();
 
-        var accountBalance = account.AddOutcomeTransaction(request.Amount, request.Description);
+        var accountBalance = account.AddOutcomeTransaction(request.Amount, request.Description, request.Category);
         var transaction = account.Transactions.Items.First();
         
-        var categoryBalance = category.AddTransaction(transaction);
         
-        var addAccountModel = new AddTransactionModel(account.Id, accountBalance, category.Id, categoryBalance);
+        var addAccountModel = new AddTransactionModel(account.Id, accountBalance);
 
         _accountCommandsRepository.AddTransaction(addAccountModel, transaction);
         
-        output.Results(new AddTransactionResponse(transaction.Id, accountBalance.Amount, categoryBalance.Amount));
+        output.Results(new AddTransactionResponse(transaction.Id, accountBalance.Amount));
     }
 }

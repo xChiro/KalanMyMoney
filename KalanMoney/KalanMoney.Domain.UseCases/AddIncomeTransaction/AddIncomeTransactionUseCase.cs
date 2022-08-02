@@ -10,14 +10,11 @@ namespace KalanMoney.Domain.UseCases.AddIncomeTransaction;
 public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
 {
     private readonly IAccountQueriesRepository _accountQueriesRepository;
-    private readonly ICategoryQueriesRepository _categoryQueriesRepository;
     private readonly IAccountCommandsRepository _accountCommandsRepository;
 
-    public AddIncomeTransactionUseCase(IAccountQueriesRepository accountQueriesRepository, 
-        ICategoryQueriesRepository categoryQueriesRepository, IAccountCommandsRepository accountCommandsRepository)
+    public AddIncomeTransactionUseCase(IAccountQueriesRepository accountQueriesRepository, IAccountCommandsRepository accountCommandsRepository)
     {
         _accountQueriesRepository = accountQueriesRepository;
-        _categoryQueriesRepository = categoryQueriesRepository;
         _accountCommandsRepository = accountCommandsRepository;
     }
 
@@ -30,30 +27,17 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
     public void Execute(AddTransactionRequest request, IAddIncomeTransactionOutput output)
     {
         var account = GetFinancialAccount(request);
-        var category = GetFinancialCategory(request);
 
-        var accountBalance = account.AddIncomeTransaction(request.Amount, request.Description);
+        var accountBalance = account.AddIncomeTransaction(request.Amount, request.Description, request.Category);
         var transaction = account.Transactions.Items.First();
         
-        var categoryBalance = category.AddTransaction(transaction);
-        var response = new AddTransactionResponse(transaction.Id, accountBalance.Amount, categoryBalance.Amount);
+        var response = new AddTransactionResponse(transaction.Id, accountBalance.Amount);
 
-        var addAccountModel = new AddTransactionModel(account.Id, accountBalance, category.Id, categoryBalance);
+        var addAccountModel = new AddTransactionModel(account.Id, accountBalance);
         
         _accountCommandsRepository.AddTransaction(addAccountModel, transaction);
         
         output.Results(response);
-    }
-
-    /// <exception cref="CategoryNotFoundException"></exception>
-    private FinancialCategory GetFinancialCategory(AddTransactionRequest request)
-    {
-        var transactionsFilters = TransactionFilter.CreateMonthRangeFromUtcNow();
-        var category = _categoryQueriesRepository.GetCategoryById(request.CategoryId, transactionsFilters);
-        
-        if (category == null) throw new CategoryNotFoundException();
-        
-        return category;
     }
 
     /// <exception cref="AccountNotFoundException"></exception>

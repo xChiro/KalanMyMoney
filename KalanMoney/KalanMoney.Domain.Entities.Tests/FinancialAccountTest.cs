@@ -16,7 +16,7 @@ public class FinancialAccountTest
         var sut = new FinancialAccount(accountName, Guid.NewGuid().ToString(), "Test Name");
         
         // Act
-        var balance = sut.AddIncomeTransaction(incomeAmount, "Transaction Description");
+        var balance = sut.AddIncomeTransaction(incomeAmount, "Transaction Description", "Salary");
         
         // Assert
         Assert.True(balance == new Balance(expectedBalance) && sut.Transactions.Items.Length > 0 && !string.IsNullOrEmpty(sut.Id));
@@ -33,18 +33,21 @@ public class FinancialAccountTest
         var accountName = AccountName.Create("Test Name");
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
         var timeStamp = TimeStamp.CreateNow();
-        var transaction = new List<Transaction> { new (actualBalance, Description.Create(transactionDescription)) };
+        const string categoryName = "Salary";
+        
+        var transaction = new List<Transaction> { new (actualBalance, Description.Create(transactionDescription), Category.Create(categoryName)) };
 
         var sut = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner, actualBalance, timeStamp,
             transaction);
         
         // Act
-        var result = sut.AddIncomeTransaction(transactionAmount, transactionDescription);
+        var result = sut.AddIncomeTransaction(transactionAmount, transactionDescription, categoryName);
 
         // Assert 
         Assert.Equal(new Balance(expected), result);
         Assert.Equal(new Balance(expected), sut.Balance);
         Assert.Equal(Description.Create(transactionDescription), sut.Transactions.Items.First().Description);
+        Assert.Equal(Category.Create(categoryName), sut.Transactions.Items.First().Category);
     }
 
     [Theory]
@@ -59,18 +62,21 @@ public class FinancialAccountTest
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
         var timeStamp = TimeStamp.CreateNow();
         var transaction = new List<Transaction>();
-        transaction.Add(new Transaction(actualBalance, Description.Create(transactionDescription)));
+        const string categoryName = "Salary";
+        
+        transaction.Add(new Transaction(actualBalance, Description.Create(transactionDescription), Category.Create(categoryName)));
         
         var sut = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner, actualBalance, timeStamp,
             transaction);
         
         // Act
-        var result = sut.AddOutcomeTransaction(transactionAmount, transactionDescription);
+        var result = sut.AddOutcomeTransaction(transactionAmount, transactionDescription, categoryName);
 
         // Assert 
         Assert.Equal(new Balance(expected), result);
         Assert.Equal(new Balance(expected), sut.Balance);
         Assert.Equal(Description.Create(transactionDescription), sut.Transactions.Items.First().Description);
+        Assert.Equal(Category.Create(categoryName), sut.Transactions.Items.First().Category);
     }
 
     [Theory]
@@ -85,14 +91,16 @@ public class FinancialAccountTest
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
         var timeStamp = TimeStamp.CreateNow();
         const string transactionDescription = "Transaction Description";
-        var transaction = new List<Transaction> { new (actualBalance, Description.Create(transactionDescription)) };
+        const string category = "Salary";
+        
+        var transaction = new List<Transaction> { new (actualBalance, Description.Create(transactionDescription), Category.Create(category)) };
 
         var sut = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner, actualBalance, timeStamp,
             transaction);
         
         // Act
-        sut.AddIncomeTransaction(incomeTransactionAmount, transactionDescription);
-        sut.AddOutcomeTransaction(outputTransactionAmount, transactionDescription);
+        sut.AddIncomeTransaction(incomeTransactionAmount, transactionDescription, category);
+        sut.AddOutcomeTransaction(outputTransactionAmount, transactionDescription, category);
 
         // Assert 
         Assert.Equal(new Balance(expected), sut.Balance);

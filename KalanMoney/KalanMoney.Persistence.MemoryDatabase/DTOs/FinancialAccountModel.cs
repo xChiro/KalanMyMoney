@@ -19,8 +19,6 @@ public class FinancialAccountModel
 
     public List<Transaction> Transactions { get; set; }
     
-    public Dictionary<string, FinancialCategoryModel> CategoryModels { get; set; }
-
     public FinancialAccount ToFinancialAccount()
     {
         return new FinancialAccount(Id, Domain.Entities.ValueObjects.AccountName.Create(AccountName), 
@@ -45,7 +43,6 @@ public class FinancialAccountModel
             Balance = financialAccount.Balance.Amount,
             CreationDate = financialAccount.CreationDate.Value,
             Transactions = financialAccount.Transactions.Items.ToList(),
-            CategoryModels = new Dictionary<string, FinancialCategoryModel>()
         };
     }
 }

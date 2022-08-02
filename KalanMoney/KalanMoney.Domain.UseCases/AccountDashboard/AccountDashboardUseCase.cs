@@ -1,4 +1,5 @@
 using KalanMoney.Domain.Entities;
+using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Domain.UseCases.Repositories.Models;
@@ -8,13 +9,10 @@ namespace KalanMoney.Domain.UseCases.AccountDashboard;
 public class AccountDashboardUseCase : IAccountDashboardInput
 {
     private readonly IAccountQueriesRepository _accountQueriesRepository;
-    private readonly ICategoryQueriesRepository _categoryQueriesRepository;
 
-    public AccountDashboardUseCase(IAccountQueriesRepository accountQueriesRepository,
-        ICategoryQueriesRepository categoryQueriesRepository)
+    public AccountDashboardUseCase(IAccountQueriesRepository accountQueriesRepository)
     {
         _accountQueriesRepository = accountQueriesRepository;
-        _categoryQueriesRepository = categoryQueriesRepository;
     }
 
     /// <exception cref="AccountNotFoundException"></exception>
@@ -24,28 +22,16 @@ public class AccountDashboardUseCase : IAccountDashboardInput
         var account = _accountQueriesRepository.GetAccountByOwner(ownerId, transactionsFilters);
 
         if (account == null) throw new AccountNotFoundException();
-        
-        var categories = _categoryQueriesRepository.GetCategoriesFromAccount(ownerId, transactionsFilters);
-        CategoryBalanceModel[]? categoriesBalances = null;
-        
-        categoriesBalances = CreateCategoryBalanceModels(categories);
-        
-        var request = new AccountDashboardResponse(account.Id, account.Name.Value, account.Transactions.Items, categoriesBalances);
+
+        var categories = MapCategoriesToDictionary(account.Transactions);
+        var request = new AccountDashboardResponse(account.Id, account.Name.Value, account.Transactions.Items, categories);
         
         output.Results(request);
     }
 
-    private static CategoryBalanceModel[]? CreateCategoryBalanceModels(IReadOnlyList<FinancialCategory>? categories)
+    private static Dictionary<Category, Balance> MapCategoriesToDictionary(TransactionCollection transactions)
     {
-        if (categories == null) return null;
-        var categoriesBalances = new CategoryBalanceModel[categories.Count];
-
-        for (int i = 0; i < categories.Count; i++)
-        {
-            var category = categories[i];
-            categoriesBalances[i] = new CategoryBalanceModel(category.Id, category.Name.Value, category.Balance.Amount);
-        }
-
-        return categoriesBalances;
+        return transactions.Items.ToDictionary(current => current.Category, current => new Balance(current.Amount));
     }
+
 }

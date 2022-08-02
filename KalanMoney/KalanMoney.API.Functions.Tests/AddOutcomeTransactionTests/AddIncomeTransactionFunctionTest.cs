@@ -1,10 +1,7 @@
-using System.Text;
 using KalanMoney.API.Functions.AddOutcomeTransaction;
 using KalanMoney.Domain.UseCases.AddOutcomeTransaction;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Common.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;

@@ -1,4 +1,3 @@
-using System.Text;
 using KalanMoney.API.Functions.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
