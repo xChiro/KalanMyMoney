@@ -26,7 +26,6 @@ public class AddIncomeTransactionUseCaseTest
         
         var sut = new AddIncomeTransactionUseCase(accountRepositoryMock.Object, accountCommandsRepository.Object);
         var accountId = Guid.NewGuid().ToString();
-        var categoryId = Guid.NewGuid().ToString();
         
         var inputRequest = new AddTransactionRequest(accountId, 1500.00m, "Test", "Salary");
         
@@ -50,11 +49,10 @@ public class AddIncomeTransactionUseCaseTest
         
         var financialAccount = CreateFinancialAccount(accountBalance, owner, transactionDescription, category);
 
-        var accountCommandsRepository = new Mock<IAccountCommandsRepository>();
-        accountCommandsRepository.Setup(x => x.OpenAccount(It.IsAny<FinancialAccount>()));
+        var accountCommandsRepository = new AccountCommandsRepositoryMock();
 
         var accountQueryRepository = SetupAccountQueryRepositoryMock(financialAccount);
-        var sut = new AddIncomeTransactionUseCase(accountQueryRepository.Object, accountCommandsRepository.Object);
+        var sut = new AddIncomeTransactionUseCase(accountQueryRepository.Object, accountCommandsRepository);
         var transaction = new AddTransactionRequest(financialAccount.Id, transactionAmount, transactionDescription, category);
         var outputMock = new AddIncomeTransactionOutputMock();
         
@@ -63,6 +61,9 @@ public class AddIncomeTransactionUseCaseTest
         
         // Assert
         Assert.Equal(expectedAccountBalance, outputMock.AccountBalance);
+        Assert.Equal(expectedAccountBalance, accountCommandsRepository.Balance.Amount);
+        Assert.Equal(transactionAmount, accountCommandsRepository.ResultTransaction.Amount);
+        Assert.Equal(financialAccount.Id, accountCommandsRepository.AccountId);
     }
     
     [Theory]
@@ -72,13 +73,13 @@ public class AddIncomeTransactionUseCaseTest
     {
         // Arrange
         var owner = new Owner(Guid.NewGuid().ToString(), "Test");
-        const string transactionDescription = "Test Description";;
+        const string transactionDescription = "Test Description";
         const string category = "Salary";
         
         var financialAccount = CreateFinancialAccount(accountBalance, owner, transactionDescription, category);
         var accountQueriesRepository = SetupAccountQueryRepositoryMock(financialAccount);
 
-        var accountCommandRepository = new AccountCommandsRepositoryMock(financialAccount);
+        var accountCommandRepository = new AccountCommandsRepositoryMock();
         var sut = new AddIncomeTransactionUseCase(accountQueriesRepository.Object,
             accountCommandRepository);
 
@@ -98,7 +99,7 @@ public class AddIncomeTransactionUseCaseTest
     
     private static FinancialAccount CreateFinancialAccount(decimal accountBalance, Owner owner, string transactionDescription, string category)
     {
-        var currentTransactions = new Transaction[1]
+        var currentTransactions = new Transaction[]
         {
             new(Guid.NewGuid().ToString(), accountBalance, Description.Create(transactionDescription), Category.Create(category), TimeStamp.CreateNow())
         };

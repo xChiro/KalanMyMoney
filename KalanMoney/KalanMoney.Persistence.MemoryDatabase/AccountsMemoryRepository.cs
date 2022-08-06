@@ -1,4 +1,5 @@
 using KalanMoney.Domain.Entities;
+using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Domain.UseCases.Repositories.Models;
 using KalanMoney.Persistence.MemoryDatabase.DTOs;
@@ -26,10 +27,10 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
         DataBase.FinancialAccounts.Add(account.Id, FinancialAccountModel.CreateFromFinancialAccount(account));
     }
 
-    public void AddTransaction(AddTransactionModel addTransactionModel, Transaction transaction)
+    public void AddTransaction(string accountId, Balance accountBalance, Transaction transaction)
     {
-        DataBase.FinancialAccounts[addTransactionModel.AccountId].Balance = addTransactionModel.AccountBalance.Amount;
-        DataBase.FinancialAccounts[addTransactionModel.AccountId].Transactions.Add(transaction);
+        DataBase.FinancialAccounts[accountId].Balance = accountBalance.Amount;
+        DataBase.FinancialAccounts[accountId].Transactions.Add(transaction);
     }
 
     public FinancialAccount? GetAccount(string id, TransactionFilter transactionFilter)

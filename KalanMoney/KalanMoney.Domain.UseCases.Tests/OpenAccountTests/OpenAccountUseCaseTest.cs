@@ -1,7 +1,9 @@
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.Exceptions;
+using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.OpenAccount;
 using KalanMoney.Domain.UseCases.Repositories;
+using KalanMoney.Domain.UseCases.Tests.RepositoriesMocks;
 using Moq;
 using Xunit;
 
@@ -10,42 +12,42 @@ namespace KalanMoney.Domain.UseCases.Tests.OpenAccountTests;
 public class OpenAccountUseCaseTest
 {
     [Fact]
-    public void Open_an_account_with_a_default_category_successfully()
+    public void Try_to_open_an_account_but_the_name_is_to_long()
+    {
+        // Arrange
+        var accountRepositoryMock = new AccountCommandsRepositoryMock();
+        var createAccountRequest =
+            CreateAccountRequest("Very very very very very loooooonnnnnggggggg name, its invalid.");
+        
+        var sut = new OpenAccountUseCase(accountRepositoryMock);
+        var openAccountOutputMock = new OpenAccountOutputMock();
+
+        // Act/Assert
+        Assert.Throws<AccountNameException>(() => sut.Execute(createAccountRequest, openAccountOutputMock));
+    }
+
+    [Fact]
+    public void Open_an_account_successfully()
     {
         // Arrange 
         const decimal openingTransaction = 0;
-        
+
         var createAccountRequest = CreateAccountRequest("Normal Name");
-        var accountRepositoryMock = GetSetupAccountRepositoryMock();
-        
+        var accountRepositoryMock = new AccountCommandsRepositoryMock();
+
         var createAccountOutput = new OpenAccountOutputMock();
-        var sut = new OpenAccountUseCase(accountRepositoryMock.Object);
+        var sut = new OpenAccountUseCase(accountRepositoryMock);
 
         // Act
         sut.Execute(createAccountRequest, createAccountOutput);
 
         // Assert
-        Assert.True(!string.IsNullOrEmpty(createAccountOutput.AccountId) && createAccountOutput.AccountBalance == openingTransaction);
+        Assert.True(!string.IsNullOrEmpty(createAccountOutput.AccountId) &&
+                    createAccountOutput.AccountBalance == openingTransaction);
+        Assert.NotNull(accountRepositoryMock.FinancialAccount);
+        Assert.Equal(new Balance(0), accountRepositoryMock.FinancialAccount.Balance);
     }
-    
-    [Fact]
-    public void Try_to_create_a_new_category_but_the_name_is_to_long()
-    {
-        // Arrange
-        var accountRepositoryMock = GetSetupAccountRepositoryMock();
 
-        var createAccountOutput = new OpenAccountOutputMock();
-        var sut = new OpenAccountUseCase(accountRepositoryMock.Object);
-        
-        const string longName =
-            "This its a very very very long accountName and we follow TDD and Clean Architecture principles.";
-        
-        var createAccountRequest = CreateAccountRequest(longName);
-        
-        // Act/Assert
-        Assert.Throws<AccountNameException>(() => sut.Execute(createAccountRequest, createAccountOutput));
-    }
-    
     private static CreateAccountRequest CreateAccountRequest(string accountName)
     {
         var createAccountRequest = new CreateAccountRequest(
@@ -53,15 +55,7 @@ public class OpenAccountUseCaseTest
             "Owner Test",
             accountName
         );
-        
-        return createAccountRequest;
-    }
 
-    private static Mock<IAccountCommandsRepository> GetSetupAccountRepositoryMock()
-    {
-        var accountRepositoryMock = new Mock<IAccountCommandsRepository>();
-        accountRepositoryMock.Setup(x => x.OpenAccount(It.IsAny<FinancialAccount>()));
-        
-        return accountRepositoryMock;
+        return createAccountRequest;
     }
 }

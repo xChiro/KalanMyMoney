@@ -28,25 +28,22 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
     {
         var account = GetFinancialAccount(request);
 
+        if (account == null) throw new AccountNotFoundException();
+        
         var accountBalance = account.AddIncomeTransaction(request.Amount, request.Description, request.Category);
         var transaction = account.Transactions.Items.First();
-        
-        var response = new AddTransactionResponse(transaction.Id, accountBalance.Amount);
 
-        var addAccountModel = new AddTransactionModel(account.Id, accountBalance);
-        
-        _accountCommandsRepository.AddTransaction(addAccountModel, transaction);
-        
+        _accountCommandsRepository.AddTransaction(account.Id, accountBalance, transaction);
+
+        var response = new AddTransactionResponse(transaction.Id, accountBalance.Amount);
         output.Results(response);
     }
 
     /// <exception cref="AccountNotFoundException"></exception>
-    private FinancialAccount GetFinancialAccount(AddTransactionRequest request)
+    private FinancialAccount? GetFinancialAccount(AddTransactionRequest request)
     {
         var transactionsFilters = TransactionFilter.CreateMonthRangeFromUtcNow();
         var account = _accountQueriesRepository.GetAccount(request.AccountId, transactionsFilters);
-        
-        if (account == null) throw new AccountNotFoundException();
         
         return account;
     }

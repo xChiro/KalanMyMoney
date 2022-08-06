@@ -36,11 +36,9 @@ public class AccountsMemoryRepositoryTest
         const string testTransaction = "Test Transaction";
         var transaction = new Transaction(0, Description.Create(testTransaction), Category.Create("Salary"));
         var balance = new Balance(100.13m);
-        var addTransactionModel =
-            new AddTransactionModel(financialAccount.Id, balance);
 
         // Act
-        sut.AddTransaction(addTransactionModel, transaction);
+        sut.AddTransaction(financialAccount.Id, balance, transaction);
 
         // Assert
         Assert.Equal(balance.Amount, sut.DataBase.FinancialAccounts.First().Value.Balance);
