@@ -46,8 +46,8 @@ public class FinancialAccountTest
         // Assert 
         Assert.Equal(new Balance(expected), result);
         Assert.Equal(new Balance(expected), sut.Balance);
-        Assert.Equal(Description.Create(transactionDescription), sut.Transactions.Items.First().Description);
-        Assert.Equal(Category.Create(categoryName), sut.Transactions.Items.First().Category);
+        Assert.Equal(Description.Create(transactionDescription), sut.Transactions.GetLastTransaction()?.Description);
+        Assert.Equal(Category.Create(categoryName), sut.Transactions.GetLastTransaction()?.Category);
     }
 
     [Theory]
@@ -75,8 +75,8 @@ public class FinancialAccountTest
         // Assert 
         Assert.Equal(new Balance(expected), result);
         Assert.Equal(new Balance(expected), sut.Balance);
-        Assert.Equal(Description.Create(transactionDescription), sut.Transactions.Items.First().Description);
-        Assert.Equal(Category.Create(categoryName), sut.Transactions.Items.First().Category);
+        Assert.Equal(Description.Create(transactionDescription), sut.Transactions.GetLastTransaction()?.Description);
+        Assert.Equal(Category.Create(categoryName), sut.Transactions.GetLastTransaction()?.Category);
     }
 
     [Theory]

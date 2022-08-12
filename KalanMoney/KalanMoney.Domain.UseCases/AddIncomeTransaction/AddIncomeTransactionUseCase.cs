@@ -31,7 +31,7 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
         if (account == null) throw new AccountNotFoundException();
         
         var accountBalance = account.AddIncomeTransaction(request.Amount, request.Description, request.Category);
-        var transaction = account.Transactions.Items.First();
+        var transaction = account.Transactions.GetLastTransaction()!;
 
         _accountCommandsRepository.AddTransaction(account.Id, accountBalance, transaction);
 

@@ -23,17 +23,50 @@ public class TransactionCollectionTest
         const string description = "Test";
         const string category = "Salary";
         
-        var transaction = new Transaction(amount, Description.Create(description), Category.Create(category));
         var sut = new TransactionCollection();
 
         // Act
-        sut.AddTransaction(transaction);
+        var result = sut.AddTransaction(amount, description, category);
 
         // Assert
         Assert.Single(sut.Items);
-        Assert.Equal(sut.Items.First().Amount, amount);
-        Assert.Equal(Description.Create(description), sut.Items.First().Description);
-        Assert.Equal(Category.Create(category), sut.Items.First().Category);
-        Assert.True(sut.Items[0].TimeStamp.Value > 0);
+        Assert.Contains(sut.Items, transaction => transaction.Id == result.Id);
+        Assert.Equal(amount, result.Amount);
+        Assert.Equal(Description.Create(description), result.Description);
+        Assert.Equal(Category.Create(category), result.Category);
+        Assert.True(result.TimeStamp.Value > 0);
+    }
+
+    [Fact]
+    public void Try_to_get_the_last_transaction_from_empty_collection_return_null()
+    {
+        // Arrange
+        var sut = new TransactionCollection();
+        
+        // Act
+        var transaction = sut.GetLastTransaction();
+
+        // Assert
+        Assert.Null(transaction);
+    }
+
+    [Fact]
+    public void Get_last_transaction_from_a_collection_with_two_transactions_successfully()
+    {
+        // Arrange
+        var expectedTransaction = new Transaction(100, Description.Create("LastTransaction"), Category.Create("Test"));
+        var transactions = new List<Transaction>()
+        {
+            new (10, Description.Create("First Transaction"), Category.Create("Test")),
+            expectedTransaction
+        };
+        
+        var sut = new TransactionCollection(transactions);
+        
+        // Act
+        var transaction = sut.GetLastTransaction();
+
+        // Assert
+        Assert.Equal(expectedTransaction, transaction);
     }
 }

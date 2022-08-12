@@ -1,3 +1,5 @@
+using KalanMoney.Domain.Entities.ValueObjects;
+
 namespace KalanMoney.Domain.Entities;
 
 public class TransactionCollection
@@ -12,9 +14,17 @@ public class TransactionCollection
     public Transaction[] Items => _transactions.ToArray();
 
     private readonly Stack<Transaction> _transactions;
-    
-    public void AddTransaction(Transaction transaction)
+
+    public Transaction? GetLastTransaction()
     {
+        return _transactions.Count == 0 ? default : Items.First();
+    }
+    
+    public Transaction AddTransaction(decimal amount, string description, string category)
+    {
+        var transaction = new Transaction(amount, Description.Create(description), Category.Create(category));
+        
         _transactions.Push(transaction);
+        return transaction;
     }
 }
