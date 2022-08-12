@@ -33,7 +33,7 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
         var accountBalance = account.AddIncomeTransaction(request.Amount, request.Description, request.Category);
         var transaction = account.Transactions.GetLastTransaction()!;
 
-        _accountCommandsRepository.AddTransaction(account.Id, accountBalance, transaction);
+        _accountCommandsRepository.StoreTransaction(account.Id, accountBalance, transaction);
 
         var response = new AddTransactionResponse(transaction.Id, accountBalance.Amount);
         output.Results(response);

@@ -8,5 +8,5 @@ public interface IAccountCommandsRepository
 {
     public void OpenAccount(FinancialAccount account);
 
-    public void AddTransaction(string accountId, Balance accountBalance, Transaction transaction);
+    public void StoreTransaction(string accountId, Balance accountBalance, Transaction transaction);
 }

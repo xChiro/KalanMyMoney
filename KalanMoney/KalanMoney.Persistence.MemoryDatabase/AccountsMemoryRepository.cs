@@ -27,7 +27,7 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
         DataBase.FinancialAccounts.Add(account.Id, FinancialAccountModel.CreateFromFinancialAccount(account));
     }
 
-    public void AddTransaction(string accountId, Balance accountBalance, Transaction transaction)
+    public void StoreTransaction(string accountId, Balance accountBalance, Transaction transaction)
     {
         DataBase.FinancialAccounts[accountId].Balance = accountBalance.Amount;
         DataBase.FinancialAccounts[accountId].Transactions.Add(transaction);

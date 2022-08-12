@@ -46,7 +46,7 @@ public class AddOutcomeTransactionTest
 
         var accountCommandRepository = new Mock<IAccountCommandsRepository>();
         accountCommandRepository.Setup(x =>
-            x.AddTransaction(It.IsAny<string>(), It.IsAny<Balance>(), It.IsAny<Transaction>()));
+            x.StoreTransaction(It.IsAny<string>(), It.IsAny<Balance>(), It.IsAny<Transaction>()));
         
         var accountQueriesRepository = AccountQueriesRepositoryMockSetup(financialAccount);
         

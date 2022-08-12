@@ -20,7 +20,7 @@ public class AccountCommandsRepositoryMock : IAccountCommandsRepository
         FinancialAccount = account;
     }
 
-    public void AddTransaction(string accountId, Balance balance, Transaction transaction)
+    public void StoreTransaction(string accountId, Balance balance, Transaction transaction)
     {
         ResultTransaction = transaction;
         Balance = balance;
