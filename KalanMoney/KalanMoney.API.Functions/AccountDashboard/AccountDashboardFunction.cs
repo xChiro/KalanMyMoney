@@ -19,13 +19,13 @@ public class AccountDashboardFunction
     }
 
     [FunctionName("AccountDashboardFunction")]
-    public async Task<IActionResult> RunAsync(
+    public Task<IActionResult> RunAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "accounts/dashboard")]
         HttpRequest req, ILogger log)
     {
         var tokenHandler = new TokenHandler(req);
         
-        if (!tokenHandler.TryGetSubjectFromToken(out var ownerId)) return new UnauthorizedResult();
+        if (!tokenHandler.TryGetSubjectFromToken(out var ownerId)) return Task.FromResult<IActionResult>(new UnauthorizedResult());
         var accountDashboardPresenter = new AccountDashboardPresenter();
         
         try
@@ -34,9 +34,9 @@ public class AccountDashboardFunction
         }
         catch (AccountNotFoundException)
         {
-            return new NotFoundResult();
+            return Task.FromResult<IActionResult>(new NotFoundResult());
         } 
         
-        return new OkObjectResult(accountDashboardPresenter);
+        return Task.FromResult<IActionResult>(new OkObjectResult(accountDashboardPresenter));
     }
 }

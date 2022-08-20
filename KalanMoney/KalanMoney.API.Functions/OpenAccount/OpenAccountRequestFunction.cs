@@ -31,10 +31,13 @@ public class OpenAccountRequestFunction : BaseRequestFunction<OpenAccountFunctio
         try
         {
             var data = await DeserializeRequest(req);
-            
-            var presenter = new OpenAccountPresenter();
-            var createAccountRequest = new CreateAccountRequest(Guid.NewGuid().ToString(), "A name here", data.AccountName);
 
+            var tokenHandler = new TokenHandler(req);
+            if (!tokenHandler.TryGetSubjectFromToken(out var subject)) return new UnauthorizedResult();
+            
+            var createAccountRequest = new CreateAccountRequest(subject, "A name here", data.AccountName);
+
+            var presenter = new OpenAccountPresenter();
             _openAccountInput.Execute(createAccountRequest, presenter);
 
             return new OkObjectResult(presenter);
