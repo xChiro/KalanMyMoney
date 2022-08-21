@@ -122,9 +122,9 @@ public class AccountDashboardUseCaseTest
         Assert.Contains(transactions[1], output.AccountDashboardResponse.AccountTransactions);
         Assert.True(output.AccountDashboardResponse.CategoriesBalances.ContainsKey(category.Value));
         Assert.Contains(transactions[1], output.AccountDashboardResponse.AccountTransactions);
-        Assert.Equal(accountBalance, output.AccountDashboardResponse.DashboardBalance.accountBalance);
-        Assert.Equal(negativeAmount, output.AccountDashboardResponse.DashboardBalance.outcomeBalance);
-        Assert.Equal(positiveAmount, output.AccountDashboardResponse.DashboardBalance.incomeBalance);
+        Assert.Equal(accountBalance, output.AccountDashboardResponse.DashboardBalance.AccountBalance);
+        Assert.Equal(negativeAmount, output.AccountDashboardResponse.DashboardBalance.OutcomeBalance);
+        Assert.Equal(positiveAmount, output.AccountDashboardResponse.DashboardBalance.IncomeBalance);
     }
 
     private static Mock<IAccountQueriesRepository> CreateAccountQueriesRepository(decimal balanceAmount, Transaction[]? transactions, 
