@@ -1,3 +1,3 @@
 namespace KalanMoney.API.Functions.OpenAccount;
 
-public record OpenAccountFunctionRequest(string AccountName);
+public record OpenAccountFunctionRequest(string? AccountName);

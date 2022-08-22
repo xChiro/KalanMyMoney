@@ -35,15 +35,13 @@ public class OpenAccountFunctionTest : BaseApiTest
 
     [Theory]
     [InlineData("The name of this accounts its to long to be permitted.")]
-    [InlineData("")]
-    [InlineData(null)]
     public async void Try_to_open_an_account_with_an_invalid_name_return_bad_request(string categoryName)
     {
         // Arrange
         var accountInput = CreateOpenAccountInputException(new AccountNameException(categoryName));
         var sut = new OpenAccountRequestFunction(accountInput);
         
-        var defaultHttpRequest = CreateHttpRequestCategoryName(categoryName);
+        var defaultHttpRequest = CreateHttpRequestAccountName(categoryName);
         var loggerMock = new Mock<ILogger>(); 
 
         // Act
@@ -92,9 +90,26 @@ public class OpenAccountFunctionTest : BaseApiTest
         
         // Assert
         Assert.IsType<OkObjectResult>(result);
-        
     }
 
+    [Fact]
+    public async void Open_an_account_without_name_successfully()
+    {
+        // Arrange
+        var accountInput = new Mock<IOpenAccountInput>();
+
+        var sut = new OpenAccountRequestFunction(accountInput.Object);
+        var defaultHttpRequest = CreateHttpRequestAccountName(null);
+        
+        var loggerMock = new Mock<ILogger>(); 
+
+        // Act
+        var result = await sut.RunAsync(defaultHttpRequest, loggerMock.Object);
+        
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+    }
+    
     private static IOpenAccountInput CreateOpenAccountInputException(Exception exception)
     {
         var openAccountInput = new Mock<IOpenAccountInput>();
@@ -104,7 +119,7 @@ public class OpenAccountFunctionTest : BaseApiTest
         return openAccountInput.Object;
     }
 
-    private static DefaultHttpRequest CreateHttpRequestCategoryName(string categoryName)
+    private static DefaultHttpRequest CreateHttpRequestAccountName(string? categoryName)
     {
         var requestBody = $"{{ 'Name': '${categoryName}' }}";
         var defaultHttpRequest = CreateHttpRequest(requestBody);

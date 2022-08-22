@@ -21,7 +21,7 @@ public class OpenAccountUseCase : IOpenAccountInput
     /// </exception>
     public void Execute(CreateAccountRequest requestModel, IOpenAccountOutput openAccountOutput)
     {
-        var accountName = AccountName.Create(requestModel.AccountName);
+        var accountName = AccountName.Create(requestModel.AccountName, $"{requestModel.OwnerName} Account");
         var financialAccount = new FinancialAccount(accountName, requestModel.OwnerId, requestModel.OwnerName);
 
         _accountCommands.OpenAccount(financialAccount);

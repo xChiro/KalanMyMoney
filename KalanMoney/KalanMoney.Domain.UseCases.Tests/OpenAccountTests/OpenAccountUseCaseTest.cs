@@ -27,12 +27,11 @@ public class OpenAccountUseCaseTest
     }
 
     [Fact]
-    public void Open_an_account_successfully()
+    public void Open_an_account_with_account_name_successfully()
     {
         // Arrange 
-        const decimal openingTransaction = 0;
-
-        var createAccountRequest = CreateAccountRequest("Normal Name");
+        const string accountName = "Normal Name";
+        var createAccountRequest = CreateAccountRequest(accountName);
         var accountRepositoryMock = new AccountCommandsRepositoryMock();
 
         var createAccountOutput = new OpenAccountOutputMock();
@@ -42,13 +41,37 @@ public class OpenAccountUseCaseTest
         sut.Execute(createAccountRequest, createAccountOutput);
 
         // Assert
-        Assert.True(!string.IsNullOrEmpty(createAccountOutput.AccountId) &&
-                    createAccountOutput.AccountBalance == openingTransaction);
+        Assert.NotNull(createAccountOutput.AccountId);
+        Assert.NotEmpty(createAccountOutput.AccountId);
+        Assert.Equal(0, createAccountOutput.AccountBalance);
         Assert.NotNull(accountRepositoryMock.FinancialAccount);
         Assert.Equal(new Balance(0), accountRepositoryMock.FinancialAccount.Balance);
+        Assert.Equal( accountName, accountRepositoryMock.FinancialAccount.Name.Value);
     }
 
-    private static CreateAccountRequest CreateAccountRequest(string accountName)
+    [Fact]
+    public void Open_an_account_without_name_set_default_name_instead_successfully()
+    {
+        // Arrange
+        var accountRepositoryMock = new AccountCommandsRepositoryMock();
+        var sut = new OpenAccountUseCase(accountRepositoryMock);
+        
+        var createAccountRequest = CreateAccountRequest();
+        var output = new OpenAccountOutputMock();
+
+        // Act
+        sut.Execute(createAccountRequest, output);
+
+        // Assert
+        Assert.NotNull(output.AccountId);
+        Assert.NotEmpty(output.AccountId);
+        Assert.Equal(0, output.AccountBalance);
+        Assert.NotNull(accountRepositoryMock.FinancialAccount);
+        Assert.Equal(new Balance(0), accountRepositoryMock.FinancialAccount.Balance);
+        Assert.Equal($"{createAccountRequest.OwnerName} Account", accountRepositoryMock.FinancialAccount.Name.Value);
+    }
+    
+    private static CreateAccountRequest CreateAccountRequest(string? accountName = null)
     {
         var createAccountRequest = new CreateAccountRequest(
             Guid.NewGuid().ToString(),
