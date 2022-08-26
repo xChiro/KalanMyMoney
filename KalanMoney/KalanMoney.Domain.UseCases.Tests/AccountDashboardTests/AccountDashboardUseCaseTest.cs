@@ -19,7 +19,7 @@ public class AccountDashboardUseCaseTest
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(x => x.GetAccountByOwner(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(default(FinancialAccount));
-        
+
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object);
 
         // Act/Assert
@@ -33,7 +33,7 @@ public class AccountDashboardUseCaseTest
         // Arrange
         var transaction = Array.Empty<Transaction>();
         var owner = CreateOwner();
-        
+
         var accountId = Guid.NewGuid().ToString();
         var accountQueriesRepository = CreateAccountQueriesRepository(0, transaction, owner, accountId);
 
@@ -45,7 +45,11 @@ public class AccountDashboardUseCaseTest
 
         // Assert
         Assert.NotNull(outPut.AccountDashboardResponse.AccountTransactions);
+        Assert.NotNull(outPut.AccountDashboardResponse.DashboardBalance);
         Assert.Empty(outPut.AccountDashboardResponse.AccountTransactions);
+        Assert.Equal(0, outPut.AccountDashboardResponse.DashboardBalance.AccountBalance);
+        Assert.Equal(0, outPut.AccountDashboardResponse.DashboardBalance.IncomeBalance);
+        Assert.Equal(0, outPut.AccountDashboardResponse.DashboardBalance.OutcomeBalance);
     }
 
     [Fact]
@@ -57,22 +61,22 @@ public class AccountDashboardUseCaseTest
 
         const decimal amountSalary = 10;
         const decimal amountGroceries = -5;
-        
-        var transactions = new []
+
+        var transactions = new[]
         {
             new Transaction(amountSalary, Description.Create("Test"), categorySalary),
             new Transaction(amountGroceries, Description.Create("Test"), categoryGroceries)
         };
-        
+
         var owner = CreateOwner();
-        
+
         var accountId = Guid.NewGuid().ToString();
-        var accountQueriesRepository = CreateAccountQueriesRepository(0, transactions, 
+        var accountQueriesRepository = CreateAccountQueriesRepository(0, transactions,
             owner, accountId);
-        
+
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object);
         var output = new AccountDashboardOutputMock();
-        
+
         // Act
         sut.Execute(owner.SubId, output);
 
@@ -80,8 +84,10 @@ public class AccountDashboardUseCaseTest
         Assert.NotNull(output.AccountDashboardResponse.AccountTransactions);
         Assert.Contains(transactions[0], output.AccountDashboardResponse.AccountTransactions);
         Assert.Contains(transactions[1], output.AccountDashboardResponse.AccountTransactions);
-        Assert.Contains(output.AccountDashboardResponse.CategoriesBalances, pair => pair.Key == categorySalary.Value && pair.Value == amountSalary);
-        Assert.Contains(output.AccountDashboardResponse.CategoriesBalances, pair => pair.Key == categoryGroceries.Value && pair.Value == amountGroceries);
+        Assert.Contains(output.AccountDashboardResponse.CategoriesBalances,
+            pair => pair.Key == categorySalary.Value && pair.Value == amountSalary);
+        Assert.Contains(output.AccountDashboardResponse.CategoriesBalances,
+            pair => pair.Key == categoryGroceries.Value && pair.Value == amountGroceries);
     }
 
     [Fact]
@@ -92,18 +98,18 @@ public class AccountDashboardUseCaseTest
         const decimal negativeAmount = -50.50m;
         const decimal accountBalance = positiveAmount - negativeAmount;
         var category = Category.Create("Test");
-        
+
         var transactions = new Transaction[]
         {
-            new (positiveAmount, Description.Create("Test"), category), 
-            new (negativeAmount, Description.Create("Test"), category), 
+            new(positiveAmount, Description.Create("Test"), category),
+            new(negativeAmount, Description.Create("Test"), category),
         };
-        
+
         var owner = CreateOwner();
         var accountId = Guid.NewGuid().ToString();
 
         var financialAccount = CreateFinancialAccount(accountId, transactions, owner, accountBalance);
-        
+
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(x => x.GetAccountByOwner(owner.SubId, It.IsAny<TransactionFilter>()))
             .Returns(financialAccount);
@@ -127,7 +133,8 @@ public class AccountDashboardUseCaseTest
         Assert.Equal(positiveAmount, output.AccountDashboardResponse.DashboardBalance.IncomeBalance);
     }
 
-    private static Mock<IAccountQueriesRepository> CreateAccountQueriesRepository(decimal balanceAmount, Transaction[]? transactions, 
+    private static Mock<IAccountQueriesRepository> CreateAccountQueriesRepository(decimal balanceAmount,
+        Transaction[]? transactions,
         Owner owner, string? accountId = null)
     {
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
@@ -136,7 +143,7 @@ public class AccountDashboardUseCaseTest
         accountQueriesRepository.Setup(x =>
                 x.GetAccountByOwner(It.Is<string>(id => id == owner.SubId), It.IsAny<TransactionFilter>()))
             .Returns(financialAccount);
-        
+
         return accountQueriesRepository;
     }
 
@@ -146,13 +153,14 @@ public class AccountDashboardUseCaseTest
         return owner;
     }
 
-    private static FinancialAccount CreateFinancialAccount(string? accountId, Transaction[]? transactions, Owner owner, decimal balance)
+    private static FinancialAccount CreateFinancialAccount(string? accountId, Transaction[]? transactions, Owner owner,
+        decimal balance)
     {
         accountId ??= Guid.NewGuid().ToString();
-        
+
         var financialAccount = new FinancialAccount(accountId, AccountName.Create("Test"), owner, balance,
             TimeStamp.CreateNow(), transactions ?? Array.Empty<Transaction>());
-        
+
         return financialAccount;
     }
 }

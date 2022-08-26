@@ -20,7 +20,7 @@ public class AccountDashboardFunction
 
     [FunctionName("AccountDashboardFunction")]
     public Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "accounts/dashboard")]
+         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "accounts/dashboard")]
         HttpRequest req, ILogger log)
     {
         var tokenHandler = new TokenHandler(req);

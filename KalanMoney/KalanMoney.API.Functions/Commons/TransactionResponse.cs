@@ -2,4 +2,4 @@ using System;
 
 namespace KalanMoney.API.Functions.Commons;
 
-public record TransactionResponse(decimal Amount, string Description, string Category, DateTime Time);
+public record TransactionResponse(string Id, decimal Amount, string Description, string Category, DateTime Time);

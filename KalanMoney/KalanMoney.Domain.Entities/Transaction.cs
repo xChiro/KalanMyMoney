@@ -5,7 +5,7 @@ namespace KalanMoney.Domain.Entities;
 public class Transaction : Entity
 {
     public Transaction(decimal amount, Description description, Category category) 
-        : this(new Guid().ToString(), amount, description, category, TimeStamp.CreateNow())
+        : this(Guid.NewGuid().ToString(), amount, description, category, TimeStamp.CreateNow())
     { }
     
     public Transaction(string id, decimal amount, Description description, Category category, TimeStamp timeStamp) : base(id)
