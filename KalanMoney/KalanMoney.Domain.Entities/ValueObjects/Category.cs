@@ -17,6 +17,6 @@ public record Category
         
         if (newName.Length > 15) newName = newName[..15];
 
-        return new Category(newName);
+        return new Category(newName.ToLower());
     }
 }

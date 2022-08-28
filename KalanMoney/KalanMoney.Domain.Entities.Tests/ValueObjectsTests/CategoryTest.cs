@@ -15,7 +15,7 @@ public class CategoryTest
     }
     
     [Fact]
-    public void Create_category_successfully()
+    public void Create_category_to_lower_successfully()
     {
         // Arrange
         const string expected = "Salary";
@@ -24,7 +24,7 @@ public class CategoryTest
         var result = Category.Create(expected);
 
         // Assert
-        Assert.Equal(expected, result.Value);
+        Assert.Equal(expected.ToLower(), result.Value);
     }
 
     [Theory]
@@ -36,6 +36,6 @@ public class CategoryTest
         var result = Category.Create(invalidName);
 
         // Assert
-        Assert.Equal(expected, result.Value);
+        Assert.Equal(expected.ToLower(), result.Value);
     }
 }

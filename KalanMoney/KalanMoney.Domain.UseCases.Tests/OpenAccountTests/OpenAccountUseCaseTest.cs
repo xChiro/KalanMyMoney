@@ -1,10 +1,7 @@
-using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.Exceptions;
 using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.OpenAccount;
-using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Domain.UseCases.Tests.RepositoriesMocks;
-using Moq;
 using Xunit;
 
 namespace KalanMoney.Domain.UseCases.Tests.OpenAccountTests;

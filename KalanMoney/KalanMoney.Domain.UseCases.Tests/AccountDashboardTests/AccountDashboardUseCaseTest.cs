@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.AccountDashboard;
@@ -44,7 +43,7 @@ public class AccountDashboardUseCaseTest
         sut.Execute(owner.SubId, outPut);
 
         // Assert
-        Assert.NotNull(outPut.AccountDashboardResponse.AccountTransactions);
+        Assert.NotNull(outPut.AccountDashboardResponse?.AccountTransactions);
         Assert.NotNull(outPut.AccountDashboardResponse.DashboardBalance);
         Assert.Empty(outPut.AccountDashboardResponse.AccountTransactions);
         Assert.Equal(0, outPut.AccountDashboardResponse.DashboardBalance.AccountBalance);
@@ -81,7 +80,7 @@ public class AccountDashboardUseCaseTest
         sut.Execute(owner.SubId, output);
 
         // Assert
-        Assert.NotNull(output.AccountDashboardResponse.AccountTransactions);
+        Assert.NotNull(output.AccountDashboardResponse?.AccountTransactions);
         Assert.Contains(transactions[0], output.AccountDashboardResponse.AccountTransactions);
         Assert.Contains(transactions[1], output.AccountDashboardResponse.AccountTransactions);
         Assert.Contains(output.AccountDashboardResponse.CategoriesBalances,
@@ -102,7 +101,7 @@ public class AccountDashboardUseCaseTest
         var transactions = new Transaction[]
         {
             new(positiveAmount, Description.Create("Test"), category),
-            new(negativeAmount, Description.Create("Test"), category),
+            new(negativeAmount, Description.Create("test"), category),
         };
 
         var owner = CreateOwner();

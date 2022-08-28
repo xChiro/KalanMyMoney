@@ -5,7 +5,7 @@ namespace KalanMoney.Domain.UseCases.Tests.AddIncomeTransactionTests;
 
 public class AddIncomeTransactionOutputMock : IAddIncomeTransactionOutput
 {
-    public string TransactionId { get; private set; }
+    public string? TransactionId { get; private set; }
     
     public decimal AccountBalance { get; private set; }
     

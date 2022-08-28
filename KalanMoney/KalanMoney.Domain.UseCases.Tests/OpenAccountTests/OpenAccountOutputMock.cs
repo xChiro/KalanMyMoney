@@ -4,7 +4,7 @@ namespace KalanMoney.Domain.UseCases.Tests.OpenAccountTests;
 
 public class OpenAccountOutputMock : IOpenAccountOutput
 {
-    public string AccountId { get; private set; }
+    public string? AccountId { get; private set; }
 
     public decimal AccountBalance { get; private set; }
 

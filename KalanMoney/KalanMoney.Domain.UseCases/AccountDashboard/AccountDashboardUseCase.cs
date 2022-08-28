@@ -1,5 +1,4 @@
 using KalanMoney.Domain.Entities;
-using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Domain.UseCases.Repositories.Models;
@@ -35,13 +34,13 @@ public class AccountDashboardUseCase : IAccountDashboardInput
 
         foreach (var transaction in transactions.Items)
         {
-            if (categories.ContainsKey(transaction.Category.Value))
+            if (categories.ContainsKey(transaction.Category.Value.ToLower()))
             {
                 categories[transaction.Category.Value] += transaction.Amount;
             }
             else
             {
-                categories.Add(transaction.Category.Value, transaction.Amount);
+                categories.Add(transaction.Category.Value.ToLower(), transaction.Amount);
             }
         }
 

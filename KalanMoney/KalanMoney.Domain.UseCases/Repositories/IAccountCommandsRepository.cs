@@ -1,6 +1,5 @@
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.ValueObjects;
-using KalanMoney.Domain.UseCases.Repositories.Models;
 
 namespace KalanMoney.Domain.UseCases.Repositories;
 
