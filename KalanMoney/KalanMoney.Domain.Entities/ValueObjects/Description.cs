@@ -1,6 +1,6 @@
 namespace KalanMoney.Domain.Entities.ValueObjects;
 
-public struct Description 
+public record Description 
 {
     public string Value { get;  }
 
@@ -9,8 +9,14 @@ public struct Description
         Value = value;
     }
 
+    /// <exception cref="ArgumentNullException">
+    /// Description can't be null or empty.
+    /// </exception>
     public static Description Create(string description)
     {
+        if (string.IsNullOrEmpty(description))
+            throw new ArgumentNullException(nameof(description), "Description can't be null or empty");
+        
         var newDescription = description;
         if (newDescription.Length > 155) newDescription = newDescription[..155];
 

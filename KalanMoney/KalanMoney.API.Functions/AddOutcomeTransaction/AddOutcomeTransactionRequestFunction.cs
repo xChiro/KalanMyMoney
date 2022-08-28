@@ -43,7 +43,7 @@ public class AddOutcomeTransactionRequestFunction : BaseRequestFunction<AddOutco
         {
             return new NotFoundResult();
         }
-        catch (Exception ex) when (ex is JsonException | ex is InvalidCastException)
+        catch (Exception ex) when (ex is JsonException | ex is InvalidCastException | ex is ArgumentNullException)
         {
             log.LogInformation("Bad Request");
             return new BadRequestResult();

@@ -5,6 +5,15 @@ namespace KalanMoney.Domain.Entities.Tests.ValueObjectsTests;
 
 public class CategoryTest
 {
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    public void Try_to_create_a_category_with_invalid_value(string value)
+    {
+        // Act/Assert
+        Assert.Throws<ArgumentNullException>(() => Category.Create(value));
+    }
+    
     [Fact]
     public void Create_category_successfully()
     {
