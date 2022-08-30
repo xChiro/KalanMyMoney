@@ -9,11 +9,11 @@ public class FinancialAccount : Entity
         Owner = new Owner(ownerId, ownerName);
         Name = name;
         Transactions = new TransactionCollection();
-        CreationDate = DateTime.UtcNow;
+        CreationDate = TimeStamp.CreateNow();
         Balance = new Balance(0);
     }
 
-    public FinancialAccount(string id, AccountName name, Owner owner, decimal balance, DateTime creationDate,
+    public FinancialAccount(string id, AccountName name, Owner owner, decimal balance, TimeStamp creationDate,
         IEnumerable<Transaction> transactions) : base(id)
     {
         Name = name; 
@@ -23,15 +23,15 @@ public class FinancialAccount : Entity
         Transactions = new TransactionCollection(transactions);
     }
 
-    public AccountName Name { get; }
+    public AccountName Name { get; private set; }
     
-    public Owner Owner { get; }
+    public Owner Owner { get; init; }
     
     public Balance Balance { get; private set; }
     
-    public DateTime CreationDate { get; }
+    public TimeStamp CreationDate { get; init; }
     
-    public TransactionCollection Transactions { get; }
+    public TransactionCollection Transactions { get; private set; }
 
     /// <returns>
     /// Returns new account balance.

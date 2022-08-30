@@ -32,7 +32,7 @@ public class FinancialAccountTest
         // Arrange
         var accountName = AccountName.Create("Test Name");
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
-        var timeStamp = DateTime.UtcNow;
+        var timeStamp = TimeStamp.CreateNow();
         const string categoryName = "Salary";
         
         var transaction = new List<Transaction> { new (actualBalance, Description.Create(transactionDescription), Category.Create(categoryName)) };
@@ -60,7 +60,7 @@ public class FinancialAccountTest
         // Arrange
         var accountName = AccountName.Create("Test Name");
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
-        var timeStamp = DateTime.UtcNow;
+        var timeStamp = TimeStamp.CreateNow();
         var transaction = new List<Transaction>();
         const string categoryName = "Salary";
         
@@ -89,7 +89,7 @@ public class FinancialAccountTest
         // Arrange
         var accountName = AccountName.Create("Test Name");
         var owner = new Owner(Guid.NewGuid().ToString(), "Test Owner");
-        var timeStamp = DateTime.UtcNow;
+        var timeStamp = TimeStamp.CreateNow();
         const string transactionDescription = "Transaction Description";
         const string category = "Salary";
         

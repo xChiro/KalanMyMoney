@@ -65,9 +65,9 @@ public class AccountsMemoryRepositoryTest
         // Arrange
         const string testTransaction = "Test Transaction";
         var todayTransaction = new Transaction(Guid.NewGuid().ToString(), 100, Description.Create(testTransaction), 
-            Category.Create("Salary"), DateTime.UtcNow);
+            Category.Create("Salary"), TimeStamp.CreateNow());
         var oldTransaction = new Transaction(Guid.NewGuid().ToString(), -50, Description.Create(testTransaction),
-            Category.Create("Salary"), new DateTime(1625847972000));
+            Category.Create("Salary"), new TimeStamp(1625847972000));
         var transactions = new[] {todayTransaction, oldTransaction};
 
         var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"), transactions);
@@ -120,10 +120,10 @@ public class AccountsMemoryRepositoryTest
         const string testTransaction = "Test Transaction";
         
         var todayTransaction = new Transaction(Guid.NewGuid().ToString(), 100, Description.Create(testTransaction), 
-            Category.Create("Salary"), DateTime.UtcNow);
+            Category.Create("Salary"), TimeStamp.CreateNow());
         var oldTransaction =
             new Transaction(Guid.NewGuid().ToString(), -50, Description.Create(testTransaction), 
-                Category.Create("Salary"), new DateTime(1625847972000));
+                Category.Create("Salary"), new TimeStamp(1625847972000));
         
         var transactions = new[] {todayTransaction, oldTransaction};
 
@@ -145,7 +145,7 @@ public class AccountsMemoryRepositoryTest
     {
         var accountName = AccountName.Create(name);
         var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), accountName, owner,
-            0, DateTime.UtcNow, transactions ?? Array.Empty<Transaction>());
+            0, TimeStamp.CreateNow(), transactions ?? Array.Empty<Transaction>());
 
         return financialAccount;
     }

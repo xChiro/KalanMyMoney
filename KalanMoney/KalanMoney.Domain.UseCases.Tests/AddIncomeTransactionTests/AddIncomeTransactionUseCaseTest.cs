@@ -101,11 +101,11 @@ public class AddIncomeTransactionUseCaseTest
     {
         var currentTransactions = new Transaction[]
         {
-            new(Guid.NewGuid().ToString(), accountBalance, Description.Create(transactionDescription), Category.Create(category), DateTime.UtcNow)
+            new(Guid.NewGuid().ToString(), accountBalance, Description.Create(transactionDescription), Category.Create(category), TimeStamp.CreateNow())
         };
 
         var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), AccountName.Create("Test"), owner,
-            accountBalance, DateTime.UtcNow, currentTransactions);   
+            accountBalance, TimeStamp.CreateNow(), currentTransactions);   
         
         return financialAccount;
     }

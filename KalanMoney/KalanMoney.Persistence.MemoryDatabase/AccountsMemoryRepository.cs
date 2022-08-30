@@ -56,8 +56,8 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
     private static IEnumerable<Transaction> ApplyFilters(TransactionFilter transactionFilter, FinancialAccountModel financialAccountModel)
     {
         return financialAccountModel.Transactions.Where(x =>
-            x.CreationDate >= transactionFilter.From.ToDateTime(TimeOnly.MinValue) &&  
-            x.CreationDate <= transactionFilter.To.ToDateTime(TimeOnly.MaxValue));
+            x.TimeStamp.ToDateTime() >= transactionFilter.From.ToDateTime(TimeOnly.MinValue) &&  
+            x.TimeStamp.ToDateTime() <= transactionFilter.To.ToDateTime(TimeOnly.MaxValue));
     }
 
     public int ItemsCount()

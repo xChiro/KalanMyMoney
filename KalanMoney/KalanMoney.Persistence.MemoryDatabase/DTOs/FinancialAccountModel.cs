@@ -15,20 +15,20 @@ public class FinancialAccountModel
     
     public decimal Balance  { get; set; }
 
-    public DateTime CreationDate { get; set; }
+    public long CreationDate { get; set; }
 
     public List<Transaction> Transactions { get; set; }
     
     public FinancialAccount ToFinancialAccount()
     {
         return new FinancialAccount(Id, Domain.Entities.ValueObjects.AccountName.Create(AccountName), 
-            new Owner(OwnerId, OwnerName), Balance, DateTime.UtcNow, Transactions);
+            new Owner(OwnerId, OwnerName), Balance, TimeStamp.CreateNow(), Transactions);
     }
     
     public static FinancialAccount ToFinancialAccount(FinancialAccountModel financialAccountModel, IEnumerable<Transaction> transactions)
     {
         return new FinancialAccount(financialAccountModel.Id, Domain.Entities.ValueObjects.AccountName.Create(financialAccountModel.AccountName), 
-            new Owner(financialAccountModel.OwnerId, financialAccountModel.OwnerName), financialAccountModel.Balance, DateTime.UtcNow, transactions);
+            new Owner(financialAccountModel.OwnerId, financialAccountModel.OwnerName), financialAccountModel.Balance, TimeStamp.CreateNow(), transactions);
     }
 
     
@@ -41,7 +41,7 @@ public class FinancialAccountModel
             OwnerId = financialAccount.Owner.SubId,
             OwnerName = financialAccount.Owner.Name,
             Balance = financialAccount.Balance.Amount,
-            CreationDate = financialAccount.CreationDate,
+            CreationDate = financialAccount.CreationDate.Value,
             Transactions = financialAccount.Transactions.Items.ToList(),
         };
     }
