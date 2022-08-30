@@ -34,7 +34,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.Persistence.Memo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{5F8BF087-1668-4AEE-A0D1-8F7410EE60EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.Persistence.MemoryDatabase.Test", "KalanMoney.Persistence.MemoryDatabase.Test\KalanMoney.Persistence.MemoryDatabase.Test.csproj", "{16A87190-59D9-4CAD-A46D-CCBC0D6DF838}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.Persistence.MemoryDatabase.Tests", "KalanMoney.Persistence.MemoryDatabase.Tests\KalanMoney.Persistence.MemoryDatabase.Tests.csproj", "{16A87190-59D9-4CAD-A46D-CCBC0D6DF838}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalanMoney.Persistence.CosmosDB", "KalanMoney.Persistence.CosmosDB\KalanMoney.Persistence.CosmosDB.csproj", "{30D3AD6C-A6E6-4C54-B215-21ED322F3EDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +80,10 @@ Global
 		{16A87190-59D9-4CAD-A46D-CCBC0D6DF838}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16A87190-59D9-4CAD-A46D-CCBC0D6DF838}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16A87190-59D9-4CAD-A46D-CCBC0D6DF838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30D3AD6C-A6E6-4C54-B215-21ED322F3EDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30D3AD6C-A6E6-4C54-B215-21ED322F3EDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30D3AD6C-A6E6-4C54-B215-21ED322F3EDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30D3AD6C-A6E6-4C54-B215-21ED322F3EDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0A1DFEC7-CB16-404C-BC52-2A722C71DDE6} = {F30CBA46-F2AB-4CE2-924A-772EBAA8E248}
@@ -96,5 +102,6 @@ Global
 		{0571D442-CD77-4C62-A97B-A31699C7B9D7} = {C209466B-9DED-407B-A1EF-2F7D5CD85E53}
 		{5F8BF087-1668-4AEE-A0D1-8F7410EE60EF} = {98CA01A9-82A6-49FA-9CC6-FBB7ADDBABF8}
 		{16A87190-59D9-4CAD-A46D-CCBC0D6DF838} = {5F8BF087-1668-4AEE-A0D1-8F7410EE60EF}
+		{30D3AD6C-A6E6-4C54-B215-21ED322F3EDB} = {C209466B-9DED-407B-A1EF-2F7D5CD85E53}
 	EndGlobalSection
 EndGlobal

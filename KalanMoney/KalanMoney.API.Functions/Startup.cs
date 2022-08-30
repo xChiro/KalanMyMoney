@@ -1,3 +1,4 @@
+using System;
 using KalanMoney.API.Functions;
 using KalanMoney.Startup;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
@@ -10,7 +11,17 @@ namespace KalanMoney.API.Functions
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.SetupWithMemoryDataBase();
+            var strategy = Environment.GetEnvironmentVariable("deployStrategy", EnvironmentVariableTarget.Process);
+            
+            switch (strategy)
+            {
+                case "cosmosDB":
+                    builder.Services.SetupWithCosmosDataBase();
+                    break;
+                default:
+                    builder.Services.SetupWithMemoryDataBase();
+                    break;
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ using KalanMoney.Domain.UseCases.Repositories.Models;
 using KalanMoney.Persistence.MemoryDatabase.DTOs;
 using Xunit;
 
-namespace KalanMoney.Persistence.MemoryDatabase.Test.AccountCommandTests;
+namespace KalanMoney.Persistence.MemoryDatabase.Tests.AccountCommandTests;
 
 public class AccountsMemoryRepositoryTest
 {
