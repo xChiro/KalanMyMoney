@@ -23,8 +23,8 @@ public class AccountQueriesRepository : IAccountQueriesRepository
     public FinancialAccount? GetAccount(string id, TransactionFilter transactionFilter)
     {
         const string sqlQuery = $"SELECT * FROM c WHERE c.id = @idParam WHERE " +
-                                $"TimestampToDateTime(c.transactions) as Date >= @from " +
-                                $"AND c.transactions <= @to";
+                                $"(TimestampToDateTime(c.Transactions.TimeStamp) as Date >= @from " +
+                                $"AND (TimestampToDateTime(c.Transactions.TimeStamp) <= @to)";
 
         var queryDefinition = new QueryDefinition(sqlQuery)
             .WithParameter("@idParam", id)
@@ -53,9 +53,9 @@ public class AccountQueriesRepository : IAccountQueriesRepository
 
     public FinancialAccount? GetAccountByOwner(string ownerId, TransactionFilter transactionFilter)
     {
-        const string sqlQuery = $"SELECT * FROM c WHERE c.owner.Subid = @ownerId WHERE " +
-                                $"(TimestampToDateTime(c.transactions) as Date >= @from " +
-                                $"AND c.transactions <= @to)";
+        const string sqlQuery = $"SELECT * FROM c WHERE c.Owner.Subid = @ownerId WHERE " +
+                                $"(TimestampToDateTime(c.Transactions.TimeStamp) as Date >= @from " +
+                                $"AND (TimestampToDateTime(c.Transactions.TimeStamp) <= @to)";
 
         var queryDefinition = new QueryDefinition(sqlQuery)
             .WithParameter("@ownerId", ownerId)
