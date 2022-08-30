@@ -158,7 +158,7 @@ public class AccountDashboardUseCaseTest
         accountId ??= Guid.NewGuid().ToString();
 
         var financialAccount = new FinancialAccount(accountId, AccountName.Create("Test"), owner, balance,
-            TimeStamp.CreateNow(), transactions ?? Array.Empty<Transaction>());
+            DateTime.UtcNow, transactions ?? Array.Empty<Transaction>());
 
         return financialAccount;
     }

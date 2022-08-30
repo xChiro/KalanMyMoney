@@ -38,7 +38,7 @@ public class AccountCommandsRepository : IAccountCommandsRepository
     public void StoreTransaction(string accountId, Balance accountBalance, Transaction transaction)
     {
         var transactionDto = new TransactionDto(transaction.Id, transaction.Amount, transaction.Description.Value,
-            transaction.Category.Value, transaction.TimeStamp.Value);
+            transaction.Category.Value, transaction.CreationDate);
 
         var result = _taskFactory.StartNew(() =>
                 _container.PatchItemAsync<FinancialAccountDto>(accountId, new PartitionKey(accountId),

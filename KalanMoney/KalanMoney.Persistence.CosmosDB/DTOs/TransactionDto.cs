@@ -2,11 +2,11 @@ namespace KalanMoney.Persistence.CosmosDB.DTOs;
 
 public class TransactionDto
 {
-    public TransactionDto(string id, decimal amount, string description, string category, long timeStamp)
+    public TransactionDto(string id, decimal amount, string description, string category, DateTime creationDate)
     {
         Description = description;
         Category = category;
-        TimeStamp = timeStamp;
+        CreationDate = creationDate;
         Id = id;
         Amount = amount;
     }
@@ -19,5 +19,5 @@ public class TransactionDto
 
     public string Category { get; }
 
-    public long TimeStamp { get; }
+    public DateTime CreationDate { get; }
 }

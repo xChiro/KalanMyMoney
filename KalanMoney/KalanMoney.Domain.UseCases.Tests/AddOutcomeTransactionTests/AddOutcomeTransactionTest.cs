@@ -105,11 +105,11 @@ public class AddOutcomeTransactionTest
         var transactions = new Transaction[1]
         {
             new(Guid.NewGuid().ToString(), baseTransaction, Description.Create(transactionDescription), 
-                Category.Create(category), TimeStamp.CreateNow())
+                Category.Create(category), DateTime.UtcNow)
         };
 
         var financialAccount = new FinancialAccount(Guid.NewGuid().ToString(), AccountName.Create("Test"), owner,
-            baseTransaction, TimeStamp.CreateNow(), transactions);
+            baseTransaction, DateTime.UtcNow, transactions);
         
         return financialAccount;
     }

@@ -43,7 +43,7 @@ public class AccountDashboardPresenter : IAccountDashboardOutput
             var currentItem = response.AccountTransactions![i];
 
             AccountTransactions[i] = new TransactionResponse(currentItem.Id, currentItem.Amount, currentItem.Description.Value,
-                currentItem.Category.Value, currentItem.TimeStamp.ToDateTime());
+                currentItem.Category.Value, currentItem.CreationDate);
         }
     }
 }

@@ -34,7 +34,7 @@ public class TransactionCollectionTest
         Assert.Equal(amount, result.Amount);
         Assert.Equal(Description.Create(description), result.Description);
         Assert.Equal(Category.Create(category), result.Category);
-        Assert.True(result.TimeStamp.Value > 0);
+        Assert.NotEqual(DateTime.MinValue, result.CreationDate);
     }
 
     [Fact]

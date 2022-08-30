@@ -5,15 +5,15 @@ namespace KalanMoney.Domain.Entities;
 public class Transaction : Entity
 {
     public Transaction(decimal amount, Description description, Category category) 
-        : this(Guid.NewGuid().ToString(), amount, description, category, TimeStamp.CreateNow())
+        : this(Guid.NewGuid().ToString(), amount, description, category,DateTime.UtcNow)
     { }
     
-    public Transaction(string id, decimal amount, Description description, Category category, TimeStamp timeStamp) : base(id)
+    public Transaction(string id, decimal amount, Description description, Category category, DateTime creationDate) : base(id)
     {
         Amount = amount;
         Description = description;
         Category = category;
-        TimeStamp = timeStamp;
+        CreationDate = creationDate;
     }
     
     public decimal Amount { get; }
@@ -22,5 +22,5 @@ public class Transaction : Entity
     
     public Category Category { get; }
 
-    public TimeStamp TimeStamp { get;  }
+    public DateTime CreationDate { get;  }
 }

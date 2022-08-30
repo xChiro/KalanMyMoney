@@ -5,13 +5,13 @@ namespace KalanMoney.Persistence.CosmosDB.DTOs;
 
 public class FinancialAccountDto
 {
-    public FinancialAccountDto(string id, string name, OwnerDto owner, long creationTimeStamp,
+    public FinancialAccountDto(string id, string name, OwnerDto owner, DateTime creationDate,
         List<TransactionDto> transactions, decimal balance)
     {
         Id = id;
         Name = name;
         Owner = owner;
-        CreationTimeStamp = creationTimeStamp;
+        CreationDate = creationDate;
         Transactions = transactions;
         Balance = balance;
     }
@@ -24,7 +24,7 @@ public class FinancialAccountDto
 
     public decimal Balance { get; }
 
-    public long CreationTimeStamp { get; }
+    public DateTime CreationDate { get; }
 
     public List<TransactionDto> Transactions { get; }
 
@@ -33,10 +33,10 @@ public class FinancialAccountDto
         var ownerDto = new OwnerDto(financialAccount.Owner.SubId, financialAccount.Owner.Name);
         var transactions = financialAccount.Transactions.Items.Select(currentTransaction =>
             new TransactionDto(currentTransaction.Id, currentTransaction.Amount, currentTransaction.Description.Value,
-                currentTransaction.Category.Value, currentTransaction.TimeStamp.Value)).ToList();
+                currentTransaction.Category.Value, currentTransaction.CreationDate)).ToList();
 
         return new FinancialAccountDto(financialAccount.Id, financialAccount.Name.Value, ownerDto,
-            financialAccount.CreationDate.Value, transactions, financialAccount.Balance.Amount);
+            financialAccount.CreationDate, transactions, financialAccount.Balance.Amount);
     }
 
     public FinancialAccount ToFinancialAccount()
@@ -47,11 +47,9 @@ public class FinancialAccountDto
                 new Transaction(currentTransaction.Id, currentTransaction.Amount,
                     Description.Create(currentTransaction.Description),
                     Category.Create(currentTransaction.Category),
-                    new TimeStamp(currentTransaction.TimeStamp)))
+                    currentTransaction.CreationDate))
             .ToList();
 
-
-        return new FinancialAccount(Id, AccountName.Create(Name), owner, Balance, new TimeStamp(CreationTimeStamp),
-            transactions);
+        return new FinancialAccount(Id, AccountName.Create(Name), owner, Balance, CreationDate, transactions);
     }
 }
