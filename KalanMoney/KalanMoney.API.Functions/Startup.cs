@@ -10,18 +10,10 @@ namespace KalanMoney.API.Functions
     public class Startup : FunctionsStartup
     {
         public override void Configure(IFunctionsHostBuilder builder)
-        {
+        {            
             var strategy = Environment.GetEnvironmentVariable("deployStrategy", EnvironmentVariableTarget.Process);
-            
-            switch (strategy)
-            {
-                case "cosmosDB":
-                    builder.Services.SetupWithCosmosDataBase();
-                    break;
-                default:
-                    builder.Services.SetupWithMemoryDataBase();
-                    break;
-            }
+
+            builder.Services.SetupFromSettings(strategy ?? "");
         }
     }
 }

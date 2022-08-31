@@ -14,6 +14,15 @@ namespace KalanMoney.Startup;
 
 public static class AccountUseCaseServiceRegistration
 {
+    public static IServiceCollection SetupFromSettings(this IServiceCollection services, string strategy)
+    {
+        return strategy.ToLower() switch
+        {
+            "cosmosdb" => SetupWithCosmosDataBase(services),
+            _ => SetupWithMemoryDataBase(services)
+        };
+    }
+    
     public static IServiceCollection SetupWithMemoryDataBase(this IServiceCollection services)
     {
         var memoryDb = new MemoryDb();
