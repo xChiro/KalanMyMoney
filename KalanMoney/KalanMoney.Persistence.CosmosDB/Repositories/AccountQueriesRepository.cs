@@ -22,13 +22,13 @@ public class AccountQueriesRepository : IAccountQueriesRepository
 
     public FinancialAccount? GetAccount(string id, TransactionFilter transactionFilter)
     {
-        const string sqlQuery = $"SELECT * FROM c WHERE c.id = @idParam WHERE " +
-                                $"(TimestampToDateTime(c.Transactions.TimeStamp) as Date >= @from " +
-                                $"AND (TimestampToDateTime(c.Transactions.TimeStamp) <= @to)";
+        const string sqlQuery = $"SELECT * FROM c WHERE c.id = @idParam OR " +
+                                $"TimestampToDateTime(c.transactions.timeStamp) >= @from " +
+                                $"AND TimestampToDateTime(c.transactions.timeStamp) <= @to";
 
         var queryDefinition = new QueryDefinition(sqlQuery)
             .WithParameter("@idParam", id)
-            .WithParameter("@from", transactionFilter.From.ToDateTime(TimeOnly.MaxValue))
+            .WithParameter("@from", transactionFilter.From.ToDateTime(TimeOnly.MinValue))
             .WithParameter("@to", transactionFilter.To.ToDateTime(TimeOnly.MaxValue));
 
         var queryRequestOptions = new QueryRequestOptions()
@@ -48,18 +48,18 @@ public class AccountQueriesRepository : IAccountQueriesRepository
             .GetResult()
             .FirstOrDefault();
 
-        return result.ToFinancialAccount();
+        return result?.ToFinancialAccount();
     }
 
     public FinancialAccount? GetAccountByOwner(string ownerId, TransactionFilter transactionFilter)
     {
-        const string sqlQuery = $"SELECT * FROM c WHERE c.Owner.Subid = @ownerId WHERE " +
-                                $"(TimestampToDateTime(c.Transactions.TimeStamp) as Date >= @from " +
-                                $"AND (TimestampToDateTime(c.Transactions.TimeStamp) <= @to)";
+        const string sqlQuery = $"SELECT * FROM c WHERE c.owner.subId = @ownerId OR " +
+                                $"TimestampToDateTime(c.transactions.timeStamp) >= @from " +
+                                $"AND TimestampToDateTime(c.transactions.timeStamp) <= @to";
 
         var queryDefinition = new QueryDefinition(sqlQuery)
             .WithParameter("@ownerId", ownerId)
-            .WithParameter("@from", transactionFilter.From.ToDateTime(TimeOnly.MaxValue))
+            .WithParameter("@from", transactionFilter.From.ToDateTime(TimeOnly.MinValue))
             .WithParameter("@to", transactionFilter.To.ToDateTime(TimeOnly.MaxValue));
 
         var queryRequestOptions = new QueryRequestOptions()
@@ -79,6 +79,6 @@ public class AccountQueriesRepository : IAccountQueriesRepository
             .GetResult()
             .FirstOrDefault();
 
-        return result.ToFinancialAccount();
+        return result?.ToFinancialAccount();
     }
 }

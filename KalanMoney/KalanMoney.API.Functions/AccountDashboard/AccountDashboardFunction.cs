@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using System.Web.Http;
 using KalanMoney.Domain.UseCases.AccountDashboard;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +37,11 @@ public class AccountDashboardFunction
         catch (AccountNotFoundException)
         {
             return Task.FromResult<IActionResult>(new NotFoundResult());
+        } 
+        catch (Exception ex)
+        {
+            log.LogError(ex.Message);
+            return Task.FromResult<IActionResult>(new InternalServerErrorResult());
         } 
         
         return Task.FromResult<IActionResult>(new OkObjectResult(accountDashboardPresenter));

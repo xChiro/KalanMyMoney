@@ -44,13 +44,13 @@ public class AccountCommandsRepository : IAccountCommandsRepository
                 _container.PatchItemAsync<FinancialAccountDto>(accountId, new PartitionKey(accountId),
                     new[]
                     {
-                        PatchOperation.Add("Transactions/1", transactionDto),
-                        PatchOperation.Replace("Balance", accountBalance),
+                        PatchOperation.Set("/balance", accountBalance.Amount),
+                        PatchOperation.Add("/transactions/0", transactionDto),
                     }))
             .Unwrap()
             .GetAwaiter()
             .GetResult();
 
-        if (result.StatusCode != HttpStatusCode.Created) throw new Exception();
+        if (result.StatusCode != HttpStatusCode.OK) throw new Exception();
     }
 }
