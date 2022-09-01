@@ -40,7 +40,7 @@ public class AccountsMemoryRepositoryTest
         // Act
         sut.StoreTransaction(financialAccount.Id, balance, transaction);
 
-        // Assert
+        // Asser
         Assert.Equal(balance.Amount, sut.DataBase.FinancialAccounts.First().Value.Balance);
         Assert.Equal(Description.Create(testTransaction), sut.DataBase.FinancialAccounts.First().Value.Transactions.First().Description);
         Assert.Contains(transaction, sut.DataBase.FinancialAccounts.First().Value.Transactions);
@@ -53,34 +53,25 @@ public class AccountsMemoryRepositoryTest
         var sut = new AccountsMemoryRepository();
 
         // Act
-        var result = sut.GetAccount(Guid.NewGuid().ToString(), TransactionFilter.CreateMonthRangeFromUtcNow());
+        var result = sut.GetAccountWithoutTransactions(Guid.NewGuid().ToString());
 
         // Assert
         Assert.Null(result);
     }
 
     [Fact]
-    public void Get_an_account_with_dairy_transaction_filters_successfully()
+    public void Get_an_account_by_id_successfully()
     {
         // Arrange
-        const string testTransaction = "Test Transaction";
-        var todayTransaction = new Transaction(Guid.NewGuid().ToString(), 100, Description.Create(testTransaction), 
-            Category.Create("Salary"), TimeStamp.CreateNow());
-        var oldTransaction = new Transaction(Guid.NewGuid().ToString(), -50, Description.Create(testTransaction),
-            Category.Create("Salary"), new TimeStamp(1625847972000));
-        var transactions = new[] {todayTransaction, oldTransaction};
-
-        var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"), transactions);
+        var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"));
 
         var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
 
         // Act
-        var result = sut.GetAccount(financialCategory.Id, TransactionFilter.CreateMonthRangeFromUtcNow());
+        var result = sut.GetAccountWithoutTransactions(financialCategory.Id);
 
         // Assert
         Assert.NotNull(result);
-        Assert.Contains(todayTransaction, result.Transactions.Items);
-        Assert.DoesNotContain(oldTransaction, result.Transactions.Items);
     }
 
     [Fact]

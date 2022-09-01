@@ -19,7 +19,7 @@ public class AddIncomeTransactionUseCaseTest
         // Arrange
         var accountRepositoryMock = new Mock<IAccountQueriesRepository>();
 
-        accountRepositoryMock.Setup(x => x.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountRepositoryMock.Setup(x => x.GetAccountWithoutTransactions(It.IsAny<string>()))
             .Returns(default(FinancialAccount));
 
         var accountCommandsRepository = new Mock<IAccountCommandsRepository>();
@@ -114,7 +114,7 @@ public class AddIncomeTransactionUseCaseTest
     {
         var accountQueryRepository = new Mock<IAccountQueriesRepository>();
         
-        accountQueryRepository.Setup(x => x.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountQueryRepository.Setup(x => x.GetAccountWithoutTransactions(It.IsAny<string>()))
             .Returns(financialAccount);
         
         return accountQueryRepository;

@@ -42,8 +42,7 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
     /// <exception cref="AccountNotFoundException"></exception>
     private FinancialAccount? GetFinancialAccount(AddTransactionRequest request)
     {
-        var transactionsFilters = TransactionFilter.CreateMonthRangeFromUtcNow();
-        var account = _accountQueriesRepository.GetAccount(request.AccountId, transactionsFilters);
+        var account = _accountQueriesRepository.GetAccountWithoutTransactions(request.AccountId);
         
         return account;
     }

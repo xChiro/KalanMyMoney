@@ -18,7 +18,7 @@ public class AddOutcomeTransactionTest
     {
         // Arrange
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountQueriesRepository.Setup(repository => repository.GetAccountWithoutTransactions(It.IsAny<string>()))
             .Returns(default(FinancialAccount));
         
         var accountCommandRepository = new Mock<IAccountCommandsRepository>();
@@ -95,7 +95,7 @@ public class AddOutcomeTransactionTest
     private static Mock<IAccountQueriesRepository> AccountQueriesRepositoryMockSetup(FinancialAccount financialAccount)
     {
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetAccount(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountQueriesRepository.Setup(repository => repository.GetAccountWithoutTransactions(It.IsAny<string>()))
             .Returns(financialAccount);
         return accountQueriesRepository;
     }

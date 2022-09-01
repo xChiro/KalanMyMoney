@@ -33,12 +33,11 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
         DataBase.FinancialAccounts[accountId].Transactions.Add(transaction);
     }
 
-    public FinancialAccount? GetAccount(string id, TransactionFilter transactionFilter)
+    public FinancialAccount? GetAccountWithoutTransactions(string id)
     {
         if (! DataBase.FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
 
-        var transactions = ApplyFilters(transactionFilter, financialAccountModel);
-        return  FinancialAccountModel.ToFinancialAccount(financialAccountModel, transactions);
+        return  financialAccountModel.ToFinancialAccount();
     }
 
     public FinancialAccount? GetAccountByOwner(string ownerId, TransactionFilter transactionFilter)

@@ -105,7 +105,7 @@ public class GetMonthlyTransactionsTest
 
         accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId,
                 It.IsAny<TransactionFilter>()))
-            .Returns(new Transaction[]
+            .Returns(new[]
             {
                 expectedTransaction
             });
