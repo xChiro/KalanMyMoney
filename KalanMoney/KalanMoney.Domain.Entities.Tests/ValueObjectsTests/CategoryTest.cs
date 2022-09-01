@@ -38,4 +38,17 @@ public class CategoryTest
         // Assert
         Assert.Equal(expected.ToLower(), result.Value);
     }
+
+    [Theory]
+    [InlineData(" Category", "Category")]
+    [InlineData("Category ", "Category")]
+    [InlineData(" Category ", "Category")]
+    public void Apply_trim_to_categories_successfully(string value, string expected)
+    {
+        // Arrange/Act
+        var result = Category.Create(value);
+
+        // Assert
+        Assert.Equal(Category.Create(expected), result);
+    }
 }
