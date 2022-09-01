@@ -53,9 +53,16 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
 
     }
 
-    public Transaction[] GetMonthlyTransactions(string accountId, int invalidMonth, int year)
+    public Transaction[] GetMonthlyTransactions(string accountId, TransactionFilter transactionFilter)
     {
-        throw new NotImplementedException();
+        var accountModel =  DataBase.FinancialAccounts.Where(x => x.Value.Id == accountId)
+            .Select(x => x.Value).FirstOrDefault();
+        
+        if (accountModel == null) throw new KeyNotFoundException("Account id not found.");
+        
+        var transactions = ApplyFilters(transactionFilter, accountModel);
+        
+        return transactions.ToArray();
     }
 
     private static IEnumerable<Transaction> ApplyFilters(TransactionFilter transactionFilter, FinancialAccountModel financialAccountModel)

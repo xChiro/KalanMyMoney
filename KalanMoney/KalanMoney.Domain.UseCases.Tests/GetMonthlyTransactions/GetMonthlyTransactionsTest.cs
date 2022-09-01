@@ -2,6 +2,7 @@ using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.GetMonthlyTransactions;
 using KalanMoney.Domain.UseCases.Repositories;
+using KalanMoney.Domain.UseCases.Repositories.Models;
 using Moq;
 using Xunit;
 
@@ -19,7 +20,7 @@ public class GetMonthlyTransactionsTest
         var accountId = Guid.NewGuid().ToString();
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, invalidMonth, year));
+        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, It.IsAny<TransactionFilter>()));
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
 
@@ -38,7 +39,7 @@ public class GetMonthlyTransactionsTest
         var accountId = Guid.NewGuid().ToString();
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, month, invalidYear));
+        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, It.IsAny<TransactionFilter>()));
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
 
@@ -57,7 +58,7 @@ public class GetMonthlyTransactionsTest
         var accountId = Guid.NewGuid().ToString();
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, month, invalidYear));
+        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, It.IsAny<TransactionFilter>()));
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
 
@@ -76,7 +77,7 @@ public class GetMonthlyTransactionsTest
         var accountId = Guid.NewGuid().ToString();
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, month, invalidYear))
+        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, It.IsAny<TransactionFilter>()))
             .Throws(new KeyNotFoundException());
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
@@ -98,7 +99,8 @@ public class GetMonthlyTransactionsTest
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         var expectedTransaction = new Transaction(100, Description.Create("Test"), Category.Create("Salary"));
         
-        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, month, invalidYear))
+        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, 
+                It.IsAny<TransactionFilter>()))
             .Returns(new Transaction[]
             {
                 expectedTransaction

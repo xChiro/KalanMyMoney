@@ -1,4 +1,5 @@
 using KalanMoney.Domain.UseCases.Repositories;
+using KalanMoney.Domain.UseCases.Repositories.Models;
 
 namespace KalanMoney.Domain.UseCases.GetMonthlyTransactions;
 
@@ -17,8 +18,10 @@ public class GetMonthlyTransactionsUseCase : IGetMonthlyTransactionsInput
         if (request.Year < DateTime.MinValue.Year || request.Year > DateTime.MaxValue.Year)
             throw new IndexOutOfRangeException("Invalid year number");
 
+        var transactionFilter = TransactionFilter.CreateMonthRange(request.Year, request.Month);
+        
         var transactions =
-            _accountQueriesRepository.GetMonthlyTransactions(request.AccountId, request.Month, request.Year);
+            _accountQueriesRepository.GetMonthlyTransactions(request.AccountId, transactionFilter);
         
         output.Results(transactions);
     }

@@ -59,8 +59,8 @@ public class AccountQueriesRepository : IAccountQueriesRepository
 
         var queryDefinition = new QueryDefinition(sqlQuery)
             .WithParameter("@ownerId", ownerId)
-            .WithParameter("@from", transactionFilter.From.ToDateTime(TimeOnly.MinValue))
-            .WithParameter("@to", transactionFilter.To.ToDateTime(TimeOnly.MaxValue));
+            .WithParameter("@from", transactionFilter.From)
+            .WithParameter("@to", transactionFilter.To);
 
         var queryRequestOptions = new QueryRequestOptions()
         {
@@ -82,8 +82,36 @@ public class AccountQueriesRepository : IAccountQueriesRepository
         return result?.ToFinancialAccount();
     }
 
-    public Transaction[] GetMonthlyTransactions(string accountId, int invalidMonth, int year)
+    public Transaction[] GetMonthlyTransactions(string accountId, TransactionFilter transactionFilter)
     {
-        throw new NotImplementedException();
+        const string sqlQuery = $"SELECT c.transactions FROM c WHERE c.id = @idParam OR " +
+                            $"TimestampToDateTime(c.transactions.timeStamp) >= @from " +
+                            $"AND TimestampToDateTime(c.transactions.timeStamp) <= @to";
+        
+        var queryDefinition = new QueryDefinition(sqlQuery)
+            .WithParameter("@idParam", accountId)
+            .WithParameter("@from", transactionFilter.From)
+            .WithParameter("@to", transactionFilter.To);
+
+        var queryRequestOptions = new QueryRequestOptions();
+
+        using var feedIterator =
+            _container.GetItemQueryIterator<Transaction>(queryDefinition, null, queryRequestOptions);
+
+        var transactions = new List<Transaction>();
+        
+        while (feedIterator.HasMoreResults)
+        {
+            var transaction = _taskFactory
+                .StartNew(() => feedIterator.ReadNextAsync())
+                .Unwrap()
+                .GetAwaiter()
+                .GetResult()
+                .FirstOrDefault();
+            
+            transactions.Add(transaction);
+        }
+
+        return transactions.ToArray();
     }
 }

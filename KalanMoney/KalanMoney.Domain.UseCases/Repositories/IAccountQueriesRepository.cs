@@ -9,5 +9,5 @@ public interface IAccountQueriesRepository
 
     public FinancialAccount? GetAccountByOwner(string ownerId, TransactionFilter transactionFilter);
     
-    public Transaction[] GetMonthlyTransactions(string accountId, int invalidMonth, int year);
+    public Transaction[] GetMonthlyTransactions(string accountId, TransactionFilter transactionFilter);
 }
