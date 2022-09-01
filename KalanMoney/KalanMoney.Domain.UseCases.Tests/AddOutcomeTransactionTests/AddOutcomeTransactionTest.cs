@@ -28,7 +28,7 @@ public class AddOutcomeTransactionTest
             "Test", "Salary");
 
         // Act/Assert
-        Assert.Throws<AccountNotFoundException>(() => sut.Execute(addTransactionRequest, new AddOutcomeTransactionOutput()));
+        Assert.Throws<AccountNotFoundException>(() => sut.Execute(addTransactionRequest, new AddOutcomeTransactionOutputMock()));
     }
 
 
@@ -54,7 +54,7 @@ public class AddOutcomeTransactionTest
         var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, transactionAmount, 
             "Test", "Salary");
         
-        var output = new AddOutcomeTransactionOutput();
+        var output = new AddOutcomeTransactionOutputMock();
 
         // Act
         sut.Execute(addTransactionRequest, output);
@@ -80,7 +80,7 @@ public class AddOutcomeTransactionTest
         var accountCommandRepository = new AccountCommandsRepositoryMock();
         var sut = new AddOutcomeTransactionUseCase(accountQueriesRepository.Object, accountCommandRepository);
 
-        var output = new AddOutcomeTransactionOutput();
+        var output = new AddOutcomeTransactionOutputMock();
         var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, transactionAmount, 
             transactionDescription, category);
         // Act

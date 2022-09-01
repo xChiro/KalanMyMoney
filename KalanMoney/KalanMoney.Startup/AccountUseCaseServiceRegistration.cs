@@ -4,7 +4,6 @@ using KalanMoney.Domain.UseCases.Adapters;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.AddOutcomeTransaction;
 using KalanMoney.Domain.UseCases.OpenAccount;
-using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Persistence.CosmosDB.Repositories;
 using KalanMoney.Persistence.MemoryDatabase;
 using Microsoft.Azure.Cosmos.Fluent;

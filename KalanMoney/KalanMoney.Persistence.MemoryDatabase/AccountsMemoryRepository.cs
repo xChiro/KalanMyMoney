@@ -53,6 +53,11 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
 
     }
 
+    public Transaction[] GetMonthlyTransactions(string accountId, int invalidMonth, int year)
+    {
+        throw new NotImplementedException();
+    }
+
     private static IEnumerable<Transaction> ApplyFilters(TransactionFilter transactionFilter, FinancialAccountModel financialAccountModel)
     {
         return financialAccountModel.Transactions.Where(x =>

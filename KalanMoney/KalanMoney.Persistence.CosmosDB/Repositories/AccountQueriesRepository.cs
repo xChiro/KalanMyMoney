@@ -81,4 +81,9 @@ public class AccountQueriesRepository : IAccountQueriesRepository
 
         return result?.ToFinancialAccount();
     }
+
+    public Transaction[] GetMonthlyTransactions(string accountId, int invalidMonth, int year)
+    {
+        throw new NotImplementedException();
+    }
 }
