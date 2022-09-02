@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace KalanMoney.API.Functions.OpenAccount;
 
-public class OpenAccountRequestFunction : BaseRequestFunction<OpenAccountFunctionRequest>
+public class OpenAccountRequestFunction : BaseRequestFunction
 {
     private readonly IOpenAccountInput _openAccountInput;
 
@@ -28,7 +28,7 @@ public class OpenAccountRequestFunction : BaseRequestFunction<OpenAccountFunctio
     {
         try
         {
-            var data = await DeserializeRequest(req);
+            var data = await DeserializeRequest<OpenAccountFunctionRequest>(req);
 
             var tokenHandler = new TokenHandler(req);
             if (!tokenHandler.TryGetSubjectFromToken(out var subject)) return new UnauthorizedResult();

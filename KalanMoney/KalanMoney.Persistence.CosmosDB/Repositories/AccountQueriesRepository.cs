@@ -20,14 +20,15 @@ public class AccountQueriesRepository : IAccountQueriesRepository
             TaskScheduler.Default);
     }
 
-    public FinancialAccount? GetAccountWithoutTransactions(string id)
+    public FinancialAccount? GetAccountWithoutTransactions(string id, string ownerId)
     {
         const string sqlQuery = $"SELECT c.id, c.name, c.owner, c.balance, c.creationTimeStamp, " +
                                 $"ARRAY_SLICE(c.transactions, 1) as transactions " +
-                                $"FROM c WHERE c.id = @idParam";
+                                $"FROM c WHERE c.id = @idParam AND c.owner.subId = @ownerId";
 
         var queryDefinition = new QueryDefinition(sqlQuery)
-            .WithParameter("@idParam", id);
+            .WithParameter("@idParam", id)
+            .WithParameter("@ownerId", ownerId);
 
         var queryRequestOptions = new QueryRequestOptions();
 
@@ -77,16 +78,18 @@ public class AccountQueriesRepository : IAccountQueriesRepository
         return result?.ToFinancialAccount();
     }
 
-    public Transaction[] GetMonthlyTransactions(string accountId, TransactionFilter transactionFilter)
+    public Transaction[] GetMonthlyTransactions(string accountId, string ownerId, TransactionFilter transactionFilter)
     {
         const string sqlQuery = $"SELECT t FROM c " +
                                 $"JOIN t IN c.transactions " +
                                 $"WHERE c.id = @idParam " +
+                                $"AND c.owner.subId = @ownerId " +
                                 $"AND TimestampToDateTime(t.timeStamp) >= @from " +
                                 $"AND TimestampToDateTime(t.timeStamp) <= @to";
 
         var queryDefinition = new QueryDefinition(sqlQuery)
             .WithParameter("@idParam", accountId)
+            .WithParameter("@ownerId", ownerId)
             .WithParameter("@from", transactionFilter.From.ToDateTime(TimeOnly.MinValue))
             .WithParameter("@to", transactionFilter.From.ToDateTime(TimeOnly.MaxValue));
 

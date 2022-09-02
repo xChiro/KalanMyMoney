@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace KalanMoney.API.Functions.GetMonthlyTransactions;
 
-public class GetMonthlyTransactionsFunction
+public class GetMonthlyTransactionsFunction : BaseRequestFunction
 {
     private readonly IGetMonthlyTransactionsInput _getMonthlyTransactionsInput;
 
@@ -37,10 +37,12 @@ public class GetMonthlyTransactionsFunction
         if (!req.Query.TryGetValue("month", out var month))
             return Task.FromResult<IActionResult>(new BadRequestObjectResult("Year query param is required"));
 
+        if (!TryGetOwnerId(req, out var ownerId)) return Task.FromResult<IActionResult>(new UnauthorizedResult());
+
         try
         {
             var getMonthlyTransactionsRequest =
-                new GetMonthlyTransactionsRequest(accountId, Convert.ToInt32(year), Convert.ToInt32(month));
+                new GetMonthlyTransactionsRequest(accountId, ownerId, Convert.ToInt32(year), Convert.ToInt32(month));
 
             var output = new GetMonthlyTransactionsPresenter();
             _getMonthlyTransactionsInput.Execute(getMonthlyTransactionsRequest, output);

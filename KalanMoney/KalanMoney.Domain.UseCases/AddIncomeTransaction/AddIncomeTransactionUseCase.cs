@@ -3,7 +3,6 @@ using KalanMoney.Domain.Entities.Exceptions;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Common.Models;
 using KalanMoney.Domain.UseCases.Repositories;
-using KalanMoney.Domain.UseCases.Repositories.Models;
 
 namespace KalanMoney.Domain.UseCases.AddIncomeTransaction;
 
@@ -42,7 +41,7 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
     /// <exception cref="AccountNotFoundException"></exception>
     private FinancialAccount? GetFinancialAccount(AddTransactionRequest request)
     {
-        var account = _accountQueriesRepository.GetAccountWithoutTransactions(request.AccountId);
+        var account = _accountQueriesRepository.GetAccountWithoutTransactions(request.AccountId, request.OwnerId);
         
         return account;
     }

@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace KalanMoney.API.Functions.AddOutcomeTransaction;
 
-public class AddOutcomeTransactionRequestFunction : BaseRequestFunction<AddOutcomeTransactionFunctionRequest>
+public class AddOutcomeTransactionRequestFunction : BaseRequestFunction
 {
     private readonly IAddOutcomeTransactionInput _addOutcomeTransactionInput;
 
@@ -25,13 +25,16 @@ public class AddOutcomeTransactionRequestFunction : BaseRequestFunction<AddOutco
     public async Task<IActionResult> RunAsync(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "accounts/transactions/outcome")] HttpRequest req, ILogger log)
     {
+        
+        if (!TryGetOwnerId(req, out var ownerId)) return new UnauthorizedResult();
+
         try
         {
-            var request = await DeserializeRequest(req);
+            var request = await DeserializeRequest<AddOutcomeTransactionFunctionRequest>(req);
             var output = new AddOutcomeTransactionPresenter();
 
             _addOutcomeTransactionInput.Execute(
-                new AddTransactionRequest(request.AccountId, request.Amount, request.TransactionDescription, request.Category), output);
+                new AddTransactionRequest(request.AccountId, ownerId, request.Amount, request.TransactionDescription, request.Category), output);
 
             return new OkObjectResult(new
             {

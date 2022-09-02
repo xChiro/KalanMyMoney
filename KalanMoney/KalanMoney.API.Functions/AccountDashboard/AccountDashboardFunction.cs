@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace KalanMoney.API.Functions.AccountDashboard;
 
-public class AccountDashboardFunction
+public class AccountDashboardFunction : BaseRequestFunction
 {
     private readonly IAccountDashboardInput _dashboardInputObject;
 
@@ -25,9 +25,8 @@ public class AccountDashboardFunction
          [HttpTrigger(AuthorizationLevel.Function, "get", Route = "accounts/dashboard")]
         HttpRequest req, ILogger log)
     {
-        var tokenHandler = new TokenHandler(req);
+        if (!TryGetOwnerId(req, out var ownerId)) return Task.FromResult<IActionResult>(new UnauthorizedResult());
         
-        if (!tokenHandler.TryGetSubjectFromToken(out var ownerId)) return Task.FromResult<IActionResult>(new UnauthorizedResult());
         var accountDashboardPresenter = new AccountDashboardPresenter();
         
         try

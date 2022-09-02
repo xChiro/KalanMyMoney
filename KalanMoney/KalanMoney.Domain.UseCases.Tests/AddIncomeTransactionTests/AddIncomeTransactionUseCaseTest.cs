@@ -19,7 +19,8 @@ public class AddIncomeTransactionUseCaseTest
         // Arrange
         var accountRepositoryMock = new Mock<IAccountQueriesRepository>();
 
-        accountRepositoryMock.Setup(x => x.GetAccountWithoutTransactions(It.IsAny<string>()))
+        accountRepositoryMock.Setup(x => x.GetAccountWithoutTransactions(
+                It.IsAny<string>(), It.IsAny<string>()))
             .Returns(default(FinancialAccount));
 
         var accountCommandsRepository = new Mock<IAccountCommandsRepository>();
@@ -27,7 +28,7 @@ public class AddIncomeTransactionUseCaseTest
         var sut = new AddIncomeTransactionUseCase(accountRepositoryMock.Object, accountCommandsRepository.Object);
         var accountId = Guid.NewGuid().ToString();
         
-        var inputRequest = new AddTransactionRequest(accountId, 1500.00m, "Test", "Salary");
+        var inputRequest = new AddTransactionRequest(accountId, Guid.NewGuid().ToString(), 1500.00m, "Test", "Salary");
         
         var outPut = new AddIncomeTransactionOutputMock();
 
@@ -53,7 +54,7 @@ public class AddIncomeTransactionUseCaseTest
 
         var accountQueryRepository = SetupAccountQueryRepositoryMock(financialAccount);
         var sut = new AddIncomeTransactionUseCase(accountQueryRepository.Object, accountCommandsRepository);
-        var transaction = new AddTransactionRequest(financialAccount.Id, transactionAmount, transactionDescription, category);
+        var transaction = new AddTransactionRequest(financialAccount.Id, owner.SubId, transactionAmount, transactionDescription, category);
         var outputMock = new AddIncomeTransactionOutputMock();
         
         // Act
@@ -84,7 +85,7 @@ public class AddIncomeTransactionUseCaseTest
             accountCommandRepository);
 
         var output = new AddIncomeTransactionOutputMock();
-        var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, transactionAmount, 
+        var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, owner.SubId, transactionAmount, 
             transactionDescription, category);
         
         // Act
@@ -114,7 +115,7 @@ public class AddIncomeTransactionUseCaseTest
     {
         var accountQueryRepository = new Mock<IAccountQueriesRepository>();
         
-        accountQueryRepository.Setup(x => x.GetAccountWithoutTransactions(It.IsAny<string>()))
+        accountQueryRepository.Setup(x => x.GetAccountWithoutTransactions(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(financialAccount);
         
         return accountQueryRepository;

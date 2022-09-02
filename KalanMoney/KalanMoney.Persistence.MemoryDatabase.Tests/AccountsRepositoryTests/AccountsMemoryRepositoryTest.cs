@@ -53,7 +53,7 @@ public class AccountsMemoryRepositoryTest
         var sut = new AccountsMemoryRepository();
 
         // Act
-        var result = sut.GetAccountWithoutTransactions(Guid.NewGuid().ToString());
+        var result = sut.GetAccountWithoutTransactions(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
         // Assert
         Assert.Null(result);
@@ -63,12 +63,13 @@ public class AccountsMemoryRepositoryTest
     public void Get_an_account_by_id_successfully()
     {
         // Arrange
-        var financialCategory = CreateFinancialAccount("Test", CreateOwner("Owner Name Test"));
+        var owner = CreateOwner("Owner Name Test");
+        var financialCategory = CreateFinancialAccount("Test", owner);
 
         var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
 
         // Act
-        var result = sut.GetAccountWithoutTransactions(financialCategory.Id);
+        var result = sut.GetAccountWithoutTransactions(financialCategory.Id, owner.SubId);
 
         // Assert
         Assert.NotNull(result);

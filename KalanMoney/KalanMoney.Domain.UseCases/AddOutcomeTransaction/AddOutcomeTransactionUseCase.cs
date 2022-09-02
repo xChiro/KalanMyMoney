@@ -35,7 +35,7 @@ public class AddOutcomeTransactionUseCase : IAddOutcomeTransactionInput
     
     private FinancialAccount? GetFinancialAccount(AddTransactionRequest request)
     {
-        var account = _accountQueriesRepository.GetAccountWithoutTransactions(request.AccountId);
+        var account = _accountQueriesRepository.GetAccountWithoutTransactions(request.AccountId, request.OwnerId);
         
         return account;
     }

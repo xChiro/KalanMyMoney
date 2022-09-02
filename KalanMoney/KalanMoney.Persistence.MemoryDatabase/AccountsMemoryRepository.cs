@@ -33,17 +33,17 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
         DataBase.FinancialAccounts[accountId].Transactions.Add(transaction);
     }
 
-    public FinancialAccount? GetAccountWithoutTransactions(string id)
+    public FinancialAccount? GetAccountWithoutTransactions(string id, string ownerId)
     {
-        if (! DataBase.FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
+        if(!DataBase.FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
 
-        return  financialAccountModel.ToFinancialAccount();
+        return financialAccountModel.OwnerId != ownerId ? null : financialAccountModel.ToFinancialAccount();
     }
 
     public FinancialAccount? GetAccountByOwner(string ownerId, TransactionFilter transactionFilter)
     {
-        var accountModel =  DataBase.FinancialAccounts.Where(x => x.Value.OwnerId == ownerId)
-            .Select(x => x.Value).FirstOrDefault();
+        var accountModel =  DataBase.FinancialAccounts.Where(keyValuePair => keyValuePair.Value.OwnerId == ownerId)
+            .Select(keyValuePair => keyValuePair.Value).FirstOrDefault();
 
         if (accountModel == null) return null;
         
@@ -52,10 +52,11 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
 
     }
 
-    public Transaction[] GetMonthlyTransactions(string accountId, TransactionFilter transactionFilter)
+    public Transaction[] GetMonthlyTransactions(string accountId, string ownerId, TransactionFilter transactionFilter)
     {
-        var accountModel =  DataBase.FinancialAccounts.Where(x => x.Value.Id == accountId)
-            .Select(x => x.Value).FirstOrDefault();
+        var accountModel =  DataBase.FinancialAccounts.Where(valuePair => valuePair.Value.Id == accountId 
+                                                                          && valuePair.Value.OwnerId == ownerId)
+            .Select(keyValuePair => keyValuePair.Value).FirstOrDefault();
         
         if (accountModel == null) throw new KeyNotFoundException("Account id not found.");
         

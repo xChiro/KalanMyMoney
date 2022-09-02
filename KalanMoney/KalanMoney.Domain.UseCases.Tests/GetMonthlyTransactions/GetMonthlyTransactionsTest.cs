@@ -21,13 +21,13 @@ public class GetMonthlyTransactionsTest
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(repository =>
-            repository.GetMonthlyTransactions(accountId, It.IsAny<TransactionFilter>()));
+            repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<TransactionFilter>()));
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
 
         // Act/Assert
         Assert.Throws<IndexOutOfRangeException>(() =>
-            sut.Execute(new GetMonthlyTransactionsRequest(accountId, invalidMonth, year),
+            sut.Execute(new GetMonthlyTransactionsRequest(accountId,  Guid.NewGuid().ToString(), invalidMonth, year),
                 new GetMonthlyTransactionsOutputMock()));
     }
 
@@ -41,13 +41,13 @@ public class GetMonthlyTransactionsTest
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(repository =>
-            repository.GetMonthlyTransactions(accountId, It.IsAny<TransactionFilter>()));
+            repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<TransactionFilter>()));
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
 
         // Act/Assert
         Assert.Throws<IndexOutOfRangeException>(() =>
-            sut.Execute(new GetMonthlyTransactionsRequest(accountId, invalidYear, month),
+            sut.Execute(new GetMonthlyTransactionsRequest(accountId, Guid.NewGuid().ToString(), invalidYear, month),
                 new GetMonthlyTransactionsOutputMock()));
     }
 
@@ -61,13 +61,13 @@ public class GetMonthlyTransactionsTest
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(repository =>
-            repository.GetMonthlyTransactions(accountId, It.IsAny<TransactionFilter>()));
+            repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<TransactionFilter>()));
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
 
         // Act/Assert
         Assert.Throws<IndexOutOfRangeException>(() =>
-            sut.Execute(new GetMonthlyTransactionsRequest(accountId, invalidYear, month),
+            sut.Execute(new GetMonthlyTransactionsRequest(accountId, Guid.NewGuid().ToString(), invalidYear, month),
                 new GetMonthlyTransactionsOutputMock()));
     }
 
@@ -81,14 +81,14 @@ public class GetMonthlyTransactionsTest
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(repository =>
-                repository.GetMonthlyTransactions(accountId, It.IsAny<TransactionFilter>()))
+                repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Throws(new KeyNotFoundException());
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
 
         // Act/Assert
         Assert.Throws<KeyNotFoundException>(() =>
-            sut.Execute(new GetMonthlyTransactionsRequest(accountId, invalidYear, month),
+            sut.Execute(new GetMonthlyTransactionsRequest(accountId, Guid.NewGuid().ToString(), invalidYear, month),
                 new GetMonthlyTransactionsOutputMock()));
     }
 
@@ -103,8 +103,8 @@ public class GetMonthlyTransactionsTest
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         var expectedTransaction = new Transaction(100, Description.Create("Test"), Category.Create("Salary"));
 
-        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId,
-                It.IsAny<TransactionFilter>()))
+        accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, 
+                It.IsAny<string>(), It.IsAny<TransactionFilter>()))
             .Returns(new[]
             {
                 expectedTransaction
@@ -114,7 +114,7 @@ public class GetMonthlyTransactionsTest
         var output = new GetMonthlyTransactionsOutputMock();
 
         // Act
-        sut.Execute(new GetMonthlyTransactionsRequest(accountId, invalidYear, month), output);
+        sut.Execute(new GetMonthlyTransactionsRequest(accountId, Guid.NewGuid().ToString(), invalidYear, month), output);
 
         // Assert
         Assert.Contains(expectedTransaction, output.Transactions);

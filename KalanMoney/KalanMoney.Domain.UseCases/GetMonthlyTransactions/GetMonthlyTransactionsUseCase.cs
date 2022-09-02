@@ -21,7 +21,7 @@ public class GetMonthlyTransactionsUseCase : IGetMonthlyTransactionsInput
         var transactionFilter = TransactionFilter.CreateMonthRange(request.Year, request.Month);
         
         var transactions =
-            _accountQueriesRepository.GetMonthlyTransactions(request.AccountId, transactionFilter);
+            _accountQueriesRepository.GetMonthlyTransactions(request.AccountId, request.OwnerId, transactionFilter);
         
         output.Results(transactions);
     }
