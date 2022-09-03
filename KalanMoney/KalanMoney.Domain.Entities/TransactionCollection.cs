@@ -8,7 +8,8 @@ public class TransactionCollection
 
     public TransactionCollection(IEnumerable<Transaction> transactions)
     {
-        _transactions = new Stack<Transaction>(transactions);
+        var transactionsReverse = transactions.Reverse();
+        _transactions = new Stack<Transaction>(transactionsReverse);
     }
     
     public Transaction[] Items => _transactions.ToArray();

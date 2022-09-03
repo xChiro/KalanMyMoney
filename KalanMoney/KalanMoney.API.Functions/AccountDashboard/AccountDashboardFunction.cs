@@ -13,11 +13,11 @@ namespace KalanMoney.API.Functions.AccountDashboard;
 
 public class AccountDashboardFunction : BaseRequestFunction
 {
-    private readonly IAccountDashboardInput _dashboardInputObject;
+    private readonly IAccountDashboardInput _dashboardInput;
 
-    public AccountDashboardFunction(IAccountDashboardInput dashboardInputObject)
+    public AccountDashboardFunction(IAccountDashboardInput dashboardInput)
     {
-        _dashboardInputObject = dashboardInputObject;
+        _dashboardInput = dashboardInput;
     }
 
     [FunctionName("AccountDashboardFunction")]
@@ -31,7 +31,7 @@ public class AccountDashboardFunction : BaseRequestFunction
         
         try
         {
-            _dashboardInputObject.Execute(ownerId, accountDashboardPresenter);
+            _dashboardInput.Execute(ownerId, accountDashboardPresenter);
         }
         catch (AccountNotFoundException)
         {

@@ -16,7 +16,7 @@ public class AccountDashboardUseCaseTest
     {
         // Arrange
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(x => x.GetAccountByOwner(It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+        accountQueriesRepository.Setup(x => x.GetAccountByOwner(It.IsAny<string>(), It.IsAny<DateRangeFilter>()))
             .Returns(default(FinancialAccount));
 
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object);
@@ -110,7 +110,7 @@ public class AccountDashboardUseCaseTest
         var financialAccount = CreateFinancialAccount(accountId, transactions, owner, accountBalance);
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
-        accountQueriesRepository.Setup(x => x.GetAccountByOwner(owner.SubId, It.IsAny<TransactionFilter>()))
+        accountQueriesRepository.Setup(x => x.GetAccountByOwner(owner.SubId, It.IsAny<DateRangeFilter>()))
             .Returns(financialAccount);
 
         var sut = new AccountDashboardUseCase(accountQueriesRepository.Object);
@@ -140,7 +140,7 @@ public class AccountDashboardUseCaseTest
         var financialAccount = CreateFinancialAccount(accountId, transactions, owner, balanceAmount);
 
         accountQueriesRepository.Setup(x =>
-                x.GetAccountByOwner(It.Is<string>(id => id == owner.SubId), It.IsAny<TransactionFilter>()))
+                x.GetAccountByOwner(It.Is<string>(id => id == owner.SubId), It.IsAny<DateRangeFilter>()))
             .Returns(financialAccount);
 
         return accountQueriesRepository;

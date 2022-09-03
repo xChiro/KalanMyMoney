@@ -17,7 +17,7 @@ public class AccountDashboardUseCase : IAccountDashboardInput
     /// <exception cref="AccountNotFoundException"></exception>
     public void Execute(string ownerId, IAccountDashboardOutput output)
     {
-        var transactionsFilters = TransactionFilter.CreateMonthRangeFromUtcNow();
+        var transactionsFilters = DateRangeFilter.CreateMonthRangeFromUtcNow();
         var account = _accountQueriesRepository.GetAccountByOwner(ownerId, transactionsFilters);
 
         if (account == null) throw new AccountNotFoundException();

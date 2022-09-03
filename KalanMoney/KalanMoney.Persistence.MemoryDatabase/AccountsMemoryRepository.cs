@@ -40,19 +40,19 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
         return financialAccountModel.OwnerId != ownerId ? null : financialAccountModel.ToFinancialAccount();
     }
 
-    public FinancialAccount? GetAccountByOwner(string ownerId, TransactionFilter transactionFilter)
+    public FinancialAccount? GetAccountByOwner(string ownerId, DateRangeFilter dateRangeFilter)
     {
         var accountModel =  DataBase.FinancialAccounts.Where(keyValuePair => keyValuePair.Value.OwnerId == ownerId)
             .Select(keyValuePair => keyValuePair.Value).FirstOrDefault();
 
         if (accountModel == null) return null;
         
-        var transactions = ApplyFilters(transactionFilter, accountModel);
+        var transactions = ApplyFilters(dateRangeFilter, accountModel);
         return FinancialAccountModel.ToFinancialAccount(accountModel, transactions);
 
     }
 
-    public Transaction[] GetMonthlyTransactions(string accountId, string ownerId, TransactionFilter transactionFilter)
+    public Transaction[] GetMonthlyTransactions(string accountId, string ownerId, DateRangeFilter dateRangeFilter)
     {
         var accountModel =  DataBase.FinancialAccounts.Where(valuePair => valuePair.Value.Id == accountId 
                                                                           && valuePair.Value.OwnerId == ownerId)
@@ -60,16 +60,16 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
         
         if (accountModel == null) throw new KeyNotFoundException("Account id not found.");
         
-        var transactions = ApplyFilters(transactionFilter, accountModel);
+        var transactions = ApplyFilters(dateRangeFilter, accountModel);
         
         return transactions.ToArray();
     }
 
-    private static IEnumerable<Transaction> ApplyFilters(TransactionFilter transactionFilter, FinancialAccountModel financialAccountModel)
+    private static IEnumerable<Transaction> ApplyFilters(DateRangeFilter dateRangeFilter, FinancialAccountModel financialAccountModel)
     {
         return financialAccountModel.Transactions.Where(x =>
-            x.TimeStamp.ToDateTime() >= transactionFilter.From.ToDateTime(TimeOnly.MinValue) &&  
-            x.TimeStamp.ToDateTime() <= transactionFilter.To.ToDateTime(TimeOnly.MaxValue));
+            x.TimeStamp.ToDateTime() >= dateRangeFilter.From.ToDateTime(TimeOnly.MinValue) &&  
+            x.TimeStamp.ToDateTime() <= dateRangeFilter.To.ToDateTime(TimeOnly.MaxValue));
     }
 
     public int ItemsCount()

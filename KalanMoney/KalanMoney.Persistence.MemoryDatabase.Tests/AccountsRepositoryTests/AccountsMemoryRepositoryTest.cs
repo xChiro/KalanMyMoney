@@ -83,7 +83,7 @@ public class AccountsMemoryRepositoryTest
         var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
 
         // Act 
-        var result = sut.GetAccountByOwner(Guid.NewGuid().ToString(), TransactionFilter.CreateMonthRangeFromUtcNow());
+        var result = sut.GetAccountByOwner(Guid.NewGuid().ToString(), DateRangeFilter.CreateMonthRangeFromUtcNow());
 
         // Assert
         Assert.Null(result);
@@ -98,7 +98,7 @@ public class AccountsMemoryRepositoryTest
         var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
 
         // Act
-        var result = sut.GetAccountByOwner(owner.SubId, TransactionFilter.CreateMonthRangeFromUtcNow());
+        var result = sut.GetAccountByOwner(owner.SubId, DateRangeFilter.CreateMonthRangeFromUtcNow());
 
         // Assert
         Assert.NotNull(result);
@@ -124,7 +124,7 @@ public class AccountsMemoryRepositoryTest
         var sut = new AccountsMemoryRepository(FinancialAccountModel.CreateFromFinancialAccount(financialCategory));
 
         // Act
-        var result = sut.GetAccountByOwner(owner.SubId, TransactionFilter.CreateMonthRangeFromUtcNow());
+        var result = sut.GetAccountByOwner(owner.SubId, DateRangeFilter.CreateMonthRangeFromUtcNow());
 
         // Assert
         Assert.NotNull(result);

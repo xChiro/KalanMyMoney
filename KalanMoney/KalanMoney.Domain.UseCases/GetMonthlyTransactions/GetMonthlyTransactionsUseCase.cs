@@ -18,7 +18,7 @@ public class GetMonthlyTransactionsUseCase : IGetMonthlyTransactionsInput
         if (request.Year < DateTime.MinValue.Year || request.Year > DateTime.MaxValue.Year)
             throw new IndexOutOfRangeException("Invalid year number");
 
-        var transactionFilter = TransactionFilter.CreateMonthRange(request.Year, request.Month);
+        var transactionFilter = DateRangeFilter.CreateMonthRange(request.Year, request.Month);
         
         var transactions =
             _accountQueriesRepository.GetMonthlyTransactions(request.AccountId, request.OwnerId, transactionFilter);

@@ -47,7 +47,7 @@ public class AccountQueriesRepository : IAccountQueriesRepository
         return result?.ToFinancialAccount();
     }
 
-    public FinancialAccount? GetAccountByOwner(string ownerId, TransactionFilter transactionFilter)
+    public FinancialAccount? GetAccountByOwner(string ownerId, DateRangeFilter dateRangeFilter)
     {
         const string sqlQuery = $"SELECT c.id, c.name, c.owner, c.balance, c.creationTimeStamp, " +
                                 $"ARRAY(SELECT * FROM c JOIN t IN c.transactions " +
@@ -58,8 +58,8 @@ public class AccountQueriesRepository : IAccountQueriesRepository
 
         var queryDefinition = new QueryDefinition(sqlQuery)
             .WithParameter("@ownerId", ownerId)
-            .WithParameter("@from", transactionFilter.From.ToDateTime(TimeOnly.MinValue))
-            .WithParameter("@to", transactionFilter.To.ToDateTime(TimeOnly.MaxValue));
+            .WithParameter("@from", dateRangeFilter.From.ToDateTime(TimeOnly.MinValue))
+            .WithParameter("@to", dateRangeFilter.To.ToDateTime(TimeOnly.MaxValue));
 
         var queryRequestOptions = new QueryRequestOptions();
 
@@ -78,7 +78,7 @@ public class AccountQueriesRepository : IAccountQueriesRepository
         return result?.ToFinancialAccount();
     }
 
-    public Transaction[] GetMonthlyTransactions(string accountId, string ownerId, TransactionFilter transactionFilter)
+    public Transaction[] GetMonthlyTransactions(string accountId, string ownerId, DateRangeFilter dateRangeFilter)
     {
         const string sqlQuery = $"SELECT t FROM c " +
                                 $"JOIN t IN c.transactions " +
@@ -90,8 +90,8 @@ public class AccountQueriesRepository : IAccountQueriesRepository
         var queryDefinition = new QueryDefinition(sqlQuery)
             .WithParameter("@idParam", accountId)
             .WithParameter("@ownerId", ownerId)
-            .WithParameter("@from", transactionFilter.From.ToDateTime(TimeOnly.MinValue))
-            .WithParameter("@to", transactionFilter.From.ToDateTime(TimeOnly.MaxValue));
+            .WithParameter("@from", dateRangeFilter.From.ToDateTime(TimeOnly.MinValue))
+            .WithParameter("@to", dateRangeFilter.From.ToDateTime(TimeOnly.MaxValue));
 
         var queryRequestOptions = new QueryRequestOptions();
 

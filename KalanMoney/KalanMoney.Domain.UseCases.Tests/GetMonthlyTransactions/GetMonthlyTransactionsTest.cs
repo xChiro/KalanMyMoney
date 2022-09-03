@@ -21,7 +21,7 @@ public class GetMonthlyTransactionsTest
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(repository =>
-            repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<TransactionFilter>()));
+            repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<DateRangeFilter>()));
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
 
@@ -41,7 +41,7 @@ public class GetMonthlyTransactionsTest
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(repository =>
-            repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<TransactionFilter>()));
+            repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<DateRangeFilter>()));
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
 
@@ -61,7 +61,7 @@ public class GetMonthlyTransactionsTest
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(repository =>
-            repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<TransactionFilter>()));
+            repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<DateRangeFilter>()));
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
 
@@ -81,7 +81,7 @@ public class GetMonthlyTransactionsTest
 
         var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(repository =>
-                repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+                repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<DateRangeFilter>()))
             .Throws(new KeyNotFoundException());
 
         var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
@@ -104,7 +104,7 @@ public class GetMonthlyTransactionsTest
         var expectedTransaction = new Transaction(100, Description.Create("Test"), Category.Create("Salary"));
 
         accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId, 
-                It.IsAny<string>(), It.IsAny<TransactionFilter>()))
+                It.IsAny<string>(), It.IsAny<DateRangeFilter>()))
             .Returns(new[]
             {
                 expectedTransaction

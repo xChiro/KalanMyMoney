@@ -13,7 +13,7 @@ public class TransactionFilterTest
         var from =  DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-30));
 
         // Act
-        var sut = TransactionFilter.CreateMonthRangeFromUtcNow();
+        var sut = DateRangeFilter.CreateMonthRangeFromUtcNow();
 
         // Assert
         Assert.True(sut.From == from && sut.To == to);
