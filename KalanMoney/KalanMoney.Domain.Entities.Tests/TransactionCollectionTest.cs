@@ -54,11 +54,11 @@ public class TransactionCollectionTest
     public void Get_last_transaction_from_a_collection_with_two_transactions_successfully()
     {
         // Arrange
-        var expectedTransaction = new Transaction(100, Description.Create("LastTransaction"), Category.Create("Test"));
+        var expectedTransaction = new Transaction(10, Description.Create("First Transaction"), Category.Create("Test"));
         var transactions = new List<Transaction>()
         {
-            new (10, Description.Create("First Transaction"), Category.Create("Test")),
-            expectedTransaction
+            expectedTransaction,
+            new (100, Description.Create("LastTransaction"), Category.Create("Test")),
         };
         
         var sut = new TransactionCollection(transactions);

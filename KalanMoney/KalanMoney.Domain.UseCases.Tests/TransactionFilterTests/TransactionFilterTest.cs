@@ -6,7 +6,7 @@ namespace KalanMoney.Domain.UseCases.Tests.TransactionFilterTests;
 public class TransactionFilterTest
 {
     [Fact]
-    void Create_transaction_filter_for_last_moth_range_utc_time_successfully()
+    public void Create_transaction_filter_for_last_moth_range_utc_time_successfully()
     {
         // Arrange
         var to = DateOnly.FromDateTime(DateTime.UtcNow);
