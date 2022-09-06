@@ -10,7 +10,9 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
 {
     public MemoryDb DataBase { get; }
 
-    public AccountsMemoryRepository() : this(new MemoryDb()) { }
+    public AccountsMemoryRepository() : this(new MemoryDb())
+    {
+    }
 
     public AccountsMemoryRepository(MemoryDb memoryDb)
     {
@@ -35,45 +37,64 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
 
     public FinancialAccount? GetAccountWithoutTransactions(string id, string ownerId)
     {
-        if(!DataBase.FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
+        if (!DataBase.FinancialAccounts.TryGetValue(id, out var financialAccountModel)) return null;
 
         return financialAccountModel.OwnerId != ownerId ? null : financialAccountModel.ToFinancialAccount();
     }
 
     public FinancialAccount? GetAccountByOwner(string ownerId, DateRangeFilter dateRangeFilter)
     {
-        var accountModel =  DataBase.FinancialAccounts.Where(keyValuePair => keyValuePair.Value.OwnerId == ownerId)
+        var accountModel = DataBase.FinancialAccounts.Where(keyValuePair => keyValuePair.Value.OwnerId == ownerId)
             .Select(keyValuePair => keyValuePair.Value).FirstOrDefault();
 
         if (accountModel == null) return null;
-        
+
         var transactions = ApplyFilters(dateRangeFilter, accountModel);
         return FinancialAccountModel.ToFinancialAccount(accountModel, transactions);
-
     }
 
-    public Transaction[] GetMonthlyTransactions(string accountId, string ownerId, DateRangeFilter dateRangeFilter)
+    public Transaction[] GetMonthlyTransactions(string accountId, string ownerId,
+        GetTransactionsFilters dateRangeFilter)
     {
-        var accountModel =  DataBase.FinancialAccounts.Where(valuePair => valuePair.Value.Id == accountId 
-                                                                          && valuePair.Value.OwnerId == ownerId)
+        var accountModel = DataBase.FinancialAccounts.Where(valuePair => valuePair.Value.Id == accountId
+                                                                         && valuePair.Value.OwnerId == ownerId)
             .Select(keyValuePair => keyValuePair.Value).FirstOrDefault();
-        
+
         if (accountModel == null) throw new KeyNotFoundException("Account id not found.");
-        
+
         var transactions = ApplyFilters(dateRangeFilter, accountModel);
-        
+
         return transactions.ToArray();
     }
 
-    private static IEnumerable<Transaction> ApplyFilters(DateRangeFilter dateRangeFilter, FinancialAccountModel financialAccountModel)
+    private static IEnumerable<Transaction> ApplyFilters(DateRangeFilter filters,
+        FinancialAccountModel financialAccountModel)
     {
-        return financialAccountModel.Transactions.Where(x =>
-            x.TimeStamp.ToDateTime() >= dateRangeFilter.From.ToDateTime(TimeOnly.MinValue) &&  
-            x.TimeStamp.ToDateTime() <= dateRangeFilter.To.ToDateTime(TimeOnly.MaxValue));
+        bool Predicate(Transaction x) => x.TimeStamp.ToDateTime() >= filters.From.ToDateTime(TimeOnly.MinValue) &&
+                                         x.TimeStamp.ToDateTime() <= filters.To.ToDateTime(TimeOnly.MaxValue);
+
+        return ApplyFilters(Predicate, financialAccountModel);
+    }
+
+    private static IEnumerable<Transaction> ApplyFilters(GetTransactionsFilters filters,
+        FinancialAccountModel financialAccountModel)
+    {
+        bool Predicate(Transaction x) =>
+            x.TimeStamp.ToDateTime() >= filters.RangeFilter.From.ToDateTime(TimeOnly.MinValue) &&
+            x.TimeStamp.ToDateTime() <= filters.RangeFilter.To.ToDateTime(TimeOnly.MaxValue) &&
+            (filters.Categories == null || filters.Categories.Contains(x.Category));
+
+        return ApplyFilters(Predicate, financialAccountModel);
+    }
+
+    private static IEnumerable<Transaction> ApplyFilters(Func<Transaction, bool> filters,
+        FinancialAccountModel financialAccountModel)
+    {
+        return financialAccountModel.Transactions.Where(filters);
     }
 
     public int ItemsCount()
     {
-        return  DataBase.FinancialAccounts.Count;
+        return DataBase.FinancialAccounts.Count;
     }
 }

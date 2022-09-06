@@ -1,4 +1,5 @@
 using KalanMoney.Domain.Entities;
+using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Domain.UseCases.Repositories.Models;
 using KalanMoney.Persistence.CosmosDB.DTOs;
@@ -78,25 +79,30 @@ public class AccountQueriesRepository : IAccountQueriesRepository
         return result?.ToFinancialAccount();
     }
 
-    public Transaction[] GetMonthlyTransactions(string accountId, string ownerId, DateRangeFilter dateRangeFilter)
+    public Transaction[] GetMonthlyTransactions(string accountId, string ownerId,
+        GetTransactionsFilters dateRangeFilter)
     {
-        const string sqlQuery = $"SELECT t FROM c " +
+        const string sqlQuery = $"SELECT t.id, t.amount, t.description, t.category, t.timeStamp FROM c " +
                                 $"JOIN t IN c.transactions " +
                                 $"WHERE c.id = @idParam " +
                                 $"AND c.owner.subId = @ownerId " +
                                 $"AND TimestampToDateTime(t.timeStamp) >= @from " +
-                                $"AND TimestampToDateTime(t.timeStamp) <= @to";
+                                $"AND TimestampToDateTime(t.timeStamp) <= @to " +
+                                $"AND (@categories = null " +
+                                $"OR ARRAY_CONTAINS(@categories, t.category))";
 
         var queryDefinition = new QueryDefinition(sqlQuery)
             .WithParameter("@idParam", accountId)
             .WithParameter("@ownerId", ownerId)
-            .WithParameter("@from", dateRangeFilter.From.ToDateTime(TimeOnly.MinValue))
-            .WithParameter("@to", dateRangeFilter.From.ToDateTime(TimeOnly.MaxValue));
-
-        var queryRequestOptions = new QueryRequestOptions();
+            .WithParameter("@to", dateRangeFilter.RangeFilter.To.ToDateTime(TimeOnly.MaxValue))
+            .WithParameter("@from", dateRangeFilter.RangeFilter.From.ToDateTime(TimeOnly.MinValue))
+            .WithParameter("@categories", dateRangeFilter.Categories?.Select(x => x.Value));
 
         using var feedIterator =
-            _container.GetItemQueryIterator<Transaction>(queryDefinition, null, queryRequestOptions);
+            _container.GetItemQueryIterator<TransactionDto>(queryDefinition, null, new QueryRequestOptions()
+            {
+                MaxItemCount = 1
+            });
 
         var transactions = new List<Transaction>();
 
@@ -109,8 +115,16 @@ public class AccountQueriesRepository : IAccountQueriesRepository
                 .GetResult()
                 .FirstOrDefault();
 
-            transactions.Add(transaction);
+            if (transaction == null) continue;
+
+            transactions.Add(
+                new Transaction(transaction.Id,
+                    transaction.Amount, 
+                    Description.Create(transaction.Description),
+                    Category.Create(transaction.Category), 
+                    new TimeStamp(transaction.TimeStamp)));
         }
+
 
         return transactions.ToArray();
     }

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
@@ -41,19 +42,23 @@ public class GetMonthlyTransactionsFunction : BaseRequestFunction
 
         try
         {
+            var category = req.Query.FirstOrDefault(pair => pair.Key.ToLower() == "category").Value.ToString();
+            var transactionsFilters = new TransactionsFilters(Convert.ToInt32(year), 
+                Convert.ToInt32(month), string.IsNullOrEmpty(category) ? null : category);
+            
             var getMonthlyTransactionsRequest =
-                new GetMonthlyTransactionsRequest(accountId, ownerId, Convert.ToInt32(year), Convert.ToInt32(month));
+                new GetMonthlyTransactionsRequest(accountId, ownerId, transactionsFilters);
 
             var output = new GetMonthlyTransactionsPresenter();
             _getMonthlyTransactionsInput.Execute(getMonthlyTransactionsRequest, output);
 
             return Task.FromResult<IActionResult>(new OkObjectResult(output.Transactions));
         }
-        catch (Exception ex) when (ex is AccountNotFoundException)
+        catch (AccountNotFoundException)
         {
             return Task.FromResult<IActionResult>(new BadRequestObjectResult("Account not found"));
         }
-        catch (ArgumentNullException)
+        catch (Exception ex) when (ex is ArgumentNullException | ex is FormatException | ex is OverflowException)
         {
             log.LogInformation("Bad Request");
             return Task.FromResult<IActionResult>(new BadRequestResult());

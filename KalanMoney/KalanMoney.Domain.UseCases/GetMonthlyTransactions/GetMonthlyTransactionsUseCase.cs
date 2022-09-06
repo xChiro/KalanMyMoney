@@ -1,3 +1,4 @@
+using KalanMoney.Domain.Entities.ValueObjects;
 using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Domain.UseCases.Repositories.Models;
 
@@ -14,15 +15,19 @@ public class GetMonthlyTransactionsUseCase : IGetMonthlyTransactionsInput
 
     public void Execute(GetMonthlyTransactionsRequest request, IGetMonthlyTransactionsOutput output)
     {
-        if (request.Month is < 1 or > 12) throw new IndexOutOfRangeException("Invalid month number");
-        if (request.Year < DateTime.MinValue.Year || request.Year > DateTime.MaxValue.Year)
+        if (request.Filters.Month is < 1 or > 12) throw new IndexOutOfRangeException("Invalid month number");
+        if (request.Filters.Year < DateTime.MinValue.Year || request.Filters.Year > DateTime.MaxValue.Year)
             throw new IndexOutOfRangeException("Invalid year number");
 
-        var transactionFilter = DateRangeFilter.CreateMonthRange(request.Year, request.Month);
-        
+        var transactionFilter = DateRangeFilter.CreateMonthRange(request.Filters.Year, request.Filters.Month);
+        var filters = new GetTransactionsFilters(transactionFilter,
+            string.IsNullOrEmpty(request.Filters.Category)
+                ? null
+                : new[] {Category.Create(request.Filters.Category.ToLower())});
+
         var transactions =
-            _accountQueriesRepository.GetMonthlyTransactions(request.AccountId, request.OwnerId, transactionFilter);
-        
+            _accountQueriesRepository.GetMonthlyTransactions(request.AccountId, request.OwnerId, filters);
+
         output.Results(transactions);
     }
 }
