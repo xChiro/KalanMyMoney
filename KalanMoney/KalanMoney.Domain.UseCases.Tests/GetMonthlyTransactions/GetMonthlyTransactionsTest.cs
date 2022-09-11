@@ -129,11 +129,11 @@ public class GetMonthlyTransactionsTest
     public void Get_monthly_transactions_filter_by_category_successfully()
     {
         // Arrange
-        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         var accountId = Guid.NewGuid().ToString();
         var ownerId = Guid.NewGuid().ToString();
         var category = Category.Create("Category");
 
+        var accountQueriesRepository = new Mock<IAccountQueriesRepository>();
         accountQueriesRepository.Setup(repository => repository.GetMonthlyTransactions(accountId,
                 ownerId, It.IsAny<GetTransactionsFilters>()))
             .Returns(() =>
