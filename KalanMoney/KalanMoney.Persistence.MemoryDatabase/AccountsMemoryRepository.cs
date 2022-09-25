@@ -67,6 +67,11 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
         return transactions.ToArray();
     }
 
+    public Category[] GetCategoriesByAccount(string accountId)
+    {
+        throw new NotImplementedException();
+    }
+
     private static IEnumerable<Transaction> ApplyFilters(DateRangeFilter filters,
         FinancialAccountModel financialAccountModel)
     {

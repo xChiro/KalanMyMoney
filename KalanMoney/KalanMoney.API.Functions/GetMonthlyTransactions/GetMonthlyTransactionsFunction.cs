@@ -25,7 +25,7 @@ public class GetMonthlyTransactionsFunction : BaseRequestFunction
     }
 
     [FunctionName("GetMonthlyTransactionsFunction")]
-    public Task<IActionResult> RunAsync(
+    public Task<IActionResult> RunAsync(    
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "accounts/transactions")]
         HttpRequest req, ILogger log)
     {

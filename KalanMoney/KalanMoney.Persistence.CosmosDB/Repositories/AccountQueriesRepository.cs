@@ -128,4 +128,9 @@ public class AccountQueriesRepository : IAccountQueriesRepository
 
         return transactions.ToArray();
     }
+
+    public Category[] GetCategoriesByAccount(string accountId)
+    {
+        throw new NotImplementedException();
+    }
 }
