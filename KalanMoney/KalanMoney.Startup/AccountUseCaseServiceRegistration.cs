@@ -3,6 +3,7 @@ using KalanMoney.Domain.UseCases.AccountDashboard;
 using KalanMoney.Domain.UseCases.Adapters;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.AddOutcomeTransaction;
+using KalanMoney.Domain.UseCases.GetCategoriesByAccount;
 using KalanMoney.Domain.UseCases.GetMonthlyTransactions;
 using KalanMoney.Domain.UseCases.OpenAccount;
 using KalanMoney.Domain.UseCases.Repositories;
@@ -72,6 +73,7 @@ public static class AccountUseCaseServiceRegistration
         services.AddScoped<IAddOutcomeTransactionInput>(_ => new AddOutcomeTransactionUseCase(accountQueriesRepository, accountCommandsRepository));
         services.AddScoped<IAccountDashboardInput>(_ => new AccountDashboardUseCase(accountQueriesRepository));
         services.AddScoped<IGetMonthlyTransactionsInput>(_ => new GetMonthlyTransactionsUseCase(accountQueriesRepository));
+        services.AddScoped<IGetCategoriesByAccountInput>(_ => new GetCategoriesByAccountUseCase(accountQueriesRepository));
     }
     
     private static string? GetEnvironmentVariable(string name) 
