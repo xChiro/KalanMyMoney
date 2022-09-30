@@ -129,8 +129,39 @@ public class AccountQueriesRepository : IAccountQueriesRepository
         return transactions.ToArray();
     }
 
-    public Category[] GetCategoriesByAccount(string accountId)
+    public Category[] GetCategoriesByAccount(string accountId, string ownerId)
     {
-        throw new NotImplementedException();
+        const string sqlQuery = $"SELECT DISTINCT VALUE t.category FROM c " +
+                                $"JOIN t IN c.transactions " +
+                                $"WHERE c.id = @accountId AND c.owner.subId = @ownerId";
+
+
+        var queryDefinition = new QueryDefinition(sqlQuery)
+            .WithParameter("@accountId", accountId)
+            .WithParameter("@ownerId", ownerId);
+        
+        using var feedIterator =
+            _container.GetItemQueryIterator<string>(queryDefinition, null, new QueryRequestOptions()
+            {
+                MaxItemCount = 1
+            });
+
+        var categories = new List<Category>();
+
+        while (feedIterator.HasMoreResults)
+        {
+            var category = _taskFactory
+                .StartNew(() => feedIterator.ReadNextAsync())
+                .Unwrap()
+                .GetAwaiter()
+                .GetResult()
+                .FirstOrDefault();
+
+            if (category == null) continue;
+
+            categories.Add( Category.Create(category));
+        }
+        
+        return categories.ToArray();
     }
 }

@@ -12,5 +12,5 @@ public interface IAccountQueriesRepository
     
     public Transaction[] GetMonthlyTransactions(string accountId, string ownerId, GetTransactionsFilters filters);
     
-    public Category[] GetCategoriesByAccount(string accountId);
+    public Category[] GetCategoriesByAccount(string accountId, string ownerId);
 }

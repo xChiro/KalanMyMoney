@@ -67,7 +67,7 @@ public class AccountsMemoryRepository : IAccountCommandsRepository, IAccountQuer
         return transactions.ToArray();
     }
 
-    public Category[] GetCategoriesByAccount(string accountId)
+    public Category[] GetCategoriesByAccount(string accountId, string ownerId)
     {
         throw new NotImplementedException();
     }

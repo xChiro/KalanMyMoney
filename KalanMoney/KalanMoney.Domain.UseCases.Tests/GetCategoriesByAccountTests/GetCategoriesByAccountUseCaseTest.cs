@@ -15,14 +15,14 @@ public class GetCategoriesByAccountTest
     {
         // Arrange
         var accountRepositoryMock = new Mock<IAccountQueriesRepository>();
-        accountRepositoryMock.Setup(x => x.GetCategoriesByAccount(It.IsAny<string>()))
+        accountRepositoryMock.Setup(x => x.GetCategoriesByAccount(It.IsAny<string>(), It.IsAny<string>()))
             .Throws(() => new AccountNotFoundException());
 
         var sut = new GetCategoriesByAccountUseCase(accountRepositoryMock.Object);
         var output = new GetCategoryByAccountOutputTest();
 
         // Act / Assert
-        Assert.Throws<AccountNotFoundException>(() => sut.Execute("0", output));
+        Assert.Throws<AccountNotFoundException>(() => sut.Execute("0", "0", output));
     }
 
     [Theory]
@@ -37,8 +37,25 @@ public class GetCategoriesByAccountTest
         var output = new GetCategoryByAccountOutputTest();
 
         // Act / Assert
-        Assert.Throws<ArgumentException>(() => sut.Execute(accountId, output));
+        Assert.Throws<ArgumentException>(() => sut.Execute(accountId, "owner id", output));
     }
+    
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    [InlineData(" ")]
+    public void Try_to_get_categories_with_invalid_ownerId(string ownerId)
+    {
+        // Arrange
+        const string accountId = "account_id";
+        var accountRepositoryMock = new Mock<IAccountQueriesRepository>();
+        var sut = new GetCategoriesByAccountUseCase(accountRepositoryMock.Object);
+        var output = new GetCategoryByAccountOutputTest();
+
+        // Act / Assert
+        Assert.Throws<ArgumentException>(() => sut.Execute(accountId, ownerId, output));
+    }
+
 
     [Fact]
     public void Get_categories_from_account_without_transactions_successfully()
@@ -51,7 +68,7 @@ public class GetCategoriesByAccountTest
         var output = new GetCategoryByAccountOutputTest();
 
         // Act
-        sut.Execute(account.Id, output);
+        sut.Execute(account.Id, account.Owner.SubId, output);
 
         // Assert
         Assert.Empty(output.Categories);
@@ -78,7 +95,7 @@ public class GetCategoriesByAccountTest
         var output = new GetCategoryByAccountOutputTest();
         
         // Act
-        sut.Execute(accountId, output);
+        sut.Execute(accountId, account.Owner.SubId, output);
 
         // Assert
         Assert.Single(output.Categories);
@@ -106,7 +123,7 @@ public class GetCategoriesByAccountTest
         var output = new GetCategoryByAccountOutputTest();
         
         // Act
-        sut.Execute(accountId, output);
+        sut.Execute(accountId, account.Owner.SubId, output);
 
         // AssertZ~A`a 
         Assert.Equal(2, output.Categories.Length);
@@ -128,7 +145,7 @@ public class GetCategoriesByAccountTest
     private static Mock<IAccountQueriesRepository> GenerateAccountRepositoryMock(FinancialAccount account)
     {
         var accountRepositoryMock = new Mock<IAccountQueriesRepository>();
-        accountRepositoryMock.Setup(x => x.GetCategoriesByAccount(account.Id))
+        accountRepositoryMock.Setup(x => x.GetCategoriesByAccount(account.Id, account.Owner.SubId))
             .Returns(() => account.Transactions.Items.Select(x => x.Category).Distinct().ToArray());
         
         return accountRepositoryMock;
