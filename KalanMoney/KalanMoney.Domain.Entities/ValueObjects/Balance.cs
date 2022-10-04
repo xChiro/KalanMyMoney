@@ -4,8 +4,8 @@ public record Balance(decimal Amount)
 {
     public Balance Add(decimal amount)
     {
-        var newBalanceAmount = Amount + amount;
+        var newBalance = Amount + amount;
         
-        return new Balance(newBalanceAmount);
+        return new Balance(newBalance);
     }
 }
