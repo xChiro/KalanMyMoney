@@ -54,7 +54,7 @@ public class FinancialAccount : Entity
     private Balance AddTransaction(decimal amount, string description, string category)
     {
         var transaction = Transactions.AddTransaction(amount, description, category);
-        Balance = Balance.SumAmount(transaction.Amount);
+        Balance = Balance.Add(transaction.Amount);
         
         return Balance;
     }
