@@ -29,12 +29,12 @@ public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
 
         if (account == null) throw new AccountNotFoundException();
         
-        var accountBalance = account.AddIncomeTransaction(request.Amount, request.Description, request.Category);
+        var newAccountBalance = account.AddIncomeTransaction(request.Amount, request.Description, request.Category);
         var transaction = account.Transactions.GetLastTransaction()!;
 
-        _accountCommandsRepository.StoreTransaction(account.Id, accountBalance, transaction);
+        _accountCommandsRepository.StoreTransaction(account.Id, newAccountBalance, transaction);
 
-        var response = new AddTransactionResponse(transaction.Id, accountBalance.Amount);
+        var response = new AddTransactionResponse(transaction.Id, newAccountBalance.Amount);
         output.Results(response);
     }
 

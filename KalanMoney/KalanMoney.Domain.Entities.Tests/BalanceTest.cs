@@ -14,7 +14,7 @@ public class BalanceTest
         var sut = new Balance(initAmount);
         
         // Act 
-        var result = sut.SumAmount(transactionAmount);
+        var result = sut.Add(transactionAmount);
         
         // Assert
         Assert.True(result == new Balance(expected));
