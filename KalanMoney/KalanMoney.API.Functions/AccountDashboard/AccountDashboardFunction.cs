@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;
-using KalanMoney.Domain.UseCases.AccountDashboard;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
+using KalanMoney.Domain.UseCases.GetAccountDashboard;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;

@@ -23,7 +23,7 @@ public class GetMonthlyTransactionsTest
         accountQueriesRepository.Setup(repository =>
             repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<GetTransactionsFilters>()));
 
-        var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
+        var sut = new UseCases.GetMonthlyTransactions.GetMonthlyTransactions(accountQueriesRepository.Object);
         var transactionsFilters = new TransactionsFilters(year, invalidMonth);
 
         // Act/Assert
@@ -44,7 +44,7 @@ public class GetMonthlyTransactionsTest
         accountQueriesRepository.Setup(repository =>
             repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<GetTransactionsFilters>()));
 
-        var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
+        var sut = new UseCases.GetMonthlyTransactions.GetMonthlyTransactions(accountQueriesRepository.Object);
         var transactionsFilters = new TransactionsFilters(invalidYear, month);
 
         // Act/Assert
@@ -65,7 +65,7 @@ public class GetMonthlyTransactionsTest
         accountQueriesRepository.Setup(repository =>
             repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<GetTransactionsFilters>()));
 
-        var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
+        var sut = new UseCases.GetMonthlyTransactions.GetMonthlyTransactions(accountQueriesRepository.Object);
         var transactionsFilters = new TransactionsFilters(invalidYear, month);
 
         // Act/Assert
@@ -87,7 +87,7 @@ public class GetMonthlyTransactionsTest
                 repository.GetMonthlyTransactions(accountId, It.IsAny<string>(), It.IsAny<GetTransactionsFilters>()))
             .Throws(new KeyNotFoundException());
 
-        var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
+        var sut = new UseCases.GetMonthlyTransactions.GetMonthlyTransactions(accountQueriesRepository.Object);
         var transactionsFilters = new TransactionsFilters(year, month);
 
         // Act/Assert
@@ -113,7 +113,7 @@ public class GetMonthlyTransactionsTest
             {
                 expectedTransaction
             });
-        var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
+        var sut = new UseCases.GetMonthlyTransactions.GetMonthlyTransactions(accountQueriesRepository.Object);
         var output = new GetMonthlyTransactionsOutputMock();
         var transactionsFilters = new TransactionsFilters(invalidYear, month);
 
@@ -148,7 +148,7 @@ public class GetMonthlyTransactionsTest
 
         var request = new GetMonthlyTransactionsRequest(accountId, ownerId, transactionsFilters);
         var output = new GetMonthlyTransactionsOutputMock();
-        var sut = new GetMonthlyTransactionsUseCase(accountQueriesRepository.Object);
+        var sut = new UseCases.GetMonthlyTransactions.GetMonthlyTransactions(accountQueriesRepository.Object);
 
         // Act
         sut.Execute(request, output);

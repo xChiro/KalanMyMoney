@@ -25,7 +25,7 @@ public class AddIncomeTransactionUseCaseTest
 
         var accountCommandsRepository = new Mock<IAccountCommandsRepository>();
         
-        var sut = new AddIncomeTransactionUseCase(accountRepositoryMock.Object, accountCommandsRepository.Object);
+        var sut = new AddIncomeTransaction.AddIncomeTransaction(accountRepositoryMock.Object, accountCommandsRepository.Object);
         var accountId = Guid.NewGuid().ToString();
         
         var inputRequest = new AddTransactionRequest(accountId, Guid.NewGuid().ToString(), 1500.00m, "Test", "Salary");
@@ -53,7 +53,7 @@ public class AddIncomeTransactionUseCaseTest
         var accountCommandsRepository = new AccountCommandsRepositoryMock();
 
         var accountQueryRepository = SetupAccountQueryRepositoryMock(financialAccount);
-        var sut = new AddIncomeTransactionUseCase(accountQueryRepository.Object, accountCommandsRepository);
+        var sut = new AddIncomeTransaction.AddIncomeTransaction(accountQueryRepository.Object, accountCommandsRepository);
         var transaction = new AddTransactionRequest(financialAccount.Id, owner.SubId, transactionAmount, transactionDescription, category);
         var outputMock = new AddIncomeTransactionOutputMock();
         
@@ -81,7 +81,7 @@ public class AddIncomeTransactionUseCaseTest
         var accountQueriesRepository = SetupAccountQueryRepositoryMock(financialAccount);
 
         var accountCommandRepository = new AccountCommandsRepositoryMock();
-        var sut = new AddIncomeTransactionUseCase(accountQueriesRepository.Object,
+        var sut = new AddIncomeTransaction.AddIncomeTransaction(accountQueriesRepository.Object,
             accountCommandRepository);
 
         var output = new AddIncomeTransactionOutputMock();

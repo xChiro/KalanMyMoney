@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
-using KalanMoney.Domain.UseCases.AccountDashboard;
 using KalanMoney.Domain.UseCases.Adapters;
 using KalanMoney.Domain.UseCases.AddIncomeTransaction;
 using KalanMoney.Domain.UseCases.AddOutcomeTransaction;
+using KalanMoney.Domain.UseCases.GetAccountDashboard;
 using KalanMoney.Domain.UseCases.GetCategoriesByAccount;
 using KalanMoney.Domain.UseCases.GetMonthlyTransactions;
 using KalanMoney.Domain.UseCases.OpenAccount;
@@ -68,12 +68,12 @@ public static class AccountUseCaseServiceRegistration
     private static void InjectDependencies(IServiceCollection services, IAccountCommandsRepository accountCommandsRepository, 
         IAccountQueriesRepository accountQueriesRepository)
     {
-        services.AddScoped<IOpenAccountInput>(_ => new OpenAccountUseCase(accountCommandsRepository));
-        services.AddScoped<IAddIncomeTransactionInput>(_ => new AddIncomeTransactionUseCase(accountQueriesRepository, accountCommandsRepository));
-        services.AddScoped<IAddOutcomeTransactionInput>(_ => new AddOutcomeTransactionUseCase(accountQueriesRepository, accountCommandsRepository));
-        services.AddScoped<IAccountDashboardInput>(_ => new AccountDashboardUseCase(accountQueriesRepository));
-        services.AddScoped<IGetMonthlyTransactionsInput>(_ => new GetMonthlyTransactionsUseCase(accountQueriesRepository));
-        services.AddScoped<IGetCategoriesByAccountInput>(_ => new GetCategoriesByAccountUseCase(accountQueriesRepository));
+        services.AddScoped<IOpenAccountInput>(_ => new OpenAccount(accountCommandsRepository));
+        services.AddScoped<IAddIncomeTransactionInput>(_ => new AddIncomeTransaction(accountQueriesRepository, accountCommandsRepository));
+        services.AddScoped<IAddOutcomeTransactionInput>(_ => new AddOutcomeTransaction(accountQueriesRepository, accountCommandsRepository));
+        services.AddScoped<IAccountDashboardInput>(_ => new GetAccountDashboard(accountQueriesRepository));
+        services.AddScoped<IGetMonthlyTransactionsInput>(_ => new GetMonthlyTransactions(accountQueriesRepository));
+        services.AddScoped<IGetCategoriesByAccountInput>(_ => new GetCategoriesByAccount(accountQueriesRepository));
     }
     
     private static string? GetEnvironmentVariable(string name) 

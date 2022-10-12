@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using KalanMoney.API.Functions.Commons;
-using KalanMoney.Domain.UseCases.AccountDashboard;
+using KalanMoney.Domain.UseCases.GetAccountDashboard;
 
 namespace KalanMoney.API.Functions.AccountDashboard;
 

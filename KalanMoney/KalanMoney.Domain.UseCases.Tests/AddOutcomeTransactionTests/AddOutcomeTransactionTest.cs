@@ -24,7 +24,7 @@ public class AddOutcomeTransactionTest
         
         var accountCommandRepository = new Mock<IAccountCommandsRepository>();
         
-        var sut = new AddOutcomeTransactionUseCase(accountQueriesRepository.Object, accountCommandRepository.Object);
+        var sut = new AddOutcomeTransaction.AddOutcomeTransaction(accountQueriesRepository.Object, accountCommandRepository.Object);
         var addTransactionRequest = new AddTransactionRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),1005.2m,
             "Test", "Salary");
 
@@ -51,7 +51,7 @@ public class AddOutcomeTransactionTest
         
         var accountQueriesRepository = AccountQueriesRepositoryMockSetup(financialAccount);
         
-        var sut = new AddOutcomeTransactionUseCase(accountQueriesRepository.Object, accountCommandRepository.Object);
+        var sut = new AddOutcomeTransaction.AddOutcomeTransaction(accountQueriesRepository.Object, accountCommandRepository.Object);
         var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, owner.SubId, transactionAmount, 
             "Test", "Salary");
         
@@ -79,7 +79,7 @@ public class AddOutcomeTransactionTest
         var accountQueriesRepository = AccountQueriesRepositoryMockSetup(financialAccount);
 
         var accountCommandRepository = new AccountCommandsRepositoryMock();
-        var sut = new AddOutcomeTransactionUseCase(accountQueriesRepository.Object, accountCommandRepository);
+        var sut = new AddOutcomeTransaction.AddOutcomeTransaction(accountQueriesRepository.Object, accountCommandRepository);
 
         var output = new AddOutcomeTransactionOutputMock();
         var addTransactionRequest = new AddTransactionRequest(financialAccount.Id, owner.SubId, transactionAmount, 

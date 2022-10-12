@@ -6,11 +6,11 @@ using KalanMoney.Domain.UseCases.Repositories;
 
 namespace KalanMoney.Domain.UseCases.OpenAccount;
 
-public class OpenAccountUseCase : IOpenAccountInput
+public class OpenAccount : IOpenAccountInput
 {
     private readonly IAccountCommandsRepository _accountCommands;
     
-    public OpenAccountUseCase(IAccountCommandsRepository accountCommands)
+    public OpenAccount(IAccountCommandsRepository accountCommands)
     {
         _accountCommands = accountCommands;
     }

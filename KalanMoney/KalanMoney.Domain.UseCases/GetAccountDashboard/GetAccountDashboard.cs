@@ -3,13 +3,13 @@ using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Domain.UseCases.Repositories.Models;
 
-namespace KalanMoney.Domain.UseCases.AccountDashboard;
+namespace KalanMoney.Domain.UseCases.GetAccountDashboard;
 
-public class AccountDashboardUseCase : IAccountDashboardInput
+public class GetAccountDashboard : IAccountDashboardInput
 {
     private readonly IAccountQueriesRepository _accountQueriesRepository;
 
-    public AccountDashboardUseCase(IAccountQueriesRepository accountQueriesRepository)
+    public GetAccountDashboard(IAccountQueriesRepository accountQueriesRepository)
     {
         _accountQueriesRepository = accountQueriesRepository;
     }

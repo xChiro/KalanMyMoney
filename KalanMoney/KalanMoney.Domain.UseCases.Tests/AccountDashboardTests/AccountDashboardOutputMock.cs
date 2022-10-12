@@ -1,4 +1,4 @@
-using KalanMoney.Domain.UseCases.AccountDashboard;
+using KalanMoney.Domain.UseCases.GetAccountDashboard;
 
 namespace KalanMoney.Domain.UseCases.Tests.AccountDashboardTests;
 

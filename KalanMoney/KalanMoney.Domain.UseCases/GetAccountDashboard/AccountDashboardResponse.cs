@@ -1,7 +1,7 @@
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.ValueObjects;
 
-namespace KalanMoney.Domain.UseCases.AccountDashboard;
+namespace KalanMoney.Domain.UseCases.GetAccountDashboard;
 
 public record AccountDashboardResponse
 {

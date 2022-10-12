@@ -6,12 +6,12 @@ using KalanMoney.Domain.UseCases.Repositories.Models;
 
 namespace KalanMoney.Domain.UseCases.AddOutcomeTransaction;
 
-public class AddOutcomeTransactionUseCase : IAddOutcomeTransactionInput
+public class AddOutcomeTransaction : IAddOutcomeTransactionInput
 {
     private readonly IAccountQueriesRepository _accountQueriesRepository;
     private readonly IAccountCommandsRepository _accountCommandsRepository;
 
-    public AddOutcomeTransactionUseCase(IAccountQueriesRepository accountQueriesRepository,
+    public AddOutcomeTransaction(IAccountQueriesRepository accountQueriesRepository,
         IAccountCommandsRepository accountCommandsRepository)
     {
         _accountQueriesRepository = accountQueriesRepository;

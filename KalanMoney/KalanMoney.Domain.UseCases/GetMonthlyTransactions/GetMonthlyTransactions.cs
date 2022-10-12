@@ -4,11 +4,11 @@ using KalanMoney.Domain.UseCases.Repositories.Models;
 
 namespace KalanMoney.Domain.UseCases.GetMonthlyTransactions;
 
-public class GetMonthlyTransactionsUseCase : IGetMonthlyTransactionsInput
+public class GetMonthlyTransactions : IGetMonthlyTransactionsInput
 {
     private readonly IAccountQueriesRepository _accountQueriesRepository;
 
-    public GetMonthlyTransactionsUseCase(IAccountQueriesRepository accountQueriesRepository)
+    public GetMonthlyTransactions(IAccountQueriesRepository accountQueriesRepository)
     {
         _accountQueriesRepository = accountQueriesRepository;
     }

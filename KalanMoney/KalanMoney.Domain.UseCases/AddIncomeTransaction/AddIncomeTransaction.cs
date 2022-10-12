@@ -6,12 +6,12 @@ using KalanMoney.Domain.UseCases.Repositories;
 
 namespace KalanMoney.Domain.UseCases.AddIncomeTransaction;
 
-public class AddIncomeTransactionUseCase : IAddIncomeTransactionInput
+public class AddIncomeTransaction : IAddIncomeTransactionInput
 {
     private readonly IAccountQueriesRepository _accountQueriesRepository;
     private readonly IAccountCommandsRepository _accountCommandsRepository;
 
-    public AddIncomeTransactionUseCase(IAccountQueriesRepository accountQueriesRepository, IAccountCommandsRepository accountCommandsRepository)
+    public AddIncomeTransaction(IAccountQueriesRepository accountQueriesRepository, IAccountCommandsRepository accountCommandsRepository)
     {
         _accountQueriesRepository = accountQueriesRepository;
         _accountCommandsRepository = accountCommandsRepository;

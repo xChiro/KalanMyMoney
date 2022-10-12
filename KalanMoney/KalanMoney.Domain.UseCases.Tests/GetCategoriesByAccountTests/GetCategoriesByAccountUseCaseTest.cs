@@ -18,7 +18,7 @@ public class GetCategoriesByAccountTest
         accountRepositoryMock.Setup(x => x.GetCategoriesByAccount(It.IsAny<string>(), It.IsAny<string>()))
             .Throws(() => new AccountNotFoundException());
 
-        var sut = new GetCategoriesByAccountUseCase(accountRepositoryMock.Object);
+        var sut = new UseCases.GetCategoriesByAccount.GetCategoriesByAccount(accountRepositoryMock.Object);
         var output = new GetCategoryByAccountOutputTest();
 
         // Act / Assert
@@ -33,7 +33,7 @@ public class GetCategoriesByAccountTest
     {
         // Arrange
         var accountRepositoryMock = new Mock<IAccountQueriesRepository>();
-        var sut = new GetCategoriesByAccountUseCase(accountRepositoryMock.Object);
+        var sut = new UseCases.GetCategoriesByAccount.GetCategoriesByAccount(accountRepositoryMock.Object);
         var output = new GetCategoryByAccountOutputTest();
 
         // Act / Assert
@@ -49,7 +49,7 @@ public class GetCategoriesByAccountTest
         // Arrange
         const string accountId = "account_id";
         var accountRepositoryMock = new Mock<IAccountQueriesRepository>();
-        var sut = new GetCategoriesByAccountUseCase(accountRepositoryMock.Object);
+        var sut = new UseCases.GetCategoriesByAccount.GetCategoriesByAccount(accountRepositoryMock.Object);
         var output = new GetCategoryByAccountOutputTest();
 
         // Act / Assert
@@ -64,7 +64,7 @@ public class GetCategoriesByAccountTest
         var account = new FinancialAccount(AccountName.Create("Test"), "ownerId", "ownerName");
         var accountRepositoryMock = GenerateAccountRepositoryMock(account);
 
-        var sut = new GetCategoriesByAccountUseCase(accountRepositoryMock.Object);
+        var sut = new UseCases.GetCategoriesByAccount.GetCategoriesByAccount(accountRepositoryMock.Object);
         var output = new GetCategoryByAccountOutputTest();
 
         // Act
@@ -91,7 +91,7 @@ public class GetCategoriesByAccountTest
 
         var accountRepositoryMock = GenerateAccountRepositoryMock(account);
         
-        var sut = new GetCategoriesByAccountUseCase(accountRepositoryMock.Object);
+        var sut = new UseCases.GetCategoriesByAccount.GetCategoriesByAccount(accountRepositoryMock.Object);
         var output = new GetCategoryByAccountOutputTest();
         
         // Act
@@ -119,7 +119,7 @@ public class GetCategoriesByAccountTest
 
         var accountRepositoryMock = GenerateAccountRepositoryMock(account);
         
-        var sut = new GetCategoriesByAccountUseCase(accountRepositoryMock.Object);
+        var sut = new UseCases.GetCategoriesByAccount.GetCategoriesByAccount(accountRepositoryMock.Object);
         var output = new GetCategoryByAccountOutputTest();
         
         // Act

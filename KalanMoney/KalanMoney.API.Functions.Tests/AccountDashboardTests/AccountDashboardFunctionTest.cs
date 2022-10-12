@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using KalanMoney.API.Functions.AccountDashboard;
-using KalanMoney.Domain.UseCases.AccountDashboard;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
+using KalanMoney.Domain.UseCases.GetAccountDashboard;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;

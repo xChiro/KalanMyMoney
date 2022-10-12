@@ -16,7 +16,7 @@ public class OpenAccountUseCaseTest
         var createAccountRequest =
             CreateAccountRequest("Very very very very very loooooonnnnnggggggg name, its invalid.");
         
-        var sut = new OpenAccountUseCase(accountRepositoryMock);
+        var sut = new OpenAccount.OpenAccount(accountRepositoryMock);
         var openAccountOutputMock = new OpenAccountOutputMock();
 
         // Act/Assert
@@ -32,7 +32,7 @@ public class OpenAccountUseCaseTest
         var accountRepositoryMock = new AccountCommandsRepositoryMock();
 
         var createAccountOutput = new OpenAccountOutputMock();
-        var sut = new OpenAccountUseCase(accountRepositoryMock);
+        var sut = new OpenAccount.OpenAccount(accountRepositoryMock);
 
         // Act
         sut.Execute(createAccountRequest, createAccountOutput);
@@ -51,7 +51,7 @@ public class OpenAccountUseCaseTest
     {
         // Arrange
         var accountRepositoryMock = new AccountCommandsRepositoryMock();
-        var sut = new OpenAccountUseCase(accountRepositoryMock);
+        var sut = new OpenAccount.OpenAccount(accountRepositoryMock);
         
         var createAccountRequest = CreateAccountRequest();
         var output = new OpenAccountOutputMock();

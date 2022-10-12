@@ -4,11 +4,11 @@ using KalanMoney.Domain.UseCases.Repositories;
 
 namespace KalanMoney.Domain.UseCases.GetCategoriesByAccount;
 
-public class GetCategoriesByAccountUseCase : IGetCategoriesByAccountInput
+public class GetCategoriesByAccount : IGetCategoriesByAccountInput
 {
     private readonly IAccountQueriesRepository _accountQueriesRepository;
 
-    public GetCategoriesByAccountUseCase(IAccountQueriesRepository accountQueriesRepository)
+    public GetCategoriesByAccount(IAccountQueriesRepository accountQueriesRepository)
     {
         _accountQueriesRepository = accountQueriesRepository;
     }

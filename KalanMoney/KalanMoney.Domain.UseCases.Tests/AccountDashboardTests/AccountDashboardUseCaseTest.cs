@@ -1,6 +1,5 @@
 using KalanMoney.Domain.Entities;
 using KalanMoney.Domain.Entities.ValueObjects;
-using KalanMoney.Domain.UseCases.AccountDashboard;
 using KalanMoney.Domain.UseCases.Common.Exceptions;
 using KalanMoney.Domain.UseCases.Repositories;
 using KalanMoney.Domain.UseCases.Repositories.Models;
@@ -19,7 +18,7 @@ public class AccountDashboardUseCaseTest
         accountQueriesRepository.Setup(x => x.GetAccountByOwner(It.IsAny<string>(), It.IsAny<DateRangeFilter>()))
             .Returns(default(FinancialAccount));
 
-        var sut = new AccountDashboardUseCase(accountQueriesRepository.Object);
+        var sut = new GetAccountDashboard.GetAccountDashboard(accountQueriesRepository.Object);
 
         // Act/Assert
         Assert.Throws<AccountNotFoundException>(() =>
@@ -36,7 +35,7 @@ public class AccountDashboardUseCaseTest
         var accountId = Guid.NewGuid().ToString();
         var accountQueriesRepository = CreateAccountQueriesRepository(0, transaction, owner, accountId);
 
-        var sut = new AccountDashboardUseCase(accountQueriesRepository.Object);
+        var sut = new GetAccountDashboard.GetAccountDashboard(accountQueriesRepository.Object);
         var outPut = new AccountDashboardOutputMock();
 
         // Act
@@ -73,7 +72,7 @@ public class AccountDashboardUseCaseTest
         var accountQueriesRepository = CreateAccountQueriesRepository(0, transactions,
             owner, accountId);
 
-        var sut = new AccountDashboardUseCase(accountQueriesRepository.Object);
+        var sut = new GetAccountDashboard.GetAccountDashboard(accountQueriesRepository.Object);
         var output = new AccountDashboardOutputMock();
 
         // Act
@@ -113,7 +112,7 @@ public class AccountDashboardUseCaseTest
         accountQueriesRepository.Setup(x => x.GetAccountByOwner(owner.SubId, It.IsAny<DateRangeFilter>()))
             .Returns(financialAccount);
 
-        var sut = new AccountDashboardUseCase(accountQueriesRepository.Object);
+        var sut = new GetAccountDashboard.GetAccountDashboard(accountQueriesRepository.Object);
         var output = new AccountDashboardOutputMock();
 
         // Act
