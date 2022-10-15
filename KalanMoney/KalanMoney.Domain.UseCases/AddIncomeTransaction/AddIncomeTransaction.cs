@@ -25,8 +25,7 @@ public class AddIncomeTransaction : IAddIncomeTransactionInput
     /// </exception>
     public void Execute(AddTransactionRequest request, IAddIncomeTransactionOutput output)
     {
-        var account = GetFinancialAccount(request);
-
+        var account = _accountQueriesRepository.GetAccountWithoutTransactions(request.AccountId, request.OwnerId);
         if (account == null) throw new AccountNotFoundException();
         
         var newAccountBalance = account.AddIncomeTransaction(request.Amount, request.Description, request.Category);
@@ -36,13 +35,5 @@ public class AddIncomeTransaction : IAddIncomeTransactionInput
 
         var response = new AddTransactionResponse(transaction.Id, newAccountBalance.Amount);
         output.Results(response);
-    }
-
-    /// <exception cref="AccountNotFoundException"></exception>
-    private FinancialAccount? GetFinancialAccount(AddTransactionRequest request)
-    {
-        var account = _accountQueriesRepository.GetAccountWithoutTransactions(request.AccountId, request.OwnerId);
-        
-        return account;
     }
 }

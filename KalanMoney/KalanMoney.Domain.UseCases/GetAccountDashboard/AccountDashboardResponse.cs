@@ -8,21 +8,21 @@ public record AccountDashboardResponse
     public string AccountId { get; }
     public string AccountName { get; }
     public Transaction[]? AccountTransactions { get; }
-    public Dictionary<string, decimal> CategoriesBalances { get; }
+    public CategoriesBalances CategoriesesBalances { get; }
     public DashboardBalance DashboardBalance { get; }
 
     private AccountDashboardResponse(string accountId, string accountName, Transaction[]? accountTransactions,
-        Dictionary<string, decimal> categoriesBalances, DashboardBalance dashboardBalance)
+        CategoriesBalances categoriesesBalances, DashboardBalance dashboardBalance)
     {
         AccountId = accountId;
         AccountName = accountName;
         AccountTransactions = accountTransactions;
-        CategoriesBalances = categoriesBalances;
+        CategoriesesBalances = categoriesesBalances;
         DashboardBalance = dashboardBalance;
     }
 
     public static AccountDashboardResponse Create(string accountId, AccountName accountName, Balance accountBalance, 
-        Transaction[]? accountTransactions, Dictionary<string, decimal> categoriesBalances)
+        Transaction[]? accountTransactions, CategoriesBalances categoriesBalances)
     {
         var incomeBalance = 0m;
         var outcomeBalance = 0m;

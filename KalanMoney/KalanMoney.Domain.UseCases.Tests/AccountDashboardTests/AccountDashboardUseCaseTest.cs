@@ -82,9 +82,9 @@ public class AccountDashboardUseCaseTest
         Assert.NotNull(output.AccountDashboardResponse?.AccountTransactions);
         Assert.Contains(transactions[0], output.AccountDashboardResponse.AccountTransactions);
         Assert.Contains(transactions[1], output.AccountDashboardResponse.AccountTransactions);
-        Assert.Contains(output.AccountDashboardResponse.CategoriesBalances,
+        Assert.Contains(output.AccountDashboardResponse.CategoriesesBalances.Values,
             pair => pair.Key == categorySalary.Value && pair.Value == amountSalary);
-        Assert.Contains(output.AccountDashboardResponse.CategoriesBalances,
+        Assert.Contains(output.AccountDashboardResponse.CategoriesesBalances.Values,
             pair => pair.Key == categoryGroceries.Value && pair.Value == amountGroceries);
     }
 
@@ -124,7 +124,7 @@ public class AccountDashboardUseCaseTest
         Assert.NotNull(output.AccountDashboardResponse.AccountTransactions);
         Assert.Contains(transactions[0], output.AccountDashboardResponse.AccountTransactions);
         Assert.Contains(transactions[1], output.AccountDashboardResponse.AccountTransactions);
-        Assert.True(output.AccountDashboardResponse.CategoriesBalances.ContainsKey(category.Value));
+        Assert.True(output.AccountDashboardResponse.CategoriesesBalances.Values.ContainsKey(category.Value));
         Assert.Contains(transactions[1], output.AccountDashboardResponse.AccountTransactions);
         Assert.Equal(accountBalance, output.AccountDashboardResponse.DashboardBalance.AccountBalance);
         Assert.Equal(negativeAmount, output.AccountDashboardResponse.DashboardBalance.OutcomeBalance);

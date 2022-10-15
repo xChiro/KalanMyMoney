@@ -15,10 +15,6 @@ public class GetMonthlyTransactions : IGetMonthlyTransactionsInput
 
     public void Execute(GetMonthlyTransactionsRequest request, IGetMonthlyTransactionsOutput output)
     {
-        if (request.Filters.Month is < 1 or > 12) throw new IndexOutOfRangeException("Invalid month number");
-        if (request.Filters.Year < DateTime.MinValue.Year || request.Filters.Year > DateTime.MaxValue.Year)
-            throw new IndexOutOfRangeException("Invalid year number");
-
         var transactionFilter = DateRangeFilter.CreateMonthRange(request.Filters.Year, request.Filters.Month);
         var filters = new GetTransactionsFilters(transactionFilter,
             string.IsNullOrEmpty(request.Filters.Category)

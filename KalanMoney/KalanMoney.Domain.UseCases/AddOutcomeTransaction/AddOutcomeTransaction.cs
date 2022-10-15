@@ -20,8 +20,7 @@ public class AddOutcomeTransaction : IAddOutcomeTransactionInput
 
     public void Execute(AddTransactionRequest request, IAddOutcomeTransactionOutput output)
     {
-        var account = GetFinancialAccount(request);
-        
+        var account = _accountQueriesRepository.GetAccountWithoutTransactions(request.AccountId, request.OwnerId);
         if (account == null) throw new AccountNotFoundException();
 
         var newAccountBalance = account.AddOutcomeTransaction(request.Amount, request.Description, request.Category);
@@ -31,12 +30,5 @@ public class AddOutcomeTransaction : IAddOutcomeTransactionInput
 
         var response = new AddTransactionResponse(transaction.Id, newAccountBalance.Amount);
         output.Results(response);
-    }
-    
-    private FinancialAccount? GetFinancialAccount(AddTransactionRequest request)
-    {
-        var account = _accountQueriesRepository.GetAccountWithoutTransactions(request.AccountId, request.OwnerId);
-        
-        return account;
     }
 }
