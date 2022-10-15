@@ -17,8 +17,8 @@ public class GetAccountDashboard : IAccountDashboardInput
     public void Execute(string ownerId, IAccountDashboardOutput output)
     {
         var transactionsFilters = DateRangeFilter.CreateMonthRangeFromUtcNow();
+        
         var account = _accountQueriesRepository.GetAccountByOwner(ownerId, transactionsFilters);
-
         if (account == null) throw new AccountNotFoundException();
 
         var categories = CategoriesBalances.CreateFromTransactions(account.Transactions);
