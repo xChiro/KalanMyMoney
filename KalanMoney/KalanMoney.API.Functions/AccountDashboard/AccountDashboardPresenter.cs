@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using KalanMoney.API.Functions.Commons;
 using KalanMoney.Domain.UseCases.GetAccountDashboard;
 
@@ -18,13 +19,13 @@ public class AccountDashboardPresenter : IAccountDashboardOutput
     
     public TransactionResponse[] AccountTransactions { get; private set; }
     
-    public Dictionary<string, decimal> CategoriesBalances { get; private set; }
+    public IReadOnlyDictionary<string, decimal> CategoriesBalances { get; private set; }
 
     public void Results(AccountDashboardResponse response)
     {
         AccountId = response.AccountId;
         AccountName = response.AccountName;
-        CategoriesBalances = response.CategoriesBalances;
+        CategoriesBalances = response.CategoriesesBalances.Values;
 
         MapTransactionsFromResponse(response);
 
