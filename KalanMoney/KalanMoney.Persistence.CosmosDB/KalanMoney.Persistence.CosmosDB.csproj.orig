@@ -1,13 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
+<<<<<<< HEAD
+      <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.31.2" />
+=======
       <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.30.0" />
+>>>>>>> parent of e7f2a2c (update solution packages)
     </ItemGroup>
 
     <ItemGroup>

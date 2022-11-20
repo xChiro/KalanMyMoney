@@ -1,15 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>KalanMoney.API.Functions.Test</RootNamespace>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
+<<<<<<< HEAD
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+=======
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
+>>>>>>> parent of e7f2a2c (update solution packages)
       <PackageReference Include="xunit.extensibility.core" Version="2.4.2" />
     </ItemGroup>
 
