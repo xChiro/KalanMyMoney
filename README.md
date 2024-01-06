@@ -10,7 +10,7 @@ Front End Application: https://github.com/xChiro/KalanMyWeb/tree/main
 Kalan My Money follows Clean Architecture principles; you can find more about that on 
 the next page: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
-As you can see in the following image, clean architecture has 4 layers (typically)
+As you can see in the following image, clean architecture has 4 layers (not necessary).
 
 ![CleanArchitecture](https://user-images.githubusercontent.com/3914477/177056418-fa3c875d-87ff-4ce9-994a-dfe40ce946c4.jpg)
 
